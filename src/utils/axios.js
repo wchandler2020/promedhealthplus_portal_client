@@ -1,9 +1,9 @@
 import axios from 'axios';
 
 const authRequest = () => {
-  const baseURL = process.env.REACT_APP_RENDER_CLOUND_API;
+  const baseURL = process.env.REACT_APP_PYTHONANYWHERE_API;
   if (!baseURL) {
-    throw new Error('Missing REACT_APP_RENDER_CLOUND_API environment variable');
+    throw new Error('Missing REACT_APP_PYTHONANYWHERE_API environment variable');
   }
 
   const instance = axios.create({
