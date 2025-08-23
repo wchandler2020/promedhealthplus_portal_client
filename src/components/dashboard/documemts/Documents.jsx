@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { API_BASE_URL } from "../../../utils/constants";
 import { Uploader } from "uploader";
 import { UploadDropzone } from "react-uploader";
 
@@ -32,13 +33,14 @@ const Documents = () => {
   const [uploadFile, setUploadFile] = useState(null);
   const [isUploading, setIsUploading] = useState(false); // New state for loading indicator
   const token = localStorage.getItem("accessToken");
+  
 
   // 📥 Fetch documents
   useEffect(() => {
     const fetchDocuments = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:8000/api/v1/docs/onboarding/documents/",
+          `${API_BASE_URL}/docs/onboarding/documents/`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -68,7 +70,7 @@ const Documents = () => {
 
     try {
       await axios.post(
-        "http://localhost:8000/api/v1/docs/onboarding/documents/",
+        `${API_BASE_URL}/docs/onboarding/documents/`,
         formData,
         {
           headers: {
@@ -83,7 +85,7 @@ const Documents = () => {
 
       // 🔁 Refresh document list
       const updated = await axios.get(
-        "http://localhost:8000/api/v1/docs/onboarding/documents/",
+        `${API_BASE_URL}/docs/onboarding/documents/`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
