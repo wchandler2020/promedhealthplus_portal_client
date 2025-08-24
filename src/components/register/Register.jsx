@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import bg_image from "../../assets/images/bg_image_01.jpg";
 import { Link } from "react-router-dom";
 import { IoArrowBack, IoCheckmarkCircleOutline } from "react-icons/io5";
+import { countryCodesList } from "../../utils/data";
 
 const Register = () => {
   const { register } = useContext(AuthContext);
@@ -20,14 +21,6 @@ const Register = () => {
   const [errorMsg, setErrorMsg] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
   const navigate = useNavigate();
-
-  // You would need a list of country codes here for the dropdown
-  const countryCodes = [
-    { code: "+1", name: "United States" },
-    { code: "+44", name: "United Kingdom" },
-    { code: "+91", name: "India" },
-    // Add all other countries from your Django model here
-  ];
 
   // Validation functions
   const hasMinLength = password.length >= 12;
@@ -165,7 +158,7 @@ const Register = () => {
                       onChange={(e) => setCountryCode(e.target.value)}
                       className="block w-auto px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-l-md dark:bg-white dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 focus:ring focus:ring-blue-400 focus:outline-none focus:ring-opacity-40"
                     >
-                      {countryCodes.map((country) => (
+                      {countryCodesList.map((country) => (
                         <option key={country.code} value={country.code}>
                           {country.code}
                         </option>
