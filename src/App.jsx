@@ -1,7 +1,7 @@
 import "./App.css";
 import Dashboard from "./components/dashboard/Dashboard";
 import Register from "./components/register/Register";
-import { Route, BrowserRouter, Routes, useLocation } from "react-router-dom";
+import { Route, HashRouter, Routes, useLocation } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import Login from "./components/login/Login";
 import Navbar from "./components/navbar/Navbar";
@@ -70,9 +70,9 @@ function AppWrapper() {
 
 function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <AppWrapper />
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 
