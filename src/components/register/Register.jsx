@@ -156,14 +156,18 @@ const Register = () => {
                     <select
                       value={countryCode}
                       onChange={(e) => setCountryCode(e.target.value)}
-                      className="block w-auto px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-l-md dark:bg-white dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 focus:ring focus:ring-blue-400 focus:outline-none focus:ring-opacity-40"
+                      className="px-2 py-2 border border-gray-200 rounded-l-md bg-white text-gray-700 focus:border-blue-400 focus:ring focus:ring-blue-400 focus:outline-none focus:ring-opacity-40"
                     >
                       {countryCodesList.map((country) => (
-                        <option key={country.code} value={country.code}>
-                          {country.code}
+                        <option
+                          key={`${country.code}-${country.name}`}
+                          value={country.code}
+                        >
+                          {country.flag} {country.name} ({country.code})
                         </option>
                       ))}
                     </select>
+
                     <input
                       type="tel"
                       id="phoneNumber"
