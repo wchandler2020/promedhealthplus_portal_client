@@ -89,6 +89,18 @@ const Register = () => {
           >
             <IoArrowBack size={28} />
           </Link>
+          <div className="flex items-center h-full px-20 bg-gray-9600 bg-opacity-40 relative z-20">
+            <div>
+              <h2 className="text-4xl font-bold text-black">
+                ProMed Health Plus
+              </h2>
+              <p className="max-w-xl mt-3 text-gray-900">
+                Lorem ipsum dolor sit, amet consectetur adipisicing elit. In
+                autem ipsa, nulla laboriosam dolores, repellendus perferendis
+                libero suscipit nam temporibus molestiae
+              </p>
+            </div>
+          </div>
         </div>
         {/* Right Side Form */}
         <div className="flex items-center w-full max-w-md px-6 mx-auto lg:w-2/6">
