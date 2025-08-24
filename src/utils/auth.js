@@ -16,7 +16,6 @@ export const AuthProvider = ({ children }) => {
   const verifyToken = async (token) => {
     const axiosInstance = axiosAuth();
     try {
-      // const response = await axiosInstance.get(`${API_BASE_URL}/me/`)
       const response = await axiosInstance.get(`${API_BASE_URL}/provider/profile/`)
   
       return { success: true, data: response.data };
@@ -29,10 +28,10 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const sendVerificationToken = async () => {
+  const sendVerificationToken = async (method = 'sms') => {
     const axiosInstance = axiosAuth();
     try {
-      const response = await axiosInstance.post(`${API_BASE_URL}/send-code/`, { method: 'sms' });
+      const response = await axiosInstance.post(`${API_BASE_URL}/send-code/`, { method });
       return { success: true, data: response.data };
     } catch (error) {
       console.error('Error sending verification token:', error);
@@ -43,11 +42,13 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const register = async (fullName, email, password, password2) => {
+  const register = async (fullName, email, phoneNumber, countryCode, password, password2) => {
     try {
       const response = await axios.post(`${API_BASE_URL}/provider/register/`, {
         full_name: fullName,
         email,
+        phone_number: phoneNumber,
+        country_code: countryCode,
         password,
         password2
       });
@@ -99,13 +100,13 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const verifyCode = async (code) => {
+  const verifyCode = async (code, method = 'sms') => {
     try {
       const accessToken = localStorage.getItem('accessToken');
       const session_id = localStorage.getItem('session_id');
       const response = await axios.post(
         `${API_BASE_URL}/verify-code/`,
-        { code, session_id },
+        { code, session_id, method },
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
