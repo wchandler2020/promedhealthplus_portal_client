@@ -303,7 +303,7 @@ const Register = () => {
               <p className="mt-6 text-sm text-center text-gray-400">
                 Already have an account?{" "}
                 <Link
-                  href="/login"
+                  to="/login"
                   className="text-emerald-500 focus:outline-none focus:underline hover:underline"
                 >
                   Log in
