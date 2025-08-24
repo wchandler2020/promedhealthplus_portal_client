@@ -93,7 +93,15 @@ const Register = () => {
         {/* Right Side Form */}
         <div className="flex items-center w-full max-w-md px-6 mx-auto lg:w-2/6">
           <div className="flex-1">
-            {/* ... (existing code) ... */}
+            <div className="text-center">
+              <h2 className="text-4xl font-bold text-center text-gray-700 dark:text-white">
+                Brand
+              </h2>
+
+              <p className="mt-3 text-gray-900 text-xl font-bold">
+                Create your account
+              </p>
+            </div>
             <div className="mt-8">
               <form onSubmit={handleSubmit}>
                 <div>
