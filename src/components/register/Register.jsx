@@ -28,7 +28,7 @@ const Register = () => {
     { code: "+91", name: "India" },
     // Add all other countries from your Django model here
   ];
-  
+
   // Validation functions
   const hasMinLength = password.length >= 12;
   const hasUppercase = (password.match(/[A-Z]/g) || []).length >= 2;
@@ -43,7 +43,14 @@ const Register = () => {
     setSuccessMsg("");
 
     // Pass the new fields to the register function
-    const result = await register(fullName, email, phoneNumber, countryCode, password, password2);
+    const result = await register(
+      fullName,
+      email,
+      phoneNumber,
+      countryCode,
+      password,
+      password2
+    );
 
     if (result.success) {
       setSuccessMsg("Account created successfully!");
@@ -74,9 +81,15 @@ const Register = () => {
           className="relative hidden bg-cover lg:block lg:w-2/3"
           style={{ backgroundImage: `url(${bg_image})` }}
         >
-          {/* ... (existing code) ... */}
+          <div className="absolute inset-0 bg-black opacity-30 z-10"></div>
+          <Link
+            to="/"
+            className="absolute top-6 left-6 z-50 text-white hover:text-blue-300 transition duration-200"
+            title="Back to Home"
+          >
+            <IoArrowBack size={28} />
+          </Link>
         </div>
-
         {/* Right Side Form */}
         <div className="flex items-center w-full max-w-md px-6 mx-auto lg:w-2/6">
           <div className="flex-1">
@@ -156,7 +169,85 @@ const Register = () => {
                   >
                     Password
                   </label>
-                  {/* ... (existing password input and validation) ... */}
+
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    id="password"
+                    placeholder="Create a password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:bg-white dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 focus:ring focus:ring-blue-400 focus:outline-none focus:ring-opacity-40"
+                    required
+                  />
+
+                  <div className="mt-2 text-sm">
+                    <ul className="list-disc list-inside text-gray-500">
+                      <li
+                        className={
+                          hasMinLength
+                            ? "text-green-600 flex items-center"
+                            : "flex items-center"
+                        }
+                      >
+                        {hasMinLength && (
+                          <IoCheckmarkCircleOutline className="mr-1 text-green-600" />
+                        )}
+                        Minimum 12 characters
+                      </li>
+
+                      <li
+                        className={
+                          hasUppercase
+                            ? "text-green-600 flex items-center"
+                            : "flex items-center"
+                        }
+                      >
+                        {hasUppercase && (
+                          <IoCheckmarkCircleOutline className="mr-1 text-green-600" />
+                        )}
+                        At least two uppercase letters
+                      </li>
+
+                      <li
+                        className={
+                          hasLowercase
+                            ? "text-green-600 flex items-center"
+                            : "flex items-center"
+                        }
+                      >
+                        {hasLowercase && (
+                          <IoCheckmarkCircleOutline className="mr-1 text-green-600" />
+                        )}
+                        At least two lowercase letters
+                      </li>
+
+                      <li
+                        className={
+                          hasNumbers
+                            ? "text-green-600 flex items-center"
+                            : "flex items-center"
+                        }
+                      >
+                        {hasNumbers && (
+                          <IoCheckmarkCircleOutline className="mr-1 text-green-600" />
+                        )}
+                        At least two numbers
+                      </li>
+
+                      <li
+                        className={
+                          hasSpecialChars
+                            ? "text-green-600 flex items-center"
+                            : "flex items-center"
+                        }
+                      >
+                        {hasSpecialChars && (
+                          <IoCheckmarkCircleOutline className="mr-1 text-green-600" />
+                        )}
+                        At least two special characters
+                      </li>
+                    </ul>
+                  </div>
                 </div>
 
                 <div className="mt-4">
@@ -166,7 +257,16 @@ const Register = () => {
                   >
                     Confirm Password
                   </label>
-                  {/* ... (existing confirm password input) ... */}
+
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    id="confirmPassword"
+                    placeholder="Repeat your password"
+                    value={password2}
+                    onChange={(e) => setPassword2(e.target.value)}
+                    className="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:bg-white dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 focus:ring focus:ring-blue-400 focus:outline-none focus:ring-opacity-40"
+                    required
+                  />
                 </div>
 
                 <div className="mt-4">
@@ -200,8 +300,16 @@ const Register = () => {
                   )}
                 </div>
               </form>
-
-              {/* ... (existing code) ... */}
+              <p className="mt-6 text-sm text-center text-gray-400">
+                Already have an account?{" "}
+                <Link
+                  href="/login"
+                  className="text-emerald-500 focus:outline-none focus:underline hover:underline"
+                >
+                  Log in
+                </Link>
+                .
+              </p>
             </div>
           </div>
         </div>
