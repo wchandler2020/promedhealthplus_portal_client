@@ -36,10 +36,15 @@ const Register = () => {
     setSuccessMsg("");
 
     // Pass the new fields to the register function
+    const fullInternationalPhone = `${countryCode}${phoneNumber.replace(
+      /\D/g,
+      ""
+    )}`;
+
     const result = await register(
       fullName,
       email,
-      phoneNumber,
+      fullInternationalPhone,
       countryCode,
       password,
       password2
