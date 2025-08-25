@@ -93,24 +93,34 @@ const Hero = () => {
 
   return (
     <>
-      <section className="bg-white text-gray-800 py-20 px-4 md:px-8 h-[75vh]">
-        <div className="container mx-auto flex flex-col md:flex-row items-center h-[75%]">
+      <section className="bg-white text-gray-800 px-4 md:px-8 h-[50vh]">
+        <div className="container mx-auto flex flex-col md:flex-row items-start lg:items-center h-[75%]">
           <div className="md:w-1/2 mb-8 md:mb-0">
-            <h1 className="text-4xl md:text-6xl font-bold leading-tight">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold leading-tight text-center lg:text-start">
               Your Health is Our Priority
             </h1>
-            <p className="mt-4 text-lg md:text-xl">
+            <p className="mt-4 text-sm sm:text-base md:text-lg text-center lg:text-start">
               Providing exceptional medical care with compassion and expertise.
             </p>
-            <button
-              onClick={() => setOpen(true)}
-              className="mt-8 bg-white text-emerald-500 font-bold py-3 px-6 rounded-full shadow-lg hover:bg-gray-100 transition duration-300"
-            >
-              Contact Us
-            </button>
+
+            <div className="mt-8 flex justify-center lg:justify-start">
+              <button
+                onClick={() => setOpen(true)}
+                className="bg-white text-emerald-500 font-bold 
+                 text-sm sm:text-base 
+                 py-2 sm:py-3 
+                 px-5 sm:px-6 
+                 rounded-full shadow-lg 
+                 hover:bg-gray-100 
+                 transition duration-300"
+              >
+                Contact Us
+              </button>
+            </div>
           </div>
-          <div className="md:w-1/2">
-            <div className="relative h-64 w-full rounded-lg shadow-lg h-[70%]">
+
+          <div className="w-full md:w-1/2">
+            <div className="relative w-full h-[300px] sm:h-[400px] md:h-[375px] rounded-lg shadow-lg">
               <img
                 src={hero_img}
                 alt="Medical professional"

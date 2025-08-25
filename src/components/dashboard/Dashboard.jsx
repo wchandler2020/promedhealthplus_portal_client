@@ -4,7 +4,7 @@ import Orders from "./orders/Orders";
 import Documents from "./documemts/Documents";
 import Patients from "./patient/Patient";
 import { IoChatbubblesOutline } from "react-icons/io5";
-import ContactModal from '../contact/contactModal/ContactModal'
+import ContactModal from "../contact/contactModal/ContactModal";
 
 const Dashboard = () => {
   const [openModal, setOpenModal] = useState(false);
@@ -14,12 +14,21 @@ const Dashboard = () => {
       <div className="px-4 sm:px-6 ml-6 font-bold">
         <button
           onClick={() => setOpenModal(true)}
-          className="bg-red-500 text-white py-3 px-6 rounded-full shadow-lg hover:bg-red-400 transition duration-300 flex items-center"
+          className="
+      bg-red-500 text-white 
+      py-1.5 px-3               /* small screens (default) */
+      md:py-2 md:px-4         /* medium screens */
+      lg:py-3 lg:px-6         /* large screens */
+      rounded-full shadow-lg 
+      hover:bg-red-400 
+      transition duration-300 
+      flex items-center
+    "
         >
-          <IoChatbubblesOutline className="text-lg mr-2" /> Chat With Your Rep
+          <IoChatbubblesOutline className="text-lg mr-2" />
+          Chat With Your Rep
         </button>
       </div>
-
       {/* Modal */}
       <ContactModal open={openModal} onClose={() => setOpenModal(false)} />
 
