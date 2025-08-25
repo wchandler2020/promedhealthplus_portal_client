@@ -1,8 +1,8 @@
-import "./App.css";
 import Dashboard from "./components/dashboard/Dashboard";
 import Register from "./components/register/Register";
 import { Route, HashRouter, Routes, useLocation } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
+import { toast } from "react-hot-toast";
 import Login from "./components/login/Login";
 import Navbar from "./components/navbar/Navbar";
 import About from "./components/about/About";
@@ -14,12 +14,15 @@ import FillablePdf from "./components/dashboard/documemts/FillablePdf";
 import Home from "./components/home/Home";
 import Footer from "./components/footer/Footer";
 import ProviderProfileCard from "./components/profile/ProviderProfileCard";
+import { useContext, useEffect, useRef } from "react";
+import { AuthContext } from "./utils/auth";
+import "./App.css";
 
 function ErrorButton() {
   return (
     <button
       onClick={() => {
-        throw new Error('This is your first error!');
+        throw new Error("This is your first error!");
       }}
     >
       Break the world
@@ -29,9 +32,66 @@ function ErrorButton() {
 
 function AppWrapper() {
   const location = useLocation();
-  const hideNavbarPaths = ['/login', '/register', '/register/', '/mfa'];
-
+  const hideNavbarPaths = ["/login", "/register", "/register/", "/mfa"];
   const shouldHideNavAndFooter = hideNavbarPaths.includes(location.pathname);
+  const { logout, user } = useContext(AuthContext);
+  const timeoutRef = useRef(null);
+  const warningTimeoutRef = useRef(null);
+  const logoutTimeoutRef = useRef(null); // <-- Add this
+
+  useEffect(() => {
+    if (!user) return;
+
+    const HIPAA_IDLE_TIMEOUT_MINUTES = 15;
+    const WARNING_BEFORE_LOGOUT_SECONDS = 60;
+
+    const warningDuration =
+      1000 * 60 * HIPAA_IDLE_TIMEOUT_MINUTES -
+      1000 * WARNING_BEFORE_LOGOUT_SECONDS;
+    const logoutDuration = 1000 * 60 * HIPAA_IDLE_TIMEOUT_MINUTES;
+
+    const logoutAndRedirect = () => {
+      logout();
+      window.location.href = "/login";
+    };
+
+    const showWarning = () => {
+      toast("You will be logged out in 1 minute due to inactivity.", {
+        icon: "⚠️",
+        duration: WARNING_BEFORE_LOGOUT_SECONDS * 1000,
+      });
+    };
+
+    const resetTimers = () => {
+      if (warningTimeoutRef.current) clearTimeout(warningTimeoutRef.current);
+      if (logoutTimeoutRef.current) clearTimeout(logoutTimeoutRef.current);
+
+      warningTimeoutRef.current = setTimeout(showWarning, warningDuration);
+      logoutTimeoutRef.current = setTimeout(logoutAndRedirect, logoutDuration);
+    };
+
+    resetTimers(); // Initialize on mount
+
+    const activityEvents = [
+      "mousemove",
+      "keydown",
+      "click",
+      "scroll",
+      "touchstart",
+    ];
+
+    activityEvents.forEach((event) =>
+      window.addEventListener(event, resetTimers)
+    );
+
+    return () => {
+      if (warningTimeoutRef.current) clearTimeout(warningTimeoutRef.current);
+      if (logoutTimeoutRef.current) clearTimeout(logoutTimeoutRef.current);
+      activityEvents.forEach((event) =>
+        window.removeEventListener(event, resetTimers)
+      );
+    };
+  }, [logout, user]);
 
   return (
     <>

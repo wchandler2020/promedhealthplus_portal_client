@@ -52,6 +52,7 @@ const Navbar = () => {
 
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const profileRef = useRef(null);
+  console.log('profile data: ', profile)
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
