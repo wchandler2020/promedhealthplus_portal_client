@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/promedhealthplus_portal_client/static/css/main.1eb54942.css",
-    "main.js": "/promedhealthplus_portal_client/static/js/main.2ca068e6.js",
+    "main.css": "/promedhealthplus_portal_client/static/css/main.9fd554fe.css",
+    "main.js": "/promedhealthplus_portal_client/static/js/main.e6bb36cb.js",
     "static/media/bg_image_01.jpg": "/promedhealthplus_portal_client/static/media/bg_image_01.adcfe6bf0a4abf90993b.jpg",
     "static/media/default_user.jpg": "/promedhealthplus_portal_client/static/media/default_user.c0aa7f0870890e1f0df7.jpg",
     "index.html": "/promedhealthplus_portal_client/index.html",
-    "main.1eb54942.css.map": "/promedhealthplus_portal_client/static/css/main.1eb54942.css.map",
-    "main.2ca068e6.js.map": "/promedhealthplus_portal_client/static/js/main.2ca068e6.js.map"
+    "main.9fd554fe.css.map": "/promedhealthplus_portal_client/static/css/main.9fd554fe.css.map",
+    "main.e6bb36cb.js.map": "/promedhealthplus_portal_client/static/js/main.e6bb36cb.js.map"
   },
   "entrypoints": [
-    "static/css/main.1eb54942.css",
-    "static/js/main.2ca068e6.js"
+    "static/css/main.9fd554fe.css",
+    "static/js/main.e6bb36cb.js"
   ]
 }
