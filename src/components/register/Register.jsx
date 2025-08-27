@@ -80,7 +80,7 @@ const Register = () => {
           <div className="absolute inset-0 bg-black opacity-30 z-10"></div>
           <Link
             to="/"
-            className="absolute top-6 left-6 z-50 text-white hover:text-blue-300 transition duration-200"
+            className="absolute top-6 left-6 z-50 text-white hover:text-emerald-300 transition duration-200"
             title="Back to Home"
           >
             <IoArrowBack size={28} />
@@ -102,9 +102,9 @@ const Register = () => {
         <div className="flex items-center w-full max-w-md px-6 mx-auto lg:w-2/6">
           <div className="flex-1">
             <div className="text-center">
-              <h2 className="text-4xl font-bold text-center text-gray-700 dark:text-white">
+              {/* <h2 className="text-4xl font-bold text-center text-gray-700">
                 Brand
-              </h2>
+              </h2> */}
 
               <p className="mt-3 text-gray-900 text-xl font-bold">
                 Create your account
@@ -125,7 +125,7 @@ const Register = () => {
                     placeholder="John Doe"
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
-                    className="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:bg-white dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 focus:ring focus:ring-blue-400 focus:outline-none focus:ring-opacity-40"
+                    className="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:border-gray-700 focus:border-emerald-400 focus:ring focus:ring-emerald-400 focus:outline-none focus:ring-opacity-40"
                     required
                   />
                 </div>
@@ -143,7 +143,7 @@ const Register = () => {
                     placeholder="example@example.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:bg-white dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 focus:ring focus:ring-blue-400 focus:outline-none focus:ring-opacity-40"
+                    className="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:bg-white focus:border-emerald-400 focus:ring focus:ring-emerald-400 focus:outline-none focus:ring-opacity-40"
                     required
                   />
                 </div>
@@ -159,7 +159,7 @@ const Register = () => {
                     <select
                       value={countryCode}
                       onChange={(e) => setCountryCode(e.target.value)}
-                      className="px-2 py-2 border border-gray-200 rounded-l-md bg-white text-gray-700 focus:border-blue-400 focus:ring focus:ring-blue-400 focus:outline-none focus:ring-opacity-40"
+                      className="px-2 py-2 border border-gray-200 rounded-l-md bg-white text-gray-700 focus:border-emerald-400 focus:ring focus:ring-emerald-400 focus:outline-none focus:ring-opacity-40"
                     >
                       {countryCodesList.map((country) => (
                         <option
@@ -177,7 +177,7 @@ const Register = () => {
                       placeholder="555-555-5555"
                       value={phoneNumber}
                       onChange={(e) => setPhoneNumber(e.target.value)}
-                      className="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-r-md dark:bg-white dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 focus:ring focus:ring-blue-400 focus:outline-none focus:ring-opacity-40"
+                      className="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-r-md dark:bg-white dark:text-gray-300 dark:border-gray-700 focus:border-emerald-400 focus:ring focus:ring-emerald-400 focus:outline-none focus:ring-opacity-40"
                     />
                   </div>
                 </div>
@@ -196,7 +196,7 @@ const Register = () => {
                     placeholder="Create a password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:border-gray-700 focus:border-blue-400 focus:ring focus:ring-emerald-400 focus:outline-none focus:ring-opacity-40"
+                    className="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:border-gray-700 focus:border-emerald-400 focus:ring focus:ring-emerald-400 focus:outline-none focus:ring-opacity-40"
                     required
                   />
 
@@ -284,7 +284,7 @@ const Register = () => {
                     placeholder="Repeat your password"
                     value={password2}
                     onChange={(e) => setPassword2(e.target.value)}
-                    className="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring focus:ring-emerald-400 focus:outline-none focus:ring-opacity-40"
+                    className="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-emerald-400 focus:ring focus:ring-emerald-400 focus:outline-none focus:ring-opacity-40"
                     required
                   />
                 </div>
