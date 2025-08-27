@@ -7,6 +7,7 @@ import bg_image from "../../assets/images/bg_image_01.jpg";
 import { Link } from "react-router-dom";
 import { IoArrowBack, IoCheckmarkCircleOutline } from "react-icons/io5";
 import { countryCodesList } from "../../utils/data";
+import toast from "react-hot-toast";
 
 const Register = () => {
   const { register } = useContext(AuthContext);
@@ -19,7 +20,7 @@ const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
-  const [successMsg, setSuccessMsg] = useState("");
+  // const [successMsg, setSuccessMsg] = useState("");
   const navigate = useNavigate();
 
   // Validation functions
@@ -33,7 +34,7 @@ const Register = () => {
     e.preventDefault();
     setIsLoading(true);
     setErrorMsg("");
-    setSuccessMsg("");
+    // setSuccessMsg("");
 
     const fullInternationalPhone = `${countryCode}${phoneNumber.replace(
       /\D/g,
@@ -51,8 +52,8 @@ const Register = () => {
 
     if (result.success) {
       // ⬅️ IMPORTANT CHANGE HERE: Display success message and do NOT redirect
-      setSuccessMsg(
-        "Account created! Please check your email to verify your account before logging in."
+      toast.success(
+      "Account created! Please check your email to verify your account before logging in."
       );
       setFullName("");
       setEmail("");
@@ -320,9 +321,9 @@ const Register = () => {
                   {errorMsg && (
                     <p className="mt-2 text-sm text-red-500">{errorMsg}</p>
                   )}
-                  {successMsg && (
+                  {/* {successMsg && (
                     <p className="mt-2 text-sm text-green-500">{successMsg}</p>
-                  )}
+                  )} */}
                 </div>
               </form>
               <p className="mt-6 text-sm text-center text-gray-400">
