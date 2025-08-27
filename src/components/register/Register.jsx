@@ -30,44 +30,49 @@ const Register = () => {
   const hasSpecialChars = (password.match(/[^A-Za-z0-9]/g) || []).length >= 2;
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  setIsLoading(true);
-  setErrorMsg("");
-  setSuccessMsg("");
+    e.preventDefault();
+    setIsLoading(true);
+    setErrorMsg("");
+    setSuccessMsg("");
 
-  const fullInternationalPhone = `${countryCode}${phoneNumber.replace(/\D/g, "")}`;
+    const fullInternationalPhone = `${countryCode}${phoneNumber.replace(
+      /\D/g,
+      ""
+    )}`;
 
-  const result = await register(
-    fullName,
-    email,
-    fullInternationalPhone,
-    countryCode,
-    password,
-    password2
-  );
+    const result = await register(
+      fullName,
+      email,
+      fullInternationalPhone,
+      countryCode,
+      password,
+      password2
+    );
 
-  if (result.success) {
-    // ⬅️ IMPORTANT CHANGE HERE: Display success message and do NOT redirect
-    setSuccessMsg("Account created! Please check your email to verify your account before logging in.");
-    setFullName("");
-    setEmail("");
-    setPhoneNumber("");
-    setCountryCode("+1");
-    setPassword("");
-    setPassword2("");
-    // ⚠️ Do not navigate here! The user must verify their email first.
-  } else {
-    // ... (existing error handling)
-    const error = result.error;
-    if (typeof error === "object") {
-      const messages = Object.values(error).flat().join(" ");
-      setErrorMsg(messages);
+    if (result.success) {
+      // ⬅️ IMPORTANT CHANGE HERE: Display success message and do NOT redirect
+      setSuccessMsg(
+        "Account created! Please check your email to verify your account before logging in."
+      );
+      setFullName("");
+      setEmail("");
+      setPhoneNumber("");
+      setCountryCode("+1");
+      setPassword("");
+      setPassword2("");
+      // ⚠️ Do not navigate here! The user must verify their email first.
     } else {
-      setErrorMsg(error);
+      // ... (existing error handling)
+      const error = result.error;
+      if (typeof error === "object") {
+        const messages = Object.values(error).flat().join(" ");
+        setErrorMsg(messages);
+      } else {
+        setErrorMsg(error);
+      }
     }
-  }
-  setIsLoading(false);
-};
+    setIsLoading(false);
+  };
 
   return (
     <div className="bg-white dark:bg-white">
@@ -159,7 +164,7 @@ const Register = () => {
                     <select
                       value={countryCode}
                       onChange={(e) => setCountryCode(e.target.value)}
-                      className="px-2 py-2 border border-gray-200 rounded-l-md bg-white text-gray-700 focus:border-emerald-400 focus:ring focus:ring-emerald-400 focus:outline-none focus:ring-opacity-40"
+                      className="w-1/3 px-3 py-2 border border-gray-200 rounded-l-md bg-white text-gray-700 focus:border-emerald-400 focus:ring focus:ring-emerald-400 focus:outline-none focus:ring-opacity-40"
                     >
                       {countryCodesList.map((country) => (
                         <option
@@ -177,7 +182,7 @@ const Register = () => {
                       placeholder="555-555-5555"
                       value={phoneNumber}
                       onChange={(e) => setPhoneNumber(e.target.value)}
-                      className="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-r-md dark:bg-white dark:text-gray-300 dark:border-gray-700 focus:border-emerald-400 focus:ring focus:ring-emerald-400 focus:outline-none focus:ring-opacity-40"
+                      className="w-2/3 px-4 py-2 border border-l-0 border-gray-200 rounded-r-md text-gray-700 placeholder-gray-400 bg-white focus:border-emerald-400 focus:ring focus:ring-emerald-400 focus:outline-none focus:ring-opacity-40"
                     />
                   </div>
                 </div>
