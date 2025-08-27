@@ -17,6 +17,7 @@ import ProviderProfileCard from "./components/profile/ProviderProfileCard";
 import { useContext, useEffect, useRef } from "react";
 import { AuthContext } from "./utils/auth";
 import "./App.css";
+import VerifyEmail from "./components/verifyEmail/VerifyEmail";
 
 function ErrorButton() {
   return (
@@ -100,6 +101,7 @@ function AppWrapper() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/verify-email/:token" element={<VerifyEmail />} /> 
         <Route
           path="/dashboard"
           element={

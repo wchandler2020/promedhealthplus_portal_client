@@ -33,7 +33,6 @@ const Documents = () => {
   const [uploadFile, setUploadFile] = useState(null);
   const [isUploading, setIsUploading] = useState(false); // New state for loading indicator
   const token = localStorage.getItem("accessToken");
-  
 
   // 📥 Fetch documents
   useEffect(() => {
@@ -51,7 +50,8 @@ const Documents = () => {
       }
     };
 
-    if (token) { // Ensure token exists before fetching
+    if (token) {
+      // Ensure token exists before fetching
       fetchDocuments();
     }
   }, [token]);
@@ -69,16 +69,12 @@ const Documents = () => {
     formData.append("document_type", docType);
 
     try {
-      await axios.post(
-        `${API_BASE_URL}/docs/onboarding/documents/`,
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      await axios.post(`${API_BASE_URL}/docs/onboarding/documents/`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
       alert("Document uploaded successfully!");
       setUploadFile(null); // Clear selected file
@@ -111,7 +107,10 @@ const Documents = () => {
           Upload New Document
         </h3>
         <div className="mb-4">
-          <label htmlFor="doc-type" className="block text-sm font-medium text-gray-700 mb-2">
+          <label
+            htmlFor="doc-type"
+            className="block text-sm font-medium text-gray-700 mb-2"
+          >
             Select Document Type
           </label>
           <select
@@ -122,38 +121,40 @@ const Documents = () => {
           >
             <option value="BAA">Business Associate Agreement</option>
             <option value="PURCHASE_AGREEMENT">Purchase Agreement</option>
-            <option value="MANUFACTURER_DOC">Manufacturer Onboarding Doc</option>
+            <option value="MANUFACTURER_DOC">
+              Manufacturer Onboarding Doc
+            </option>
           </select>
         </div>
 
         <div className="mb-4">
-          <UploadDropzone
-            uploader={uploader}
-            options={{ multi: false }}
-            width="600px"
-            height="250px"
-            onUpdate={(files) => {
-              if (files.length > 0) {
-                setUploadFile(files[0]);
-              } else {
-                setUploadFile(null); // Clear if no file selected
-              }
-            }}
-            // REFLECTED CHANGES: Reduced padding here from p-2 to py-1 px-2 for a more compact look
-            className="border border-gray-300 rounded-md py-1 px-2 text-center text-gray-500 hover:border-blue-500 hover:bg-gray-100 transition duration-200 cursor-pointer group"
-          >
-            {/* REFLECTED CHANGES: Reduced vertical padding here from py-2 to py-1 */}
-            <div className="flex items-center justify-center space-x-2 py-1">
-              <UploadIcon />
-              <span className="text-sm font-medium text-gray-600 group-hover:text-blue-600 transition-colors duration-200">
-                {uploadFile ? (
-                  <span className="text-blue-700">File selected: {uploadFile.originalFile.file.name}</span>
-                ) : (
-                  "Click to select file (PDF, DOCX, JPG, PNG)"
-                )}
-              </span>
-            </div>
-          </UploadDropzone>
+          <div className="w-full flex items-center">
+            <UploadDropzone
+              uploader={uploader}
+              options={{ multi: false }}
+              onUpdate={(files) => {
+                if (files.length > 0) {
+                  setUploadFile(files[0]);
+                } else {
+                  setUploadFile(null);
+                }
+              }}
+              className="w-full min-h-[200px] border border-gray-300 rounded-md text-center text-gray-500 hover:border-blue-500 hover:bg-gray-100 transition duration-200 cursor-pointer group"
+            >
+              <div className="flex flex-col items-center justify-center space-y-2">
+                <UploadIcon />
+                <span className="text-sm font-medium text-gray-600 group-hover:text-blue-600 transition-colors duration-200">
+                  {uploadFile ? (
+                    <span className="text-blue-700">
+                      File selected: {uploadFile.originalFile.file.name}
+                    </span>
+                  ) : (
+                    "Click to select file (PDF, DOCX, JPG, PNG)"
+                  )}
+                </span>
+              </div>
+            </UploadDropzone>
+          </div>
         </div>
 
         <button
@@ -217,7 +218,9 @@ const Documents = () => {
                     </svg>
                   </a>
                 ) : (
-                  <span className="text-red-500 text-sm">File not available</span>
+                  <span className="text-red-500 text-sm">
+                    File not available
+                  </span>
                 )}
               </li>
             ))}

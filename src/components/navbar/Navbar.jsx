@@ -52,7 +52,7 @@ const Navbar = () => {
 
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const profileRef = useRef(null);
-  console.log('profile data: ', profile)
+  console.log("profile data: ", profile);
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -110,6 +110,20 @@ const Navbar = () => {
       fetchProfile();
     }
   }, [isAuthenticated, verifyToken]);
+
+  function removeDuplicateMedia(url) {
+    if (url && typeof url === "string") {
+      const mediaUrl = "https://promedhealthplus.blob.core.windows.net/media/";
+      const duplicatedSegment = "media/images/"; // The duplicated part
+
+      // Check for the duplicated segment in the URL
+      if (url.includes(duplicatedSegment)) {
+        // Replace the duplicated segment with the correct one
+        return url.replace(duplicatedSegment, "images/");
+      }
+    }
+    return url;
+  }
 
   return (
     <div className="bg-white px-6 sm:px-8 mt-2 mb-10">
@@ -218,10 +232,21 @@ const Navbar = () => {
                     "Dr. Kara Johnson"}
                 </h6>
 
-                <img
+                {/* <img
                   src={
                     profile?.image?.startsWith("http")
                       ? profile.image
+                      : profile?.image
+                      ? `${process.env.REACT_APP_MEDIA_URL}${profile.image}`
+                      : default_user_img
+                  }
+                  alt="User Profile"
+                  className="w-10 h-10 rounded-full object-cover object-top border border-gray-300 shadow-sm"
+                /> */}
+                <img
+                  src={
+                    profile?.image?.startsWith("http")
+                      ? removeDuplicateMedia(profile.image)
                       : profile?.image
                       ? `${process.env.REACT_APP_MEDIA_URL}${profile.image}`
                       : default_user_img
@@ -279,7 +304,10 @@ const Navbar = () => {
         ></div>
         <nav className="fixed top-0 left-0 bottom-0 flex flex-col w-5/6 max-w-sm py-6 px-6 bg-white border-r overflow-y-auto">
           <div className="flex items-center mb-8 justify-between">
-            <Link className="mr-auto text-2xl font-bold leading-none pl-3" to="/">
+            <Link
+              className="mr-auto text-2xl font-bold leading-none pl-3"
+              to="/"
+            >
               ProMed Health Plus
             </Link>
             <button className="navbar-close" onClick={closeMobileMenu}>
@@ -351,10 +379,21 @@ const Navbar = () => {
                         "Dr. Kara Johnson"}
                     </h6>
 
-                    <img
+                    {/* <img
                       src={
                         profile?.image?.startsWith("http")
                           ? profile.image
+                          : profile?.image
+                          ? `${process.env.REACT_APP_MEDIA_URL}${profile.image}`
+                          : default_user_img
+                      }
+                      alt="User Profile"
+                      className="w-10 h-10 rounded-full object-cover object-top border border-gray-300 shadow-sm"
+                    /> */}
+                    <img
+                      src={
+                        profile?.image?.startsWith("http")
+                          ? removeDuplicateMedia(profile.image)
                           : profile?.image
                           ? `${process.env.REACT_APP_MEDIA_URL}${profile.image}`
                           : default_user_img

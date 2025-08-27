@@ -30,46 +30,44 @@ const Register = () => {
   const hasSpecialChars = (password.match(/[^A-Za-z0-9]/g) || []).length >= 2;
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setErrorMsg("");
-    setSuccessMsg("");
+  e.preventDefault();
+  setIsLoading(true);
+  setErrorMsg("");
+  setSuccessMsg("");
 
-    // Pass the new fields to the register function
-    const fullInternationalPhone = `${countryCode}${phoneNumber.replace(
-      /\D/g,
-      ""
-    )}`;
+  const fullInternationalPhone = `${countryCode}${phoneNumber.replace(/\D/g, "")}`;
 
-    const result = await register(
-      fullName,
-      email,
-      fullInternationalPhone,
-      countryCode,
-      password,
-      password2
-    );
+  const result = await register(
+    fullName,
+    email,
+    fullInternationalPhone,
+    countryCode,
+    password,
+    password2
+  );
 
-    if (result.success) {
-      setSuccessMsg("Account created successfully!");
-      setFullName("");
-      setEmail("");
-      setPhoneNumber("");
-      setCountryCode("+1");
-      setPassword("");
-      setPassword2("");
-      navigate("/login");
+  if (result.success) {
+    // ⬅️ IMPORTANT CHANGE HERE: Display success message and do NOT redirect
+    setSuccessMsg("Account created! Please check your email to verify your account before logging in.");
+    setFullName("");
+    setEmail("");
+    setPhoneNumber("");
+    setCountryCode("+1");
+    setPassword("");
+    setPassword2("");
+    // ⚠️ Do not navigate here! The user must verify their email first.
+  } else {
+    // ... (existing error handling)
+    const error = result.error;
+    if (typeof error === "object") {
+      const messages = Object.values(error).flat().join(" ");
+      setErrorMsg(messages);
     } else {
-      const error = result.error;
-      if (typeof error === "object") {
-        const messages = Object.values(error).flat().join(" ");
-        setErrorMsg(messages);
-      } else {
-        setErrorMsg(error);
-      }
+      setErrorMsg(error);
     }
-    setIsLoading(false);
-  };
+  }
+  setIsLoading(false);
+};
 
   return (
     <div className="bg-white dark:bg-white">
