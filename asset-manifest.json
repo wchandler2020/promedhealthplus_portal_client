@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/promedhealthplus_portal_client/static/css/main.1eb54942.css",
-    "main.js": "/promedhealthplus_portal_client/static/js/main.ab7b8c5a.js",
+    "main.js": "/promedhealthplus_portal_client/static/js/main.2ca068e6.js",
     "static/media/bg_image_01.jpg": "/promedhealthplus_portal_client/static/media/bg_image_01.adcfe6bf0a4abf90993b.jpg",
     "static/media/default_user.jpg": "/promedhealthplus_portal_client/static/media/default_user.c0aa7f0870890e1f0df7.jpg",
     "index.html": "/promedhealthplus_portal_client/index.html",
     "main.1eb54942.css.map": "/promedhealthplus_portal_client/static/css/main.1eb54942.css.map",
-    "main.ab7b8c5a.js.map": "/promedhealthplus_portal_client/static/js/main.ab7b8c5a.js.map"
+    "main.2ca068e6.js.map": "/promedhealthplus_portal_client/static/js/main.2ca068e6.js.map"
   },
   "entrypoints": [
     "static/css/main.1eb54942.css",
-    "static/js/main.ab7b8c5a.js"
+    "static/js/main.2ca068e6.js"
   ]
 }
