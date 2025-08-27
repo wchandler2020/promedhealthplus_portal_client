@@ -1,18 +1,20 @@
+// src/components/verify-email/VerifyEmail.js
+
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom"; // ⬅️ Import useNavigate
 import axios from "axios";
 import { API_BASE_URL } from "../../utils/constants";
 import { IoCheckmarkCircleOutline, IoCloseCircleOutline } from "react-icons/io5";
 
 const VerifyEmail = () => {
-  const { token } = useParams(); // Get the token from the URL
-  const [verificationStatus, setVerificationStatus] = useState("verifying"); // 'verifying', 'success', 'error'
-  const navigate = useNavigate();
+  const { token } = useParams();
+  const [verificationStatus, setVerificationStatus] = useState("verifying");
+  const navigate = useNavigate(); // ⬅️ Initialize navigate
 
   useEffect(() => {
     const verifyToken = async () => {
       try {
-        // Make a GET request to your backend's verification endpoint
+        // Make the GET request to your backend's verification endpoint
         await axios.get(`${API_BASE_URL}/provider/verify-email/${token}/`);
         setVerificationStatus("success");
       } catch (error) {
@@ -26,6 +28,11 @@ const VerifyEmail = () => {
     }
   }, [token]);
 
+  const handleRedirectToLogin = () => {
+    // ⬅️ Add a handler to navigate to the login page
+    navigate("/login"); 
+  };
+
   const renderContent = () => {
     if (verificationStatus === "verifying") {
       return (
@@ -38,7 +45,7 @@ const VerifyEmail = () => {
           <h2 className="text-2xl font-bold">Email Verified!</h2>
           <p className="mt-2 text-gray-600">You can now log in to your account.</p>
           <button
-            onClick={() => navigate("/login")}
+            onClick={handleRedirectToLogin} // ⬅️ Call the handler on click
             className="mt-4 px-6 py-2 bg-emerald-500 text-white rounded-md"
           >
             Go to Login
