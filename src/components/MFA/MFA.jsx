@@ -105,7 +105,7 @@ const MFA = () => {
 
                 <button
                   type="submit"
-                  className="w-full px-4 py-2 border border-purple-500 text-purple-500 hover:bg-purple-500 hover:text-white rounded-md focus:outline-none focus:ring focus:ring-purple-500 focus:ring-opacity-50"
+                  className="w-full px-4 py-2 border border-purple-500 text-purple-500 hover:bg-purple-500 hover:text-white rounded-md focus:outline-none focus:ring focus:ring-purple-500 focus:ring-opacity-50 uppercase"
                 >
                   Verify Code
                 </button>

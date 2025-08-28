@@ -314,7 +314,7 @@ const Register = () => {
                   <button
                     type="submit"
                     disabled={isLoading}
-                    className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-purple-500 rounded-md hover:bg-purple-400 focus:outline-none focus:bg-purple-500 focus:ring focus:ring-purple-500 focus:ring-opacity-50"
+                    className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-purple-500 rounded-md hover:bg-purple-400 focus:outline-none focus:bg-purple-500 focus:ring focus:ring-purple-500 focus:ring-opacity-50 uppercase"
                   >
                     {isLoading ? "Registering..." : "Register"}
                   </button>

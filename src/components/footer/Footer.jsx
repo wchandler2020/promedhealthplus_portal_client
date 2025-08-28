@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   const year = new Date().getFullYear();
@@ -141,14 +142,14 @@ const Footer = () => {
       </div>
 
       {/* */}
-      <div className="bg-white p-6 text-center">
-        <span>© {year} Copyright </span>
-        <a
-          className="font-semibold text-gray-800 text-xs"
-          href="https://tw-elements.com/"
+      <div className="bg-white p-6 text-center flex flex-row items-center justify-center">
+        <p className="text-xs font-semibold text-gray-800 uppercase mr-1">© {year} Copyright </p>
+        <Link
+          className="text-gray-800 text-xs font-semibold uppercase"
+          to="/"
         > 
           ProMed Health Plus
-        </a>
+        </Link>
       </div>
     </footer>
   );

@@ -128,7 +128,7 @@ const Navbar = () => {
   return (
     <div className="bg-white px-6 sm:px-8 mt-2 mb-10">
       <nav className="relative px-4 py-4 flex justify-between items-center bg-white">
-        <Link className="text-2xl sm:text-3xl font-bold leading-none" to="/">
+        <Link className="text-2xl sm:text-3xl font-semibold leading-none" to="/">
           ProMed Health Plus
         </Link>
 
@@ -279,12 +279,12 @@ const Navbar = () => {
         ) : (
           <div className="hidden lg:flex items-center space-x-4">
             <Link to="/login">
-              <button className="px-4 py-2 text-sm tracking-wide text-white transition-colors duration-200 transform bg-purple-500 rounded-md hover:bg-purple-400 focus:outline-none focus:bg-purple-500 focus:ring focus:ring-purple-500 focus:ring-opacity-50">
+              <button className="px-4 py-2 text-sm tracking-wide text-white transition-colors duration-200 transform bg-purple-500 rounded-md hover:bg-purple-400 focus:outline-none focus:bg-purple-500 focus:ring focus:ring-purple-500 focus:ring-opacity-50 uppercase">
                 Provider Login
               </button>
             </Link>
             <Link to="/register">
-              <button className="px-4 py-2 text-sm tracking-wide text-purple-500 border border-purple-500 rounded-md transition-colors duration-200 hover:bg-purple-100 focus:outline-none focus:ring focus:ring-purple-500 focus:ring-opacity-50">
+              <button className="px-4 py-2 text-sm tracking-wide text-purple-500 border border-purple-500 rounded-md transition-colors duration-200 hover:bg-purple-100 focus:outline-none focus:ring focus:ring-purple-500 focus:ring-opacity-50 uppercase">
                 Provider Registration
               </button>
             </Link>
@@ -418,12 +418,12 @@ const Navbar = () => {
             ) : (
               <div className="flex flex-col space-y-4">
                 <Link to="/login">
-                  <button className="w-full px-4 py-2 text-sm tracking-wide text-white transition-colors duration-200 transform bg-purple-500 rounded-md hover:bg-purple-400 focus:outline-none focus:bg-purple-500 focus:ring focus:ring-purple-500 focus:ring-opacity-50">
+                  <button className="w-full px-4 py-2 text-sm tracking-wide text-white transition-colors duration-200 transform bg-purple-500 rounded-md hover:bg-purple-400 focus:outline-none focus:bg-purple-500 focus:ring focus:ring-purple-500 focus:ring-opacity-50 uppercase">
                     Provider Login
                   </button>
                 </Link>
                 <Link to="/register">
-                  <button className="w-full px-4 py-2 text-sm tracking-wide text-purple-500 border border-purple-500 rounded-md transition-colors duration-200 hover:bg-purple-100 focus:outline-none focus:ring focus:ring-purple-500 focus:ring-opacity-50">
+                  <button className="w-full px-4 py-2 text-sm tracking-wide text-purple-500 border border-purple-500 rounded-md transition-colors duration-200 hover:bg-purple-100 focus:outline-none focus:ring focus:ring-purple-500 focus:ring-opacity-50 uppercase">
                     Provider Register
                   </button>
                 </Link>

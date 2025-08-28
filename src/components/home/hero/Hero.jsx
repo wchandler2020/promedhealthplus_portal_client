@@ -95,7 +95,7 @@ const Hero = () => {
 
   return (
     <>
-      <section className="bg-white text-gray-800 px-4 md:px-8 h-[50vh] mt-10">
+      <section className="bg-white text-gray-800 px-4 md:px-8 h-[50vh] mt-10  sm:mb-2 mb-10">
         <div className="container mx-auto flex flex-col md:flex-row lg:items-center h-[75%] justify-between">
           <div className="md:w-1/2 mb-8 md:mb-0">
             <h1 className="text-lg sm:text-1xl md:text-2xl lg:text-4xl font-semibold leading-tight text-center lg:text-start uppercase">
@@ -113,8 +113,11 @@ const Hero = () => {
                  py-2 sm:py-3 
                  px-5 sm:px-6 
                  rounded-full shadow-lg 
-                 hover:bg-gray-100 
-                 transition duration-300"
+                 hover:bg-purple-100 
+                 transition duration-300 
+                 uppercase
+                 "
+
               >
                 Contact Us
               </button>
