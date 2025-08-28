@@ -318,7 +318,7 @@ const Navbar = () => {
           <ul>
             <li className="mb-1">
               <Link
-                className="block p-4 text-sm font-semibold text-gray-800 hover:bg-purple-50 hover:text-purple-500 rounded"
+                className="block p-4 text-sm text-gray-800 hover:bg-purple-50 hover:text-purple-500 rounded"
                 to="/"
               >
                 Home
@@ -327,7 +327,7 @@ const Navbar = () => {
             {isAuthenticated && (
               <li className="mb-1">
                 <Link
-                  className="block p-4 text-sm font-semibold text-gray-800 hover:bg-purple-50 hover:text-purple-500 rounded"
+                  className="block p-4 text-sm text-gray-800 hover:bg-purple-50 hover:text-purple-500 rounded"
                   to="/dashboard/"
                 >
                   Dashboard
@@ -336,7 +336,7 @@ const Navbar = () => {
             )}
             <li className="mb-1">
               <Link
-                className="block p-4 text-sm font-semibold text-gray-800 hover:bg-purple-50 hover:text-purple-500 rounded"
+                className="block p-4 text-sm text-gray-800 hover:bg-purple-50 hover:text-purple-500 rounded"
                 to="/about/"
               >
                 About Us
@@ -344,7 +344,7 @@ const Navbar = () => {
             </li>
             <li className="mb-1">
               <Link
-                className="block p-4 text-sm font-semibold text-gray-800 hover:bg-purple-50 hover:text-purple-500 rounded"
+                className="block p-4 text-sm text-gray-800 hover:bg-purple-50 hover:text-purple-500 rounded"
                 to="/services/"
               >
                 Services
@@ -352,7 +352,7 @@ const Navbar = () => {
             </li>
             <li className="mb-1">
               <Link
-                className="block p-4 text-sm font-semibold text-gray-800 hover:bg-purple-50 hover:text-purple-500 rounded"
+                className="block p-4 text-sm text-gray-800 hover:bg-purple-50 hover:text-purple-500 rounded"
                 to="/contact/"
               >
                 Contact
