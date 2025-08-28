@@ -50,7 +50,7 @@ const ToolbarButton = ({ format, icon, ...props}) => {
     return (
         <button
         type="button"
-        className={`mr-2 px-2 py-1 rounded ${isActive(editor, format) ? "bg-emerald-200" : "bg-gray-200"}`}
+        className={`mr-2 px-2 py-1 rounded ${isActive(editor, format) ? "bg-purple-200" : "bg-gray-200"}`}
         onMouseDown={event => {
             event.preventDefault();
             toggle(editor, format);
@@ -195,7 +195,7 @@ const Notes = ({ patientId }) => {
             <strong>Notes</strong>
             </p>
             <button
-            className="flex items-center gap-1 text-emerald-600 text-xs"
+            className="flex items-center gap-1 text-purple-600 text-xs"
             onClick={() => start(null)}
             >
             + Add Note
@@ -209,7 +209,7 @@ const Notes = ({ patientId }) => {
                 </div>
                 <div className="flex space-x-2">
                 <FaEdit
-                    className="text-gray-500 hover:text-green-500 cursor-pointer"
+                    className="text-gray-500 hover:text-purple-500 cursor-pointer"
                     onClick={() => start(note)}
                 />
                 <FaTrashAlt
@@ -256,7 +256,7 @@ const Notes = ({ patientId }) => {
             </Slate>
             <div className="flex gap-2 mt-2">
                 <button
-                className="bg-emerald-500 text-white px-3 py-1 rounded"
+                className="bg-purple-500 text-white px-3 py-1 rounded"
                 onClick={handleSave}
                 >
                 Save

@@ -50,7 +50,7 @@ const Contact = () => {
                 value={formData.name}
                 onChange={handleChange}
                 required
-                className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none"
               />
             </div>
 
@@ -63,7 +63,7 @@ const Contact = () => {
                   value={formData.city}
                   onChange={handleChange}
                   required
-                  className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                  className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none"
                 />
               </div>
 
@@ -75,7 +75,7 @@ const Contact = () => {
                     value={formData.state}
                     onChange={handleChange}
                     required
-                    className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg bg-white focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                    className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg bg-white focus:ring-2 focus:ring-purple-500 focus:outline-none"
                   >
                     <option value="">Select</option>
                     {states.map((state) => (
@@ -94,7 +94,7 @@ const Contact = () => {
                     value={formData.zip}
                     onChange={handleChange}
                     required
-                    className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                    className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none"
                   />
                 </div>
               </div>
@@ -108,7 +108,7 @@ const Contact = () => {
                 value={formData.phone}
                 onChange={handleChange}
                 required
-                className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none"
               />
             </div>
 
@@ -120,7 +120,7 @@ const Contact = () => {
                 value={formData.email}
                 onChange={handleChange}
                 required
-                className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none"
               />
             </div>
 
@@ -132,13 +132,13 @@ const Contact = () => {
                 onChange={handleChange}
                 required
                 rows={4}
-                className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-purple-500 focus:outline-none"
               ></textarea>
             </div>
 
             <button
               type="submit"
-              className="w-full bg-emerald-500 text-white font-semibold py-3 px-6 rounded-lg hover:bg-emerald-600 transition duration-300"
+              className="w-full bg-purple-500 text-white font-semibold py-3 px-6 rounded-lg hover:bg-purple-600 transition duration-300"
             >
               Submit
             </button>
@@ -200,7 +200,7 @@ const Contact = () => {
 
       {/* CTA */}
       <div className="text-center">
-        <button className="bg-green-600 text-white px-6 py-3 rounded-md text-base hover:bg-green-700 transition">
+        <button className="bg-purple-600 text-white px-6 py-3 rounded-md text-base hover:bg-purple-700 transition">
           Get Support Now
         </button>
       </div>

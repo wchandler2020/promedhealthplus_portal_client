@@ -163,7 +163,7 @@ const Documents = () => {
           className={`w-full py-2 px-4 rounded-md font-semibold transition duration-200 ${
             !uploadFile || isUploading
               ? "bg-gray-300 text-gray-600 cursor-not-allowed"
-              : "bg-emerald-600 text-white hover:bg-emerald-700 shadow-md"
+              : "bg-purple-600 text-white hover:bg-purple-700 shadow-md"
           }`}
         >
           {isUploading ? "Uploading..." : "Submit Document"}

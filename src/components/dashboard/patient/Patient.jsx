@@ -21,7 +21,7 @@ import Notes from "../documemts/Notes";
 
 const IVRStatusBadge = ({ status }) => {
   const colors = {
-    Approved: "bg-green-100 text-green-700",
+    Approved: "bg-purple-100 text-purple-700",
     Pending: "bg-yellow-100 text-yellow-700",
     Denied: "bg-red-100 text-red-700",
   };
@@ -195,7 +195,7 @@ const PatientCard = ({ patient, onViewPdf }) => {
               className="text-gray-500 hover:text-blue-500 cursor-pointer"
               onClick={() => onViewPdf(patient)}
             />
-            <FaEdit className="text-gray-500 hover:text-green-500 cursor-pointer" />
+            <FaEdit className="text-gray-500 hover:text-purple-500 cursor-pointer" />
             <FaTrashAlt className="text-gray-500 hover:text-red-500 cursor-pointer" />
           </div>
         </div>
@@ -378,7 +378,7 @@ const Patients = () => {
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-semibold">Patient Applications</h2>
         <button
-          className="border border-emerald-500 text-emerald-500 hover:bg-emerald-500 hover:text-white px-4 py-2 rounded-md transition-all text-xs"
+          className="border border-purple-500 text-purple-500 hover:bg-purple-500 hover:text-white px-4 py-2 rounded-md transition-all text-xs"
           onClick={() => setOpen(true)}
         >
           + New Patient
@@ -388,7 +388,7 @@ const Patients = () => {
         <input
           type="text"
           placeholder="Search Patients by Name or Med Record No."
-          className="w-full px-2 py-1 pl-10 text-gray-700 bg-white border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-300 text-sm"
+          className="w-full px-2 py-1 pl-10 text-gray-700 bg-white border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 text-sm"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
@@ -410,7 +410,7 @@ const Patients = () => {
             onChange={(e) => setIvrFilter(e.target.value)}
             className="bg-gray-100 text-gray-800 border border-gray-300 rounded px-2 py-1 text-xs 
          focus:bg-gray-200 focus:outline-none focus:ring-2 
-         focus:ring-emerald-500 focus:border-emerald-300 transition"
+         focus:ring-purple-500 focus:border-purple-300 transition"
           >
             <option value="">All</option>
             <option value="Approved">Approved</option>
@@ -435,7 +435,7 @@ const Patients = () => {
             }}
             className="bg-gray-100 text-gray-800 border border-gray-300 rounded px-2 py-1 text-xs 
          focus:bg-gray-200 focus:outline-none focus:ring-2 
-         focus:ring-emerald-500 focus:border-emerald-300 transition"
+         focus:ring-purple-500 focus:border-purple-300 transition"
           >
             {[5, 10, 15, 25].map((num) => (
               <option key={num} value={num}>
@@ -555,7 +555,7 @@ const Patients = () => {
                     value={formData.first_name}
                     onChange={handleInputChange}
                     required
-                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:outline-none"
                   />
                   {errors.first_name && (
                     <p className="text-red-500 text-sm">{errors.first_name}</p>
@@ -571,7 +571,7 @@ const Patients = () => {
                     value={formData.last_name}
                     onChange={handleInputChange}
                     required
-                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:outline-none"
                   />
                   {errors.last_name && (
                     <p className="text-red-500 text-sm">{errors.last_name}</p>
@@ -589,7 +589,7 @@ const Patients = () => {
                     name="middle_initial"
                     value={formData.middle_initial}
                     onChange={handleInputChange}
-                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:outline-none"
                   />
                 </div>
 
@@ -603,7 +603,7 @@ const Patients = () => {
                     value={formData.date_of_birth}
                     onChange={handleInputChange}
                     required
-                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:outline-none"
                   />
                   {errors.date_of_birth && (
                     <p className="text-red-500 text-sm">
@@ -623,7 +623,7 @@ const Patients = () => {
                     name="address"
                     value={formData.address}
                     onChange={handleInputChange}
-                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:outline-none"
                   />
                 </div>
                 <div>
@@ -635,7 +635,7 @@ const Patients = () => {
                     name="city"
                     value={formData.city}
                     onChange={handleInputChange}
-                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:outline-none"
                   />
                 </div>
               </div>
@@ -650,7 +650,7 @@ const Patients = () => {
                     name="state"
                     value={formData.state}
                     onChange={handleInputChange}
-                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:outline-none"
                   />
                 </div>
                 <div className="w-1/3">
@@ -662,7 +662,7 @@ const Patients = () => {
                     name="zip_code"
                     value={formData.zip_code}
                     onChange={handleInputChange}
-                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:outline-none"
                   />
                 </div>
               </div>
@@ -676,7 +676,7 @@ const Patients = () => {
                   name="phone_number"
                   value={formData.phone_number}
                   onChange={handleInputChange}
-                  className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                  className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:outline-none"
                 />
               </div>
 
@@ -691,7 +691,7 @@ const Patients = () => {
                     name="primary_insurance"
                     value={formData.primary_insurance}
                     onChange={handleInputChange}
-                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:outline-none"
                   />
                 </div>
                 <div>
@@ -703,7 +703,7 @@ const Patients = () => {
                     name="primary_insurance_number"
                     value={formData.primary_insurance_number}
                     onChange={handleInputChange}
-                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:outline-none"
                   />
                 </div>
               </div>
@@ -711,7 +711,7 @@ const Patients = () => {
               {/* Submit button */}
               <button
                 type="submit"
-                className="w-full bg-emerald-400 hover:bg-emerald-500 text-white font-semibold py-3 px-6 rounded-lg shadow-lg transition duration-300"
+                className="w-full bg-purple-400 hover:bg-purple-500 text-white font-semibold py-3 px-6 rounded-lg shadow-lg transition duration-300"
               >
                 Save Patient
               </button>

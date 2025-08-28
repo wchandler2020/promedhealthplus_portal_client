@@ -151,7 +151,7 @@ const FillablePdf = ({ selectedPatientId }) => {
               target="_blank"
               rel="noopener noreferrer"
               download
-              className="px-4 py-2 bg-emerald-600 text-white rounded"
+              className="px-4 py-2 bg-purple-600 text-white rounded"
             >
               Download PDF
             </a>
@@ -163,7 +163,7 @@ const FillablePdf = ({ selectedPatientId }) => {
               Edit PDF Fields
             </button>
             <button
-              className="px-4 py-2 bg-green-600 text-white rounded"
+              className="px-4 py-2 bg-purple-600 text-white rounded"
               onClick={handleSavePatientIVR}
             >
               Save Patient IVR

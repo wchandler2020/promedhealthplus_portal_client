@@ -116,7 +116,7 @@ const ContactRepModal = ({ open, onClose }) => {
                 value={formData.name}
                 onChange={handleChange}
                 required
-                className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-purple-500 focus:outline-none"
               />
             </div>
 
@@ -130,7 +130,7 @@ const ContactRepModal = ({ open, onClose }) => {
                 value={formData.phone}
                 onChange={handleChange}
                 required
-                className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-purple-500 focus:outline-none"
               />
             </div>
 
@@ -144,7 +144,7 @@ const ContactRepModal = ({ open, onClose }) => {
                 value={formData.email}
                 onChange={handleChange}
                 required
-                className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-purple-500 focus:outline-none"
               />
             </div>
 
@@ -158,13 +158,13 @@ const ContactRepModal = ({ open, onClose }) => {
                 onChange={handleChange}
                 required
                 rows={4}
-                className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm resize-none focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm resize-none focus:ring-2 focus:ring-purple-500 focus:outline-none"
               ></textarea>
             </div>
 
             <button
               type="submit"
-              className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 px-6 rounded-lg shadow-lg transition duration-300"
+              className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-6 rounded-lg shadow-lg transition duration-300"
             >
               Send Message
             </button>

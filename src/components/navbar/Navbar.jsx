@@ -144,7 +144,7 @@ const Navbar = () => {
         <ul className="hidden absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 lg:flex lg:mx-auto lg:items-center lg:space-x-6">
           <li>
             <Link
-              className="text-base text-gray-800 hover:text-emerald-500"
+              className="text-base text-gray-800 hover:text-purple-500"
               to="/"
             >
               Home
@@ -153,7 +153,7 @@ const Navbar = () => {
           {isAuthenticated && (
             <li>
               <Link
-                className="text-base text-gray-800 hover:text-emerald-500"
+                className="text-base text-gray-800 hover:text-purple-500"
                 to="/dashboard/"
               >
                 Dashboard
@@ -162,7 +162,7 @@ const Navbar = () => {
           )}
           <li>
             <Link
-              className="text-base text-gray-800 hover:text-emerald-500"
+              className="text-base text-gray-800 hover:text-purple-500"
               to="/about/"
             >
               About Us
@@ -170,7 +170,7 @@ const Navbar = () => {
           </li>
           <li>
             <Link
-              className="text-base text-gray-800 hover:text-emerald-500"
+              className="text-base text-gray-800 hover:text-purple-500"
               to="/services/"
             >
               Services
@@ -178,7 +178,7 @@ const Navbar = () => {
           </li>
           <li>
             <Link
-              className="text-base text-gray-800 hover:text-emerald-500"
+              className="text-base text-gray-800 hover:text-purple-500"
               to="/contact/"
             >
               Contact
@@ -279,12 +279,12 @@ const Navbar = () => {
         ) : (
           <div className="hidden lg:flex items-center space-x-4">
             <Link to="/login">
-              <button className="px-4 py-2 text-sm tracking-wide text-white transition-colors duration-200 transform bg-emerald-500 rounded-md hover:bg-emerald-400 focus:outline-none focus:bg-emerald-500 focus:ring focus:ring-emerald-500 focus:ring-opacity-50">
+              <button className="px-4 py-2 text-sm tracking-wide text-white transition-colors duration-200 transform bg-purple-500 rounded-md hover:bg-purple-400 focus:outline-none focus:bg-purple-500 focus:ring focus:ring-purple-500 focus:ring-opacity-50">
                 Provider Login
               </button>
             </Link>
             <Link to="/register">
-              <button className="px-4 py-2 text-sm tracking-wide text-emerald-500 border border-emerald-500 rounded-md transition-colors duration-200 hover:bg-emerald-100 focus:outline-none focus:ring focus:ring-emerald-500 focus:ring-opacity-50">
+              <button className="px-4 py-2 text-sm tracking-wide text-purple-500 border border-purple-500 rounded-md transition-colors duration-200 hover:bg-purple-100 focus:outline-none focus:ring focus:ring-purple-500 focus:ring-opacity-50">
                 Provider Registration
               </button>
             </Link>
@@ -318,7 +318,7 @@ const Navbar = () => {
           <ul>
             <li className="mb-1">
               <Link
-                className="block p-4 text-sm font-semibold text-gray-800 hover:bg-emerald-50 hover:text-emerald-500 rounded"
+                className="block p-4 text-sm font-semibold text-gray-800 hover:bg-purple-50 hover:text-purple-500 rounded"
                 to="/"
               >
                 Home
@@ -327,7 +327,7 @@ const Navbar = () => {
             {isAuthenticated && (
               <li className="mb-1">
                 <Link
-                  className="block p-4 text-sm font-semibold text-gray-800 hover:bg-emerald-50 hover:text-emerald-500 rounded"
+                  className="block p-4 text-sm font-semibold text-gray-800 hover:bg-purple-50 hover:text-purple-500 rounded"
                   to="/dashboard/"
                 >
                   Dashboard
@@ -336,7 +336,7 @@ const Navbar = () => {
             )}
             <li className="mb-1">
               <Link
-                className="block p-4 text-sm font-semibold text-gray-800 hover:bg-emerald-50 hover:text-emerald-500 rounded"
+                className="block p-4 text-sm font-semibold text-gray-800 hover:bg-purple-50 hover:text-purple-500 rounded"
                 to="/about/"
               >
                 About Us
@@ -344,7 +344,7 @@ const Navbar = () => {
             </li>
             <li className="mb-1">
               <Link
-                className="block p-4 text-sm font-semibold text-gray-800 hover:bg-emerald-50 hover:text-emerald-500 rounded"
+                className="block p-4 text-sm font-semibold text-gray-800 hover:bg-purple-50 hover:text-purple-500 rounded"
                 to="/services/"
               >
                 Services
@@ -352,7 +352,7 @@ const Navbar = () => {
             </li>
             <li className="mb-1">
               <Link
-                className="block p-4 text-sm font-semibold text-gray-800 hover:bg-emerald-50 hover:text-emerald-500 rounded"
+                className="block p-4 text-sm font-semibold text-gray-800 hover:bg-purple-50 hover:text-purple-500 rounded"
                 to="/contact/"
               >
                 Contact
@@ -379,7 +379,7 @@ const Navbar = () => {
                         "Dr. Kara Johnson"}
                     </h6>
 
-                    {/* <img
+                    <img
                       src={
                         profile?.image?.startsWith("http")
                           ? profile.image
@@ -389,8 +389,8 @@ const Navbar = () => {
                       }
                       alt="User Profile"
                       className="w-10 h-10 rounded-full object-cover object-top border border-gray-300 shadow-sm"
-                    /> */}
-                    <img
+                    />
+                    {/* <img
                       src={
                         profile?.image?.startsWith("http")
                           ? removeDuplicateMedia(profile.image)
@@ -400,7 +400,7 @@ const Navbar = () => {
                       }
                       alt="User Profile"
                       className="w-10 h-10 rounded-full object-cover object-top border border-gray-300 shadow-sm"
-                    />
+                    /> */}
                   </div>
                 </div>
 
@@ -418,12 +418,12 @@ const Navbar = () => {
             ) : (
               <div className="flex flex-col space-y-4">
                 <Link to="/login">
-                  <button className="w-full px-4 py-2 text-sm tracking-wide text-white transition-colors duration-200 transform bg-emerald-500 rounded-md hover:bg-emerald-400 focus:outline-none focus:bg-emerald-500 focus:ring focus:ring-emerald-500 focus:ring-opacity-50">
+                  <button className="w-full px-4 py-2 text-sm tracking-wide text-white transition-colors duration-200 transform bg-purple-500 rounded-md hover:bg-purple-400 focus:outline-none focus:bg-purple-500 focus:ring focus:ring-purple-500 focus:ring-opacity-50">
                     Provider Login
                   </button>
                 </Link>
                 <Link to="/register">
-                  <button className="w-full px-4 py-2 text-sm tracking-wide text-emerald-500 border border-emerald-500 rounded-md transition-colors duration-200 hover:bg-emerald-100 focus:outline-none focus:ring focus:ring-emerald-500 focus:ring-opacity-50">
+                  <button className="w-full px-4 py-2 text-sm tracking-wide text-purple-500 border border-purple-500 rounded-md transition-colors duration-200 hover:bg-purple-100 focus:outline-none focus:ring focus:ring-purple-500 focus:ring-opacity-50">
                     Provider Register
                   </button>
                 </Link>

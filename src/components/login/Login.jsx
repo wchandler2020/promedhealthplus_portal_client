@@ -2,6 +2,7 @@ import React, { useState, useContext } from "react";
 import { AuthContext } from "../../utils/auth";
 import { useNavigate } from "react-router-dom";
 import bg_image from "../../assets/images/bg_image_01.jpg";
+import login_bg_img from '../../assets/images/login_img.jpg'
 import { Link } from "react-router-dom";
 import { IoArrowBack } from "react-icons/io5";
 
@@ -37,10 +38,10 @@ const Login = () => {
       <div className="flex justify-center h-screen">
         <div
           className="relative hidden bg-cover lg:block lg:w-2/3"
-          style={{ backgroundImage: `url(${bg_image})` }}
+          style={{ backgroundImage: `url(${login_bg_img})` }}
         >
           {/* Overlay */}
-          <div className="absolute inset-0 bg-black opacity-30 z-10"></div>
+          <div className="absolute inset-0 bg-black opacity-40 z-10"></div>
 
           {/* Back arrow */}
           <Link
@@ -53,10 +54,10 @@ const Login = () => {
 
           <div className="flex items-center h-full px-20 bg-gray-9600 bg-opacity-40 relative z-20">
             <div>
-              <h2 className="text-4xl font-bold text-black">
+              <h2 className="text-5xl font-bold text-white">
                 ProMed Health Plus
               </h2>
-              <p className="max-w-xl mt-3 text-gray-900">
+              <p className="max-w-xl mt-3 text-white text-xl font-light">
                 Lorem ipsum dolor sit, amet consectetur adipisicing elit. In
                 autem ipsa, nulla laboriosam dolores, repellendus perferendis
                 libero suscipit nam temporibus molestiae
@@ -89,7 +90,7 @@ const Login = () => {
                     name="email"
                     id="email"
                     placeholder="example@example.com"
-                    className="block w-full px-4 py-2 mt-2 text-gray-600 placeholder-gray-500 bg-white border border-gray-200 rounded-md  focus:border-emerald-400 focus:ring-emerald-400 focus:outline-none focus:ring focus:ring-opacity-40"
+                    className="block w-full px-4 py-2 mt-2 text-gray-600 placeholder-gray-500 bg-white border border-gray-200 rounded-md  focus:border-purple-400 focus:ring-purple-400 focus:outline-none focus:ring focus:ring-opacity-40"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
@@ -102,7 +103,7 @@ const Login = () => {
                     </label>
                     <a
                       href="#"
-                      className="text-sm text-gray-400 focus:text-emerald-500 hover:text-emerald-400 hover:underline"
+                      className="text-sm text-gray-400 focus:text-purple-500 hover:text-purple-400 hover:underline"
                     >
                       Forgot password?
                     </a>
@@ -112,7 +113,7 @@ const Login = () => {
                     name="password"
                     id="password"
                     placeholder="Your Password"
-                    className="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md  focus:border-emerald-500 focus:ring-emerald-500 focus:outline-none focus:ring focus:ring-opacity-40"
+                    className="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md  focus:border-purple-500 focus:ring-purple-500 focus:outline-none focus:ring focus:ring-opacity-40"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
@@ -121,7 +122,7 @@ const Login = () => {
                 <div className="mt-6">
                   <button
                     disabled={isLoading}
-                    className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-emerald-500 rounded-md hover:bg-emerald-400 focus:outline-none focus:bg-emerald-500 focus:ring focus:ring-emerald-500 focus:ring-opacity-50"
+                    className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-purple-500 rounded-md hover:bg-purple-400 focus:outline-none focus:bg-purple-500 focus:ring focus:ring-purple-500 focus:ring-opacity-50"
                   >
                     {isLoading ? "Logging in..." : "Login"}
                   </button>
@@ -132,7 +133,7 @@ const Login = () => {
                 Don't have an account yet?{" "}
                 <Link
                   to="/register"
-                  className="text-emerald-600 focus:outline-none focus:underline hover:underline"
+                  className="text-purple-600 focus:outline-none focus:underline hover:underline"
                 >
                   Register
                 </Link>

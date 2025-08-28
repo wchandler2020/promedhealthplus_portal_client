@@ -93,7 +93,7 @@ const MFA = () => {
                       ref={(el) => (inputsRef.current[index] = el)}
                       type='number'
                       maxLength="1"
-                      className="w-12 h-12 text-center text-xl border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-100"
+                      className="w-12 h-12 text-center text-xl border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-100"
                       value={digit}
                       onChange={(e) => handleChange(e.target.value, index)}
                       onKeyDown={(e) => handleKeyDown(e, index)}
@@ -105,7 +105,7 @@ const MFA = () => {
 
                 <button
                   type="submit"
-                  className="w-full px-4 py-2 border border-emerald-500 text-emerald-500 hover:bg-emerald-500 hover:text-white rounded-md focus:outline-none focus:ring focus:ring-emerald-500 focus:ring-opacity-50"
+                  className="w-full px-4 py-2 border border-purple-500 text-purple-500 hover:bg-purple-500 hover:text-white rounded-md focus:outline-none focus:ring focus:ring-purple-500 focus:ring-opacity-50"
                 >
                   Verify Code
                 </button>
@@ -113,7 +113,7 @@ const MFA = () => {
                 {error && <p className="text-red-600 text-sm">{error}</p>}
               </form>
             ) : (
-              <h3 className="mt-6 text-green-600 text-center">Verification successful!</h3>
+              <h3 className="mt-6 text-purple-600 text-center">Verification successful!</h3>
             )}
           </div>
         </div>

@@ -287,7 +287,7 @@ const About = () => {
             </p>
             <button
               onClick={() => setOpen(true)}
-              className="bg-white text-emerald-500 font-bold px-8 py-3 rounded-full hover:bg-gray-100 transition duration-300 shadow-lg"
+              className="bg-white text-purple-500 font-bold px-8 py-3 rounded-full hover:bg-gray-100 transition duration-300 shadow-lg"
             >
               Contact Us Today
             </button>
@@ -342,7 +342,7 @@ const About = () => {
                   onChange={handleChange}
                   required
                   placeholder="e.g., Dr. John Smith"
-                  className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                  className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-purple-500 focus:outline-none"
                 />
               </div>
 
@@ -357,7 +357,7 @@ const About = () => {
                     value={formData.city}
                     onChange={handleChange}
                     required
-                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-purple-500 focus:outline-none"
                   />
                 </div>
 
@@ -371,7 +371,7 @@ const About = () => {
                       value={formData.state}
                       onChange={handleChange}
                       required
-                      className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md bg-white focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                      className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md bg-white focus:ring-2 focus:ring-purple-500 focus:outline-none"
                     >
                       <option value="">Select</option>
                       {states.map((state) => (
@@ -391,7 +391,7 @@ const About = () => {
                       value={formData.zip}
                       onChange={handleChange}
                       required
-                      className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                      className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-purple-500 focus:outline-none"
                     />
                   </div>
                 </div>
@@ -408,7 +408,7 @@ const About = () => {
                   onChange={handleChange}
                   required
                   placeholder="(123) 456-7890"
-                  className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                  className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-purple-500 focus:outline-none"
                 />
               </div>
 
@@ -423,7 +423,7 @@ const About = () => {
                   onChange={handleChange}
                   required
                   placeholder="you@example.com"
-                  className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                  className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-purple-500 focus:outline-none"
                 />
               </div>
 
@@ -438,13 +438,13 @@ const About = () => {
                   required
                   rows={4}
                   placeholder="Type your message..."
-                  className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm resize-none focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                  className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm resize-none focus:ring-2 focus:ring-purple-500 focus:outline-none"
                 ></textarea>
               </div>
 
               <button
                 type="submit"
-                className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 px-6 rounded-lg shadow-lg transition duration-300"
+                className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-6 rounded-lg shadow-lg transition duration-300"
               >
                 Send Message
               </button>

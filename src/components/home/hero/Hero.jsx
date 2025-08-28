@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Modal, Box, Typography } from "@mui/material";
 import hero_img from "../../../assets/images/bg_image_01.jpg";
+import hero_img_2 from "../../../assets/images/hero_img.jpg";
+import wound_care_img from "../../../assets/images/woundcare_illustration.png";
 
 const states = [
   "AL",
@@ -93,8 +95,8 @@ const Hero = () => {
 
   return (
     <>
-      <section className="bg-white text-gray-800 px-4 md:px-8 h-[50vh]">
-        <div className="container mx-auto flex flex-col md:flex-row items-start lg:items-center h-[75%]">
+      <section className="bg-white text-gray-800 px-4 md:px-8 h-[50vh] mt-10">
+        <div className="container mx-auto flex flex-col md:flex-row lg:items-center h-[75%]">
           <div className="md:w-1/2 mb-8 md:mb-0">
             <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold leading-tight text-center lg:text-start">
               Your Health is Our Priority
@@ -106,7 +108,7 @@ const Hero = () => {
             <div className="mt-8 flex justify-center lg:justify-start">
               <button
                 onClick={() => setOpen(true)}
-                className="bg-white text-emerald-500 font-bold 
+                className="bg-white text-purple-500 font-bold 
                  text-sm sm:text-base 
                  py-2 sm:py-3 
                  px-5 sm:px-6 
@@ -120,13 +122,13 @@ const Hero = () => {
           </div>
 
           <div className="w-full md:w-1/2">
-            <div className="relative w-full h-[300px] sm:h-[400px] md:h-[375px] rounded-lg shadow-lg">
+            <div className="relative w-full h-[300px] sm:h-[350px] md:h-[400px] lg:h-[450px] rounded-lg shadow-lg">
               <img
-                src={hero_img}
+                src={hero_img_2}
                 alt="Medical professional"
                 className="h-full w-full object-cover rounded-lg"
               />
-              <div className="absolute inset-0 bg-black opacity-30 rounded-lg"></div>
+              <div className="absolute inset-0 bg-black opacity-10 rounded-lg"></div>
             </div>
           </div>
         </div>
@@ -180,7 +182,7 @@ const Hero = () => {
                   onChange={handleChange}
                   required
                   placeholder="e.g., Dr. John Smith"
-                  className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                  className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-purple-500 focus:outline-none"
                 />
               </div>
 
@@ -195,7 +197,7 @@ const Hero = () => {
                     value={formData.city}
                     onChange={handleChange}
                     required
-                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-purple-500 focus:outline-none"
                   />
                 </div>
 
@@ -209,7 +211,7 @@ const Hero = () => {
                       value={formData.state}
                       onChange={handleChange}
                       required
-                      className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md bg-white focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                      className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md bg-white focus:ring-2 focus:ring-purple-500 focus:outline-none"
                     >
                       <option value="">Select</option>
                       {states.map((state) => (
@@ -229,7 +231,7 @@ const Hero = () => {
                       value={formData.zip}
                       onChange={handleChange}
                       required
-                      className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                      className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-purple-500 focus:outline-none"
                     />
                   </div>
                 </div>
@@ -246,7 +248,7 @@ const Hero = () => {
                   onChange={handleChange}
                   required
                   placeholder="(123) 456-7890"
-                  className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                  className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-purple-500 focus:outline-none"
                 />
               </div>
 
@@ -261,7 +263,7 @@ const Hero = () => {
                   onChange={handleChange}
                   required
                   placeholder="you@example.com"
-                  className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                  className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-purple-500 focus:outline-none"
                 />
               </div>
 
@@ -276,13 +278,13 @@ const Hero = () => {
                   required
                   rows={4}
                   placeholder="Type your message..."
-                  className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm resize-none focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                  className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm resize-none focus:ring-2 focus:ring-purple-500 focus:outline-none"
                 ></textarea>
               </div>
 
               <button
                 type="submit"
-                className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 px-6 rounded-lg shadow-lg transition duration-300"
+                className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-6 rounded-lg shadow-lg transition duration-300"
               >
                 Send Message
               </button>

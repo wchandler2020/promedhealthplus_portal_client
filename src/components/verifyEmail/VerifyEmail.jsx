@@ -41,12 +41,12 @@ const VerifyEmail = () => {
     } else if (verificationStatus === "success") {
       return (
         <div className="text-center">
-          <IoCheckmarkCircleOutline className="text-green-500 mx-auto text-6xl mb-4" />
+          <IoCheckmarkCircleOutline className="text-purple-500 mx-auto text-6xl mb-4" />
           <h2 className="text-2xl font-bold">Email Verified!</h2>
           <p className="mt-2 text-gray-600">You can now log in to your account.</p>
           <button
             onClick={handleRedirectToLogin} // ⬅️ Call the handler on click
-            className="mt-4 px-6 py-2 bg-emerald-500 text-white rounded-md"
+            className="mt-4 px-6 py-2 bg-purple-500 text-white rounded-md"
           >
             Go to Login
           </button>
