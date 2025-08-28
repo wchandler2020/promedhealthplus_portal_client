@@ -65,7 +65,7 @@ const Footer = () => {
         <div className="grid-1 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
           {/* */}
           <div className="">
-            <h6 className="mb-4 flex items-center justify-center font-semibold uppercase md:justify-start text-lg">
+            <h6 className="mb-4 flex items-center justify-center font-semibold md:justify-start text-lg">
               ProMed Health Plus
             </h6>
             <p className="text-xs">
@@ -143,9 +143,9 @@ const Footer = () => {
 
       {/* */}
       <div className="bg-white p-6 text-center flex flex-row items-center justify-center">
-        <p className="text-xs font-semibold text-gray-800 uppercase mr-1">© {year} Copyright </p>
+        <p className="text-xs font-semibold text-gray-800 mr-1">© {year} Copyright </p>
         <Link
-          className="text-gray-800 text-xs font-semibold uppercase"
+          className="text-gray-800 text-xs font-semibold"
           to="/"
         > 
           ProMed Health Plus

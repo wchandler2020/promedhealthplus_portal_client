@@ -8,7 +8,7 @@ import { AuthContext } from "../../utils/auth";
 
 const MobileMenuIconSVG = () => (
   <svg
-    className="block h-4 w-4 fill-current"
+    className="block h-4 w-4 fill-current text-purple-400"
     viewBox="0 0 20 20"
     xmlns="http://www.w3.org/2000/svg"
   >
@@ -305,7 +305,7 @@ const Navbar = () => {
         <nav className="fixed top-0 left-0 bottom-0 flex flex-col w-5/6 max-w-sm py-6 px-6 bg-white border-r overflow-y-auto">
           <div className="flex items-center mb-8 justify-between">
             <Link
-              className="mr-auto text-2xl font-bold leading-none pl-3"
+              className="mr-auto text-2xl font-semibold leading-none pl-3"
               to="/"
             >
               ProMed Health Plus
