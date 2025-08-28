@@ -96,10 +96,10 @@ const Hero = () => {
   return (
     <>
       <section className="bg-white text-gray-800 px-4 md:px-8 h-[50vh] mt-10">
-        <div className="container mx-auto flex flex-col md:flex-row lg:items-center h-[75%]">
+        <div className="container mx-auto flex flex-col md:flex-row lg:items-center h-[75%] justify-between">
           <div className="md:w-1/2 mb-8 md:mb-0">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold leading-tight text-center lg:text-start">
-              Your Health is Our Priority
+            <h1 className="text-lg sm:text-1xl md:text-2xl lg:text-4xl font-semibold leading-tight text-center lg:text-start uppercase">
+              Health is Our Priority
             </h1>
             <p className="mt-4 text-sm sm:text-base md:text-lg text-center lg:text-start">
               Providing exceptional medical care with compassion and expertise.
@@ -108,7 +108,7 @@ const Hero = () => {
             <div className="mt-8 flex justify-center lg:justify-start">
               <button
                 onClick={() => setOpen(true)}
-                className="bg-white text-purple-500 font-bold 
+                className="bg-white text-purple-500 font-semibold 
                  text-sm sm:text-base 
                  py-2 sm:py-3 
                  px-5 sm:px-6 

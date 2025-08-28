@@ -54,7 +54,7 @@ const Login = () => {
 
           <div className="flex items-center h-full px-20 bg-gray-9600 bg-opacity-40 relative z-20">
             <div>
-              <h2 className="text-5xl font-bold text-white">
+              <h2 className="text-5xl font-semibold text-white">
                 ProMed Health Plus
               </h2>
               <p className="max-w-xl mt-3 text-white text-xl font-light">
@@ -72,7 +72,7 @@ const Login = () => {
               {/* <h2 className="text-4xl font-bold text-center text-gray-700 dark:text-white">
                 Brand
               </h2> */}
-              <p className="mt-3 text-gray-900 text-xl font-bold">
+              <p className="mt-3 text-gray-900 text-xl font-semibold uppercase">
                 Sign in to access your account
               </p>
             </div>

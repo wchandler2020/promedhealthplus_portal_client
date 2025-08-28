@@ -8,7 +8,7 @@ const Footer = () => {
         <div className="mr-12 hidden lg:block">
           <span>
             {" "}
-            <strong>Connected on social media:</strong>
+            <strong className="font-semibold uppercase">Connected on social media:</strong>
           </span>
         </div>
         {/* */}
