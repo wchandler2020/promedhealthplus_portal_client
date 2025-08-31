@@ -97,7 +97,7 @@ const Documents = () => {
 
   return (
     <div className="max-w-xl mx-auto mt-9 p-6 bg-white rounded-lg shadow-lg">
-      <h2 className="text-2xl font-bold text-gray-800 mb-8 text-start">
+      <h2 className="text-2xl font-semibold text-gray-800 mb-8 text-start">
         Manage Provider Documents
       </h2>
 

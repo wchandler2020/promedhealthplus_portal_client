@@ -220,9 +220,9 @@ const Orders = () => {
     <div className="max-w-3xl mx-auto mt-10 mb-10 p-6 bg-white shadow-lg rounded">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-semibold">Order Management</h2>
-        <button className="border border-purple-500 text-purple-500 hover:bg-purple-500 hover:text-white px-4 py-2 rounded-md transition-all text-xs"onClick={() => setOpen(true)}>
+        {/* <button className="border border-purple-500 text-purple-500 hover:bg-purple-500 hover:text-white px-4 py-2 rounded-md transition-all text-xs"onClick={() => setOpen(true)}>
           + New Order
-        </button>
+        </button> */}
       </div>
 
       <Dialog open={open} onClose={() => setOpen(false)} maxWidth="sm" fullWidth>
@@ -300,6 +300,7 @@ const Orders = () => {
       </Dialog>
 
       <OrderHistory orders={orderHistory} onReturn={handleReturn} />
+      
     </div>
   );
 };

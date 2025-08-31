@@ -18,6 +18,8 @@ import { FaEye, FaEdit, FaTrashAlt } from "react-icons/fa";
 import { FaSearch } from "react-icons/fa";
 import FillablePdf from "../documemts/FillablePdf";
 import Notes from "../documemts/Notes";
+import PatientCard from "./PatientCard";
+import NewOrderForm from "../../orders/NewOrderForm";
 
 const IVRStatusBadge = ({ status }) => {
   const colors = {
@@ -35,180 +37,6 @@ const IVRStatusBadge = ({ status }) => {
   );
 };
 
-const PatientCard = ({ patient, onViewPdf }) => {
-  // CORRECTED: Move formattedDate inside the component
-  const formattedDate = patient.date_of_birth
-    ? format(new Date(patient.date_of_birth), "M/d/yyyy")
-    : "N/A";
-
-  const formattedPhoneNumber = patient.phone_number
-    ? formatPhoneNumber(patient.phone_number) || patient.phone_number
-    : "N/A";
-
-  const calculateAge = (dobString) => {
-    // Check for a valid date string format.
-    if (!dobString || !/^\d{4}-\d{2}-\d{2}$/.test(dobString)) {
-      console.error("Invalid date of birth format. Please use 'YYYY-MM-DD'.");
-      return null;
-    }
-
-    // Create Date objects for the date of birth and the current date.
-    const dob = new Date(dobString);
-    const now = new Date();
-
-    // Calculate the difference in years.
-    let age = now.getFullYear() - dob.getFullYear();
-
-    // Adjust age if the birthday hasn't occurred yet this year.
-    // This is a crucial step for accuracy.
-    const monthDifference = now.getMonth() - dob.getMonth();
-    const dayDifference = now.getDate() - dob.getDate();
-
-    if (monthDifference < 0 || (monthDifference === 0 && dayDifference < 0)) {
-      age--;
-    }
-
-    return age;
-  };
-
-  return (
-    <div className="border p-4 rounded-lg border border-gray-200 bg-gray-50 shadow-sm space-y-2">
-      <div className="flex justify-between items-center">
-        <h3 className="text-lg font-semibold">{patient.name}</h3>
-        <div className="flex items-center justify-between w-full">
-          <p className="text-sm">
-            <strong>Patient Name:</strong> {patient.first_name}{" "}
-            {patient.last_name}, {patient.middle_initial}.
-          </p>
-          <strong className="text-sm">
-            IVR Status: <IVRStatusBadge status={patient.ivrStatus} />
-          </strong>
-        </div>
-      </div>
-      <div
-        className="text-xs text-gray-700 space-y-1"
-        style={{ marginTop: -4 }}
-      >
-        <p className="text-xs flex" style={{ fontSize: 10 }}>
-          <strong className="mr-1">Medical Record #:</strong>{" "}
-          {patient.medical_record_number}
-        </p>
-      </div>
-      <div className="text-sm text-gray-700 space-y-1" style={{ marginTop: 8 }}>
-        <p className="text-xs flex">
-          <strong className="mr-1">Address:</strong> {patient.address}{" "}
-          {patient.city}, {patient.state} {patient.zip_code}
-        </p>
-      </div>
-      <div
-        className="text-sm text-gray-700 space-y-1"
-        style={{ marginTop: -0.5 }}
-      >
-        <p className="text-xs flex">
-          <strong className="mr-1">Phone Number:</strong> {formattedPhoneNumber}
-        </p>
-      </div>
-      <div
-        className="text-sm text-gray-700 space-y-1"
-        style={{ marginTop: -0.5 }}
-      >
-        <p className="text-xs flex">
-          <strong className="mr-1">Date of Birth:</strong> {formattedDate}
-        </p>
-      </div>
-      <div
-        className="text-sm text-gray-700 space-y-1"
-        style={{ marginTop: -0.5 }}
-      >
-        <p className="text-xs flex">
-          <strong className="mr-1">Age :</strong>{" "}
-          {calculateAge(patient.date_of_birth)}
-        </p>
-      </div>
-      <div
-        className="h-[2px] w-[90%] bg-gray-200 flex m-auto opacity-550"
-        style={{ marginTop: 25 }}
-      ></div>
-      <p className="text-sm font-semibold text-center">Insurance Information</p>
-      <div className="text-sm text-gray-700 space-y-1" style={{ marginTop: 5 }}>
-        <p className="text-xs flex">
-          <strong className="mr-1">Primary Insurance Provider :</strong>{" "}
-          {patient.primary_insurance}
-        </p>
-      </div>
-      <div
-        className="text-sm text-gray-700 space-y-1"
-        style={{ marginTop: -0.5 }}
-      >
-        <p className="text-xs flex">
-          <strong className="mr-1">Primary Insurance Number :</strong>{" "}
-          {patient.primary_insurance_number}
-        </p>
-      </div>
-      <div className="text-sm text-gray-700 space-y-1" style={{ marginTop: 3 }}>
-        <p className="text-xs flex">
-          <strong className="mr-1">Secondary Insurance Provider:</strong>{" "}
-          {patient.secondary_insurance ? patient.secondary_insurance : "N/A"}
-        </p>
-      </div>
-      <div
-        className="text-sm text-gray-700 space-y-1"
-        style={{ marginTop: -0.5 }}
-      >
-        <p className="text-xs flex">
-          <strong className="mr-1">Secondary Insurance Number:</strong>{" "}
-          {patient.secondary_insurance_number
-            ? patient.secondary_insurance_number
-            : "N/A"}
-        </p>
-      </div>
-      <div className="text-sm text-gray-700 space-y-1" style={{ marginTop: 3 }}>
-        <p className="text-xs flex">
-          <strong className="mr-1">Secondary Insurance Provider:</strong>{" "}
-          {patient.tertiary_insurance ? patient.tertiary_insurance : "N/A"}
-        </p>
-      </div>
-      <div
-        className="text-sm text-gray-700 space-y-1"
-        style={{ marginTop: -0.5 }}
-      >
-        <p className="text-xs flex">
-          <strong className="mr-1">Secondary Insurance Number:</strong>{" "}
-          {patient.tertiary_insurance_number
-            ? patient.tertiary_insurance_number
-            : "N/A"}
-        </p>
-      </div>
-      <div
-        className="h-[2px] w-[90%] bg-gray-200 flex m-auto opacity-550"
-        style={{ marginTop: 25 }}
-      ></div>
-      <p className="text-sm font-semibold text-center">Patient Documentation</p>
-
-      <div className="text-sm text-gray-700 space-y-1" style={{ marginTop: 5 }}>
-        <div className="flex items-center justify-between">
-          <p className="text-xs flex">
-            <strong>Promed Healthcare Plus IVR</strong>
-          </p>
-          <div className="flex space-x-2">
-            <FaEye
-              className="text-gray-500 hover:text-blue-500 cursor-pointer"
-              onClick={() => onViewPdf(patient)}
-            />
-            <FaEdit className="text-gray-500 hover:text-purple-500 cursor-pointer" />
-            <FaTrashAlt className="text-gray-500 hover:text-red-500 cursor-pointer" />
-          </div>
-        </div>
-      </div>
-      <div
-        className="h-[2px] w-[90%] bg-gray-200 flex m-auto opacity-550"
-        style={{ marginTop: 25 }}
-      ></div>
-      <Notes key={patient.id} patientId={patient.id} />
-    </div>
-  );
-};
-
 const Patients = () => {
   const { getPatients, postPatient } = useContext(AuthContext);
   const [patients, setPatients] = useState([]);
@@ -221,13 +49,11 @@ const Patients = () => {
   const [patientsPerPage, setPatientsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [savePage, setSavePage] = useState(1);
-
-  // CORRECTED: Add date_of_birth field to initial state
   const [formData, setFormData] = useState({
     first_name: "",
     last_name: "",
     middle_initial: "",
-    date_of_birth: "", // New field
+    date_of_birth: "",
     email: "",
     address: "",
     city: "",
@@ -245,7 +71,6 @@ const Patients = () => {
     date_created: "",
     date_updated: "",
   });
-
   const ValidateForm = () => {
     const newErrors = {};
     if (!formData.first_name.trim())
@@ -257,7 +82,6 @@ const Patients = () => {
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-
   useEffect(() => {
     const fetchPatients = async () => {
       if (getPatients) {
@@ -271,18 +95,14 @@ const Patients = () => {
     };
     fetchPatients();
   }, [getPatients]);
-
   useEffect(() => {
     if (searchTerm || ivrFilter) {
-      // Save the current page if filtering
       setSavePage(currentPage);
       setCurrentPage(1);
     } else {
-      // Restore the last page
       setCurrentPage(savePage);
     }
   }, [searchTerm, ivrFilter]);
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -290,11 +110,9 @@ const Patients = () => {
       [name]: name === "middle_initial" ? value.trim().charAt(0) : value,
     }));
   };
-
   const handleAddPatient = async () => {
     setErrors({});
     if (!ValidateForm()) return;
-
     const newPatient = { ...formData };
     try {
       const res = await postPatient(newPatient);
@@ -305,13 +123,12 @@ const Patients = () => {
     } catch (error) {
       console.error("Failed to add patient:", error);
     }
-
     setOpen(false);
     setFormData({
       first_name: "",
       last_name: "",
       middle_initial: "",
-      date_of_birth: "", // Reset this field
+      date_of_birth: "",
       email: "",
       address: "",
       city: "",
@@ -328,7 +145,6 @@ const Patients = () => {
       ivrStatus: "Pending",
     });
   };
-
   const filteredPatients = patients.filter((patient) => {
     const fullName =
       `${patient.first_name} ${patient.last_name} ${patient.middle_initial}`.toLowerCase();
@@ -340,27 +156,21 @@ const Patients = () => {
       matchesFilter
     );
   });
-
   const sortedPatients = [...filteredPatients].sort((a, b) => {
     const active = (status) => ["Approved", "Pending"].includes(status);
     return active(b.ivrStatus) - active(a.ivrStatus);
   });
-
-  // Pagination logic
   const indexOfLastPatient = currentPage * patientsPerPage;
   const indexOfFirstPatient = indexOfLastPatient - patientsPerPage;
   const currentPatients = sortedPatients.slice(
     indexOfFirstPatient,
     indexOfLastPatient
   );
-
   const totalPages = Math.ceil(sortedPatients.length / patientsPerPage);
-
   const handleViewPdf = (patient) => {
     setSelectedPatient(patient);
     setViewPdfModalOpen(true);
   };
-
   const modalStyle = {
     position: "absolute",
     top: "50%",
@@ -372,7 +182,6 @@ const Patients = () => {
     boxShadow: "none",
     outline: "none",
   };
-
   return (
     <div className="max-w-5xl mx-auto mt-10 p-6 bg-white shadow-lg rounded">
       <div className="flex justify-between items-center mb-6">
@@ -418,7 +227,6 @@ const Patients = () => {
             <option value="Denied">Denied</option>
           </select>
         </div>
-
         <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
           <label
             htmlFor="patients-per-page"
@@ -445,7 +253,6 @@ const Patients = () => {
           </select>
         </div>
       </div>
-
       <div className="space-y-6">
         {currentPatients.map((patient) => (
           <PatientCard
@@ -502,11 +309,9 @@ const Patients = () => {
           </svg>
         </button>
       </div>
-
       <Modal open={open} onClose={() => setOpen(false)}>
-        <Box sx={modalStyle}>
+      <Box sx={{...modalStyle, maxHeight: "90vh", overflowY: "auto",}}>
           <div className="bg-white rounded-2xl shadow-2xl p-8 mx-4 border border-gray-100 relative">
-            {/* Close button */}
             <button
               onClick={() => setOpen(false)}
               className="absolute top-4 right-4 text-gray-500 hover:text-gray-800 transition"
@@ -527,16 +332,12 @@ const Patients = () => {
                 />
               </svg>
             </button>
-
-            {/* Header */}
             <h2 className="text-3xl font-bold text-center text-gray-800 mb-2">
               Add New Patient
             </h2>
             <p className="text-center text-gray-500 mb-6">
               Fill out the form to register a new patient.
             </p>
-
-            {/* Form */}
             <form
               onSubmit={(e) => {
                 e.preventDefault();
@@ -578,7 +379,6 @@ const Patients = () => {
                   )}
                 </div>
               </div>
-
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700">
@@ -592,7 +392,6 @@ const Patients = () => {
                     className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:outline-none"
                   />
                 </div>
-
                 <div className="col-span-2">
                   <label className="block text-sm font-medium text-gray-700">
                     Date of Birth
@@ -612,7 +411,6 @@ const Patients = () => {
                   )}
                 </div>
               </div>
-
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700">
@@ -639,7 +437,6 @@ const Patients = () => {
                   />
                 </div>
               </div>
-
               <div className="flex gap-2">
                 <div className="w-2/3">
                   <label className="block text-sm font-medium text-gray-700">
@@ -655,7 +452,7 @@ const Patients = () => {
                 </div>
                 <div className="w-1/3">
                   <label className="block text-sm font-medium text-gray-700">
-                    Zip Code
+                    ZIP Code
                   </label>
                   <input
                     type="text"
@@ -666,21 +463,45 @@ const Patients = () => {
                   />
                 </div>
               </div>
-
               <div>
                 <label className="block text-sm font-medium text-gray-700">
                   Phone Number
                 </label>
                 <input
-                  type="tel"
+                  type="text"
                   name="phone_number"
                   value={formData.phone_number}
                   onChange={handleInputChange}
                   className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:outline-none"
                 />
               </div>
-
-              {/* You can continue with Insurance fields similarly */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Medical Record Number
+                </label>
+                <input
+                  type="text"
+                  name="medical_record_number"
+                  value={formData.medical_record_number}
+                  onChange={handleInputChange}
+                  className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                />
+              </div>
+              <h3 className="text-xl font-bold text-center text-gray-800 mb-2">
+                Insurance Information
+              </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700">
@@ -707,43 +528,79 @@ const Patients = () => {
                   />
                 </div>
               </div>
-
-              {/* Submit button */}
-              <button
-                type="submit"
-                className="w-full bg-purple-400 hover:bg-purple-500 text-white font-semibold py-3 px-6 rounded-lg shadow-lg transition duration-300"
-              >
-                Save Patient
-              </button>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Secondary Insurance
+                  </label>
+                  <input
+                    type="text"
+                    name="secondary_insurance"
+                    value={formData.secondary_insurance}
+                    onChange={handleInputChange}
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Secondary Insurance Number
+                  </label>
+                  <input
+                    type="text"
+                    name="secondary_insurance_number"
+                    value={formData.secondary_insurance_number}
+                    onChange={handleInputChange}
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                  />
+                </div>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Tertiary Insurance
+                  </label>
+                  <input
+                    type="text"
+                    name="tertiary_insurance"
+                    value={formData.tertiary_insurance}
+                    onChange={handleInputChange}
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Tertiary Insurance Number
+                  </label>
+                  <input
+                    type="text"
+                    name="tertiary_insurance_number"
+                    value={formData.tertiary_insurance_number}
+                    onChange={handleInputChange}
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                  />
+                </div>
+              </div>
+              <div className="flex justify-center mt-6">
+                <button
+                  type="submit"
+                  className="px-6 py-3 bg-purple-600 text-white font-bold rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition-transform transform hover:scale-105"
+                >
+                  Add Patient
+                </button>
+              </div>
             </form>
           </div>
         </Box>
       </Modal>
-
-      <Dialog
-        open={viewPdfModalOpen}
-        onClose={() => setViewPdfModalOpen(false)}
-        maxWidth="lg"
-        fullWidth
-      >
-        <DialogTitle>📄 View IVR Form</DialogTitle>
-        <DialogContent dividers>
-          {selectedPatient && (
-            <FillablePdf
-              selectedPatientId={selectedPatient.id}
-              formType="IVR_FORM"
-              hidePatientSelect={true}
-            />
-          )}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setViewPdfModalOpen(false)} color="primary">
-            Close
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <Modal open={viewPdfModalOpen} onClose={() => setViewPdfModalOpen(false)}>
+        <Box sx={modalStyle}>
+          <FillablePdf
+            patient={selectedPatient}
+            onClose={() => setViewPdfModalOpen(false)}
+          />
+        </Box>
+      </Modal>
     </div>
   );
 };
-
 export default Patients;
