@@ -71,7 +71,7 @@ const OrderSummary = ({ total }) => (
 const NewOrderForm = ({ open, onClose, patient }) => {
   const [step, setStep] = useState(1);
   const totalSteps = 3;
-  const { user } = useContext(AuthContext);
+  const { user, logout } = useContext(AuthContext); // Destructure logout
   const [itemsData, setItemsData] = useState([]);
   const [quantities, setQuantities] = useState({});
   const [selectedVariantId, setSelectedVariantId] = useState({});
@@ -82,12 +82,30 @@ const NewOrderForm = ({ open, onClose, patient }) => {
     try {
       setLoading(true);
       setError(null);
-      const response = await fetch(`${process.env.REACT_APP_PYTHONANYWHERE_API}/products/`, {
-        headers: {
-          Authorization: `Bearer ${user.access}`,
-        },
-      });
-      if (!response.ok) throw new Error("Failed to fetch products.");
+      
+      const accessToken = localStorage.getItem('accessToken');
+      if (!accessToken) {
+        throw new Error("Authentication token not found.");
+      }
+      
+      const response = await fetch(
+        `${process.env.REACT_APP_PYTHONANYWHERE_API}/products/`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      
+      if (!response.ok) {
+        if (response.status === 401) {
+            // Log out user if token is expired or invalid
+            logout();
+            throw new Error("Session expired. Please log in again.");
+        }
+        throw new Error("Failed to fetch products.");
+      }
+      
       const data = await response.json();
       setItemsData(data);
       setQuantities(data.reduce((acc, item) => ({ ...acc, [item.id]: 0 }), {}));
@@ -105,6 +123,7 @@ const NewOrderForm = ({ open, onClose, patient }) => {
 
   const handleVariantChange = (productId, variantId) => {
     setSelectedVariantId((prev) => ({ ...prev, [productId]: variantId }));
+    setQuantities((prev) => ({ ...prev, [productId]: 0 })); // Reset quantity when variant changes
   };
 
   const total = itemsData.reduce((sum, item) => {
@@ -140,7 +159,7 @@ const NewOrderForm = ({ open, onClose, patient }) => {
       patient: patient.id,
       total_price: total,
       facility_name: user.profile?.facility,
-      phone_number: user.profile?.facility_phone_number,
+      phone_number: user.profile?.phone_number,
       street: user.profile?.street,
       city: user.profile?.city,
       zip_code: user.profile?.zip_code,
@@ -149,13 +168,18 @@ const NewOrderForm = ({ open, onClose, patient }) => {
     };
 
     try {
+      const accessToken = localStorage.getItem('accessToken');
+      if (!accessToken) {
+        throw new Error("Authentication token not found. Please log in again.");
+      }
+
       const response = await fetch(
-        "http://your-backend-url/api/provider/orders/",
+        `${process.env.REACT_APP_PYTHONANYWHERE_API}/provider/orders/`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${user.access}`,
+            Authorization: `Bearer ${accessToken}`,
           },
           body: JSON.stringify(orderPayload),
         }
