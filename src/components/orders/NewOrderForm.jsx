@@ -1,93 +1,57 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Modal, Box, TextField, Button, CircularProgress } from "@mui/material";
-import default_item from "../../assets/images/default_item.png";
+import {
+  Modal,
+  Box,
+  TextField,
+  Button,
+  CircularProgress,
+  Select,
+  MenuItem,
+} from "@mui/material";
 import { AuthContext } from "../../utils/auth";
-
-const OrderItem = ({
-  item,
-  quantity,
-  onQuantityChange,
-  selectedVariantId,
-  onVariantChange,
-}) => (
-  <div className="flex items-center justify-between border-b py-4">
-    <div className="flex items-center">
-      <img
-        src={item.image || default_item}
-        alt={item.name}
-        className="w-16 h-16 rounded border object-cover mr-4"
-      />
-      <div>
-        <h3 className="text-lg font-semibold">{item.name}</h3>
-        <span
-          className={`text-sm font-medium ${
-            item.is_available ? "text-purple-600" : "text-red-500"
-          }`}
-        >
-          {item.is_available ? "Available" : "Unavailable"}
-        </span>
-      </div>
-    </div>
-    <div className="text-right space-y-2">
-      <select
-        className="border rounded px-2 py-1"
-        value={selectedVariantId[item.id] || ""}
-        onChange={(e) => onVariantChange(item.id, e.target.value)}
-        disabled={!item.is_available}
-      >
-        <option value="">Select Size</option>
-        {item.variants.map((variant) => (
-          <option key={variant.id} value={variant.id}>
-            {variant.size} - ${variant.price}
-          </option>
-        ))}
-      </select>
-
-      <select
-        className="border rounded px-2 py-1"
-        value={quantity}
-        onChange={(e) => onQuantityChange(item.id, parseInt(e.target.value))}
-        disabled={!item.is_available || !selectedVariantId[item.id]}
-      >
-        {[0, 1, 2, 3, 4, 5].map((qty) => (
-          <option key={qty} value={qty}>
-            {qty}
-          </option>
-        ))}
-      </select>
-    </div>
-  </div>
-);
-
-const OrderSummary = ({ total }) => (
-  <div className="mt-6 p-4 border-t">
-    <h3 className="text-xl font-semibold">Order Summary</h3>
-    <p className="mt-2 text-gray-700">
-      Total: <span className="font-bold">${total.toFixed(2)}</span>
-    </p>
-  </div>
-);
+import OrderItem from "./OrderItem";
+import OrderSummary from "./OrderSummary";
 
 const NewOrderForm = ({ open, onClose, patient }) => {
   const [step, setStep] = useState(1);
   const totalSteps = 3;
-  const { user, logout } = useContext(AuthContext); // Destructure logout
+  const { user, logout } = useContext(AuthContext);
   const [itemsData, setItemsData] = useState([]);
   const [quantities, setQuantities] = useState({});
   const [selectedVariantId, setSelectedVariantId] = useState({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  const [formData, setFormData] = useState({
+    providerName: user?.full_name || "",
+    facilityName: user?.profile?.facility || "",
+    providerPhoneNumber: user?.profile?.phone_number || "",
+    providerAddress: user?.profile?.street || "",
+    patientName: `${patient?.first_name || ""} ${patient?.last_name || ""}`,
+    patientDob: patient?.date_of_birth || "",
+    patientPhoneNumber: patient?.phone_number || "",
+    patientAddress: `${patient?.address || ""}, ${patient?.city || ""}, ${
+      patient?.state || ""
+    } ${patient?.zip_code || ""}`,
+    patientCountry: patient?.country || "", // <-- ADDED THIS FIELD
+  });
+
+  const handleFormChange = (event) => {
+    const { name, value } = event.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
   const fetchProducts = async () => {
     try {
       setLoading(true);
       setError(null);
-      
-      const accessToken = localStorage.getItem('accessToken');
+      const accessToken = localStorage.getItem("accessToken");
       if (!accessToken) {
         throw new Error("Authentication token not found.");
       }
-      
       const response = await fetch(
         `${process.env.REACT_APP_PYTHONANYWHERE_API}/products/`,
         {
@@ -96,20 +60,19 @@ const NewOrderForm = ({ open, onClose, patient }) => {
           },
         }
       );
-      
       if (!response.ok) {
         if (response.status === 401) {
-            // Log out user if token is expired or invalid
-            logout();
-            throw new Error("Session expired. Please log in again.");
+          logout();
+          throw new Error("Session expired. Please log in again.");
         }
         throw new Error("Failed to fetch products.");
       }
-      
       const data = await response.json();
       setItemsData(data);
       setQuantities(data.reduce((acc, item) => ({ ...acc, [item.id]: 0 }), {}));
-      setSelectedVariantId(data.reduce((acc, item) => ({ ...acc, [item.id]: "" }), {}));
+      setSelectedVariantId(
+        data.reduce((acc, item) => ({ ...acc, [item.id]: "" }), {})
+      );
     } catch (err) {
       setError(err.message);
     } finally {
@@ -123,7 +86,7 @@ const NewOrderForm = ({ open, onClose, patient }) => {
 
   const handleVariantChange = (productId, variantId) => {
     setSelectedVariantId((prev) => ({ ...prev, [productId]: variantId }));
-    setQuantities((prev) => ({ ...prev, [productId]: 0 })); // Reset quantity when variant changes
+    setQuantities((prev) => ({ ...prev, [productId]: 0 }));
   };
 
   const total = itemsData.reduce((sum, item) => {
@@ -140,12 +103,10 @@ const NewOrderForm = ({ open, onClose, patient }) => {
       alert("Please select at least one item and variant.");
       return;
     }
-
     const orderItems = selectedItems.map((itemId) => {
       const item = itemsData.find((i) => i.id === parseInt(itemId));
       const variantId = selectedVariantId[itemId];
       const variant = item.variants.find((v) => v.id === parseInt(variantId));
-
       return {
         product: item.id,
         variant: variantId,
@@ -157,22 +118,21 @@ const NewOrderForm = ({ open, onClose, patient }) => {
     const orderPayload = {
       provider: user.id,
       patient: patient.id,
-      total_price: total,
-      facility_name: user.profile?.facility,
-      phone_number: user.profile?.phone_number,
-      street: user.profile?.street,
-      city: user.profile?.city,
-      zip_code: user.profile?.zip_code,
-      country: user.profile?.country,
+      total_price: parseFloat(total.toFixed(2)), 
+      facility_name: formData.facilityName,
+      phone_number: formData.providerPhoneNumber,
+      street: formData.providerAddress,
+      city: patient.city,
+      zip_code: patient.zip_code,
+      country: formData.patientCountry,
       items: orderItems,
     };
 
     try {
-      const accessToken = localStorage.getItem('accessToken');
+      const accessToken = localStorage.getItem("accessToken");
       if (!accessToken) {
         throw new Error("Authentication token not found. Please log in again.");
       }
-
       const response = await fetch(
         `${process.env.REACT_APP_PYTHONANYWHERE_API}/provider/orders/`,
         {
@@ -199,13 +159,33 @@ const NewOrderForm = ({ open, onClose, patient }) => {
   };
 
   useEffect(() => {
-    if (open) fetchProducts();
-  }, [open]);
+    if (open && user && patient) {
+      setFormData({
+        providerName: user?.full_name || "",
+        facilityName: user?.profile?.facility || "",
+        providerPhoneNumber: user?.profile?.phone_number || "",
+        providerAddress: user?.profile?.street || "",
+        patientName: `${patient?.first_name || ""} ${patient?.last_name || ""}`,
+        patientDob: patient?.date_of_birth || "",
+        patientPhoneNumber: patient?.phone_number || "",
+        patientAddress: `${patient?.address || ""}, ${patient?.city || ""}, ${
+          patient?.state || ""
+        } ${patient?.zip_code || ""}`,
+        patientCountry: patient?.country || "", // <-- CORRECTED INITIAL VALUE
+      });
+      fetchProducts();
+    }
+  }, [open, user, patient]);
 
   const renderStepContent = () => {
     if (loading) {
       return (
-        <Box display="flex" justifyContent="center" alignItems="center" height="200px">
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          height="200px"
+        >
           <CircularProgress />
         </Box>
       );
@@ -213,30 +193,88 @@ const NewOrderForm = ({ open, onClose, patient }) => {
     if (error) {
       return <div className="p-4 text-red-500 text-center">{error}</div>;
     }
-
     switch (step) {
       case 1:
         return (
           <div className="p-4 space-y-4">
-            <TextField fullWidth label="Provider Name" value={user?.full_name || ""} disabled />
-            <TextField fullWidth label="Facility Name" value={user?.profile?.facility || ""} disabled />
-            <TextField fullWidth label="Phone Number" value={user?.profile?.phone_number || ""} disabled />
-            <TextField fullWidth label="Address" value={user?.profile?.street || ""} disabled />
+            <TextField
+              fullWidth
+              label="Provider Name"
+              name="providerName"
+              value={formData.providerName}
+              onChange={handleFormChange}
+            />
+            <TextField
+              fullWidth
+              label="Facility Name"
+              name="facilityName"
+              value={formData.facilityName}
+              onChange={handleFormChange}
+            />
+            <TextField
+              fullWidth
+              label="Phone Number"
+              name="providerPhoneNumber"
+              value={formData.providerPhoneNumber}
+              onChange={handleFormChange}
+            />
+            <TextField
+              fullWidth
+              label="Address"
+              name="providerAddress"
+              value={formData.providerAddress}
+              onChange={handleFormChange}
+            />
           </div>
         );
       case 2:
         return (
           <div className="p-4 space-y-4">
-            <TextField fullWidth label="Patient Name" value={`${patient.first_name} ${patient.last_name}`} disabled />
-            <TextField fullWidth label="Date of Birth" value={patient.date_of_birth} disabled />
-            <TextField fullWidth label="Phone Number" value={patient.phone_number} disabled />
-            <TextField fullWidth label="Address" value={`${patient.address}, ${patient.city}, ${patient.state} ${patient.zip_code}`} disabled />
+            <TextField
+              fullWidth
+              label="Patient Name"
+              name="patientName"
+              value={formData.patientName}
+              onChange={handleFormChange}
+            />
+            <TextField
+              fullWidth
+              label="Date of Birth"
+              name="patientDob"
+              value={formData.patientDob}
+              onChange={handleFormChange}
+            />
+            <TextField
+              fullWidth
+              label="Phone Number"
+              name="patientPhoneNumber"
+              value={formData.patientPhoneNumber}
+              onChange={handleFormChange}
+            />
+            <TextField
+              fullWidth
+              label="Address"
+              name="patientAddress"
+              value={formData.patientAddress}
+              onChange={handleFormChange}
+            />
+            <Select
+              fullWidth
+              label="Country"
+              name="patientCountry"
+              value={formData.patientCountry || "United States"} // Set default value
+              onChange={handleFormChange}
+            >
+              <MenuItem value="United States">United States</MenuItem>
+            </Select>
           </div>
         );
       case 3:
         return (
           <div className="p-4">
-            <h3 className="text-xl font-semibold text-gray-700 mb-4">Order Items</h3>
+            <h3 className="text-xl font-semibold text-gray-700 mb-4">
+              Order Items
+            </h3>
             {itemsData.length > 0 ? (
               itemsData.map((item) => (
                 <OrderItem
@@ -249,7 +287,9 @@ const NewOrderForm = ({ open, onClose, patient }) => {
                 />
               ))
             ) : (
-              <p className="text-gray-500 text-center">No available products found.</p>
+              <p className="text-gray-500 text-center">
+                No available products found.
+              </p>
             )}
             <OrderSummary total={total} />
           </div>
@@ -284,12 +324,13 @@ const NewOrderForm = ({ open, onClose, patient }) => {
           >
             ✕
           </button>
-
-          <h2 className="text-3xl font-bold text-center text-gray-800 mb-2">New Order</h2>
-          <p className="text-center text-gray-500 mb-6">Complete the steps to place a new order.</p>
-
+          <h2 className="text-3xl font-semibold text-center text-gray-800 mb-2">
+            New Order
+          </h2>
+          <p className="text-center text-gray-500 mb-6">
+            Complete the steps to place a new order.
+          </p>
           {renderStepContent()}
-
           <div className="flex justify-center items-center mt-6 space-x-4">
             <button
               onClick={() => setStep((prev) => prev - 1)}
@@ -298,7 +339,6 @@ const NewOrderForm = ({ open, onClose, patient }) => {
             >
               Back
             </button>
-
             {step < totalSteps ? (
               <button
                 onClick={() => setStep((prev) => prev + 1)}
