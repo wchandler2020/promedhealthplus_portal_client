@@ -82,7 +82,7 @@ const NewOrderForm = ({ open, onClose, patient }) => {
     try {
       setLoading(true);
       setError(null);
-      const response = await fetch("http://your-backend-url/api/products/", {
+      const response = await fetch(`${process.env.REACT_APP_PYTHONANYWHERE_API}/products/`, {
         headers: {
           Authorization: `Bearer ${user.access}`,
         },
