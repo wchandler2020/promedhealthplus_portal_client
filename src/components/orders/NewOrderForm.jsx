@@ -11,6 +11,7 @@ import {
 import { AuthContext } from "../../utils/auth";
 import OrderItem from "./OrderItem";
 import OrderSummary from "./OrderSummary";
+import toast from "react-hot-toast";
 
 const NewOrderForm = ({ open, onClose, patient }) => {
   const [step, setStep] = useState(1);
@@ -148,13 +149,13 @@ const NewOrderForm = ({ open, onClose, patient }) => {
         const errorData = await response.json();
         throw new Error(errorData.detail || "Failed to place order.");
       }
-      alert("Order placed successfully!");
+      toast.success("Order placed successfully!");
       onClose();
       setStep(1);
       setQuantities({});
       setSelectedVariantId({});
     } catch (err) {
-      alert(`Error: ${err.message}`);
+      toast.error(`Error: ${err.message}`);
     }
   };
 
