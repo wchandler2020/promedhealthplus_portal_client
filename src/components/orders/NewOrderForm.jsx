@@ -129,6 +129,8 @@ const NewOrderForm = ({ open, onClose, patient }) => {
       items: orderItems,
     };
 
+    console.log('Provider Name: ', )
+
     try {
       const accessToken = localStorage.getItem("accessToken");
       if (!accessToken) {

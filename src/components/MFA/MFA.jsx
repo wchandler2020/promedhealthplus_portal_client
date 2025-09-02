@@ -3,6 +3,7 @@ import { AuthContext } from "../../utils/auth";
 import axiosAuth from "../../utils/axios";
 import { API_BASE_URL } from "../../utils/constants";
 import bg_image from "../../assets/images/bg_image_01.jpg";
+import mfa_bg_img from '../../assets/images/login_img.jpg'
 import {useNavigate } from "react-router-dom";
 
 const MFA = () => {
@@ -64,7 +65,7 @@ const MFA = () => {
       <div className="flex justify-center h-screen">
         <div
           className="relative hidden bg-cover lg:block lg:w-2/3"
-          style={{ backgroundImage: `url(${bg_image})` }}
+          style={{ backgroundImage: `url(${mfa_bg_img})` }}
         >
           <div className="absolute inset-0 bg-black opacity-35"></div>
           <div className="flex items-center h-full px-20 bg-gray-9600 bg-opacity-40">
