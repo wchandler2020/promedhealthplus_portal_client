@@ -332,7 +332,7 @@ const Patients = () => {
                 />
               </svg>
             </button>
-            <h2 className="text-3xl font-bold text-center text-gray-800 mb-2">
+            <h2 className="text-3xl font-semibold text-center text-gray-800 mb-2">
               Add New Patient
             </h2>
             <p className="text-center text-gray-500 mb-6">

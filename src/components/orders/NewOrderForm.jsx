@@ -18,8 +18,7 @@ const NewOrderForm = ({ open, onClose, patient }) => {
   const totalSteps = 3;
   const { user, logout } = useContext(AuthContext);
   const [itemsData, setItemsData] = useState([]);
-  const [quantities, setQuantities] = useState({});
-  const [selectedVariantId, setSelectedVariantId] = useState({});
+  const [selectedVariants, setSelectedVariants] = useState({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -31,10 +30,8 @@ const NewOrderForm = ({ open, onClose, patient }) => {
     patientName: `${patient?.first_name || ""} ${patient?.last_name || ""}`,
     patientDob: patient?.date_of_birth || "",
     patientPhoneNumber: patient?.phone_number || "",
-    patientAddress: `${patient?.address || ""}, ${patient?.city || ""}, ${
-      patient?.state || ""
-    } ${patient?.zip_code || ""}`,
-    patientCountry: patient?.country || "", // <-- ADDED THIS FIELD
+    patientAddress: `${patient?.address || ""}, ${patient?.city || ""}, ${patient?.state || ""} ${patient?.zip_code || ""}`,
+    patientCountry: patient?.country || "",
   });
 
   const handleFormChange = (event) => {
@@ -50,9 +47,8 @@ const NewOrderForm = ({ open, onClose, patient }) => {
       setLoading(true);
       setError(null);
       const accessToken = localStorage.getItem("accessToken");
-      if (!accessToken) {
-        throw new Error("Authentication token not found.");
-      }
+      if (!accessToken) throw new Error("Authentication token not found.");
+
       const response = await fetch(
         `${process.env.REACT_APP_PYTHONANYWHERE_API}/products/`,
         {
@@ -61,6 +57,7 @@ const NewOrderForm = ({ open, onClose, patient }) => {
           },
         }
       );
+
       if (!response.ok) {
         if (response.status === 401) {
           logout();
@@ -68,12 +65,9 @@ const NewOrderForm = ({ open, onClose, patient }) => {
         }
         throw new Error("Failed to fetch products.");
       }
+
       const data = await response.json();
       setItemsData(data);
-      setQuantities(data.reduce((acc, item) => ({ ...acc, [item.id]: 0 }), {}));
-      setSelectedVariantId(
-        data.reduce((acc, item) => ({ ...acc, [item.id]: "" }), {})
-      );
     } catch (err) {
       setError(err.message);
     } finally {
@@ -81,45 +75,59 @@ const NewOrderForm = ({ open, onClose, patient }) => {
     }
   };
 
-  const handleQuantityChange = (id, quantity) => {
-    setQuantities((prev) => ({ ...prev, [id]: quantity }));
+  const handleItemVariantChange = (productId, variantsArray) => {
+    setSelectedVariants((prev) => ({
+      ...prev,
+      [productId]: Array.isArray(variantsArray) ? variantsArray : [],
+    }));
   };
 
-  const handleVariantChange = (productId, variantId) => {
-    setSelectedVariantId((prev) => ({ ...prev, [productId]: variantId }));
-    setQuantities((prev) => ({ ...prev, [productId]: 0 }));
-  };
+  const total = Object.entries(selectedVariants).reduce(
+    (sum, [productId, variants]) => {
+      if (!Array.isArray(variants)) return sum;
 
-  const total = itemsData.reduce((sum, item) => {
-    const variantId = selectedVariantId[item.id];
-    const variant = item.variants.find((v) => v.id === parseInt(variantId));
-    return sum + (variant?.price || 0) * (quantities[item.id] || 0);
-  }, 0);
+      const item = itemsData.find((i) => i.id === parseInt(productId));
+      if (!item) return sum;
+
+      for (const { variantId, quantity } of variants) {
+        const variant = item.variants.find((v) => v.id === parseInt(variantId));
+        if (variant && quantity > 0) {
+          sum += variant.price * quantity;
+        }
+      }
+      return sum;
+    },
+    0
+  );
 
   const handleOrderNow = async () => {
-    const selectedItems = Object.keys(quantities).filter(
-      (id) => quantities[id] > 0 && selectedVariantId[id]
-    );
-    if (total <= 0 || selectedItems.length === 0) {
-      alert("Please select at least one item and variant.");
+    const orderItems = [];
+    Object.entries(selectedVariants).forEach(([productId, variants]) => {
+      variants.forEach(({ variantId, quantity }) => {
+        if (quantity > 0) {
+          const item = itemsData.find((i) => i.id === parseInt(productId));
+          const variant = item?.variants.find((v) => v.id === parseInt(variantId));
+          if (variant) {
+            orderItems.push({
+              product: parseInt(productId),
+              variant: parseInt(variantId),
+              quantity,
+              price_at_order: variant.price,
+            });
+          }
+        }
+      });
+    });
+
+    if (orderItems.length === 0 || total <= 0) {
+      toast.error("Please select at least one item and variant with quantity.");
       return;
     }
-    const orderItems = selectedItems.map((itemId) => {
-      const item = itemsData.find((i) => i.id === parseInt(itemId));
-      const variantId = selectedVariantId[itemId];
-      const variant = item.variants.find((v) => v.id === parseInt(variantId));
-      return {
-        product: item.id,
-        variant: variantId,
-        quantity: quantities[itemId],
-        price_at_order: variant.price,
-      };
-    });
 
     const orderPayload = {
       provider: user.id,
       patient: patient.id,
-      total_price: parseFloat(total.toFixed(2)), 
+      total_price: parseFloat(total.toFixed(2)),
       facility_name: formData.facilityName,
       phone_number: formData.providerPhoneNumber,
       street: formData.providerAddress,
@@ -129,13 +137,12 @@ const NewOrderForm = ({ open, onClose, patient }) => {
       items: orderItems,
     };
 
-    console.log('Provider Name: ', )
-
     try {
       const accessToken = localStorage.getItem("accessToken");
       if (!accessToken) {
         throw new Error("Authentication token not found. Please log in again.");
       }
+
       const response = await fetch(
         `${process.env.REACT_APP_PYTHONANYWHERE_API}/provider/orders/`,
         {
@@ -147,15 +154,16 @@ const NewOrderForm = ({ open, onClose, patient }) => {
           body: JSON.stringify(orderPayload),
         }
       );
+
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.detail || "Failed to place order.");
       }
+
       toast.success("Order placed successfully!");
       onClose();
       setStep(1);
-      setQuantities({});
-      setSelectedVariantId({});
+      setSelectedVariants({});
     } catch (err) {
       toast.error(`Error: ${err.message}`);
     }
@@ -171,10 +179,8 @@ const NewOrderForm = ({ open, onClose, patient }) => {
         patientName: `${patient?.first_name || ""} ${patient?.last_name || ""}`,
         patientDob: patient?.date_of_birth || "",
         patientPhoneNumber: patient?.phone_number || "",
-        patientAddress: `${patient?.address || ""}, ${patient?.city || ""}, ${
-          patient?.state || ""
-        } ${patient?.zip_code || ""}`,
-        patientCountry: patient?.country || "", // <-- CORRECTED INITIAL VALUE
+        patientAddress: `${patient?.address || ""}, ${patient?.city || ""}, ${patient?.state || ""} ${patient?.zip_code || ""}`,
+        patientCountry: patient?.country || "",
       });
       fetchProducts();
     }
@@ -183,12 +189,7 @@ const NewOrderForm = ({ open, onClose, patient }) => {
   const renderStepContent = () => {
     if (loading) {
       return (
-        <Box
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          height="200px"
-        >
+        <Box display="flex" justifyContent="center" alignItems="center" height="200px">
           <CircularProgress />
         </Box>
       );
@@ -196,78 +197,25 @@ const NewOrderForm = ({ open, onClose, patient }) => {
     if (error) {
       return <div className="p-4 text-red-500 text-center">{error}</div>;
     }
+
     switch (step) {
       case 1:
         return (
           <div className="p-4 space-y-4">
-            <TextField
-              fullWidth
-              label="Provider Name"
-              name="providerName"
-              value={formData.providerName}
-              onChange={handleFormChange}
-            />
-            <TextField
-              fullWidth
-              label="Facility Name"
-              name="facilityName"
-              value={formData.facilityName}
-              onChange={handleFormChange}
-            />
-            <TextField
-              fullWidth
-              label="Phone Number"
-              name="providerPhoneNumber"
-              value={formData.providerPhoneNumber}
-              onChange={handleFormChange}
-            />
-            <TextField
-              fullWidth
-              label="Address"
-              name="providerAddress"
-              value={formData.providerAddress}
-              onChange={handleFormChange}
-            />
+            <TextField fullWidth label="Provider Name" name="providerName" value={formData.providerName} onChange={handleFormChange} />
+            <TextField fullWidth label="Facility Name" name="facilityName" value={formData.facilityName} onChange={handleFormChange} />
+            <TextField fullWidth label="Phone Number" name="providerPhoneNumber" value={formData.providerPhoneNumber} onChange={handleFormChange} />
+            <TextField fullWidth label="Address" name="providerAddress" value={formData.providerAddress} onChange={handleFormChange} />
           </div>
         );
       case 2:
         return (
           <div className="p-4 space-y-4">
-            <TextField
-              fullWidth
-              label="Patient Name"
-              name="patientName"
-              value={formData.patientName}
-              onChange={handleFormChange}
-            />
-            <TextField
-              fullWidth
-              label="Date of Birth"
-              name="patientDob"
-              value={formData.patientDob}
-              onChange={handleFormChange}
-            />
-            <TextField
-              fullWidth
-              label="Phone Number"
-              name="patientPhoneNumber"
-              value={formData.patientPhoneNumber}
-              onChange={handleFormChange}
-            />
-            <TextField
-              fullWidth
-              label="Address"
-              name="patientAddress"
-              value={formData.patientAddress}
-              onChange={handleFormChange}
-            />
-            <Select
-              fullWidth
-              label="Country"
-              name="patientCountry"
-              value={formData.patientCountry || "United States"} // Set default value
-              onChange={handleFormChange}
-            >
+            <TextField fullWidth label="Patient Name" name="patientName" value={formData.patientName} onChange={handleFormChange} />
+            <TextField fullWidth label="Date of Birth" name="patientDob" value={formData.patientDob} onChange={handleFormChange} />
+            <TextField fullWidth label="Phone Number" name="patientPhoneNumber" value={formData.patientPhoneNumber} onChange={handleFormChange} />
+            <TextField fullWidth label="Address" name="patientAddress" value={formData.patientAddress} onChange={handleFormChange} />
+            <Select fullWidth name="patientCountry" value={formData.patientCountry || "United States"} onChange={handleFormChange}>
               <MenuItem value="United States">United States</MenuItem>
             </Select>
           </div>
@@ -275,24 +223,18 @@ const NewOrderForm = ({ open, onClose, patient }) => {
       case 3:
         return (
           <div className="p-4">
-            <h3 className="text-xl font-semibold text-gray-700 mb-4">
-              Order Items
-            </h3>
+            <h3 className="text-xl font-semibold text-gray-700 mb-4">Order Items</h3>
             {itemsData.length > 0 ? (
               itemsData.map((item) => (
                 <OrderItem
                   key={item.id}
                   item={item}
-                  quantity={quantities[item.id]}
-                  onQuantityChange={handleQuantityChange}
-                  selectedVariantId={selectedVariantId}
-                  onVariantChange={handleVariantChange}
+                  selectedVariants={selectedVariants[item.id] || []}
+                  onVariantChange={(variants) => handleItemVariantChange(item.id, variants)}
                 />
               ))
             ) : (
-              <p className="text-gray-500 text-center">
-                No available products found.
-              </p>
+              <p className="text-gray-500 text-center">No available products found.</p>
             )}
             <OrderSummary total={total} />
           </div>
@@ -321,41 +263,16 @@ const NewOrderForm = ({ open, onClose, patient }) => {
         }}
       >
         <div className="relative">
-          <button
-            onClick={onClose}
-            className="absolute top-0 right-0 text-gray-500 hover:text-gray-800 transition"
-          >
-            ✕
-          </button>
-          <h2 className="text-3xl font-semibold text-center text-gray-800 mb-2">
-            New Order
-          </h2>
-          <p className="text-center text-gray-500 mb-6">
-            Complete the steps to place a new order.
-          </p>
+          <button onClick={onClose} className="absolute top-0 right-0 text-gray-500 hover:text-gray-800 transition">✕</button>
+          <h2 className="text-3xl font-semibold text-center text-gray-800 mb-2">New Order</h2>
+          <p className="text-center text-gray-500 mb-6">Complete the steps to place a new order.</p>
           {renderStepContent()}
           <div className="flex justify-center items-center mt-6 space-x-4">
-            <button
-              onClick={() => setStep((prev) => prev - 1)}
-              disabled={step === 1}
-              className="px-3 py-2 rounded bg-gray-100 disabled:opacity-50"
-            >
-              Back
-            </button>
+            <button onClick={() => setStep((prev) => prev - 1)} disabled={step === 1} className="px-3 py-2 rounded bg-gray-100 disabled:opacity-50">Back</button>
             {step < totalSteps ? (
-              <button
-                onClick={() => setStep((prev) => prev + 1)}
-                className="px-3 py-2 rounded bg-purple-600 text-white"
-              >
-                Next
-              </button>
+              <button onClick={() => setStep((prev) => prev + 1)} className="px-3 py-2 rounded bg-purple-600 text-white">Next</button>
             ) : (
-              <Button
-                onClick={handleOrderNow}
-                variant="contained"
-                className="bg-purple-600 text-white font-bold"
-                disabled={total === 0}
-              >
+              <Button onClick={handleOrderNow} variant="contained" className="bg-purple-600 text-white font-bold" disabled={total === 0}>
                 Place Order
               </Button>
             )}
