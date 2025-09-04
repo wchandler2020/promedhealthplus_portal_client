@@ -18,6 +18,8 @@ import { useContext, useEffect, useRef } from "react";
 import { AuthContext } from "./utils/auth";
 import "./App.css";
 import VerifyEmail from "./components/verifyEmail/VerifyEmail";
+import ForgotPassword from "./components/login/ForgotPassword";
+import ResetPassword from "./components/login/ResetPassword";
 
 function ErrorButton() {
   return (
@@ -33,8 +35,15 @@ function ErrorButton() {
 
 function AppWrapper() {
   const location = useLocation();
-  const hideNavbarPaths = ["/login", "/register", "/register/", "/mfa"];
-  const shouldHideNavAndFooter = hideNavbarPaths.includes(location.pathname);
+  const hiddenPaths = [
+  "/login",
+  "/register",
+  "/mfa",
+  "/forgot-password",
+  "/reset-password",
+  "/verify-email"
+  ];
+  const shouldHideNavAndFooter = hiddenPaths.some(path => location.pathname.startsWith(path));
   const { logout, user } = useContext(AuthContext);
   const timeoutRef = useRef(null);
   const warningTimeoutRef = useRef(null);
@@ -118,7 +127,8 @@ function AppWrapper() {
             </PrivateRoute>
           }
         />
-        {/* <Route path='/fillable-pdf' element={<PrivateRoute><FillablePdf /></PrivateRoute>} /> */}
+        <Route path="/forgot-password" element={<ForgotPassword />}/>
+        <Route path="/reset-password/:token" element={<ResetPassword />} />
         <Route path="/login" element={<Login />} />
         <Route path="/mfa" element={<MFA />} />
         <Route path="/about" element={<About />} />

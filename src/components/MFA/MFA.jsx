@@ -68,10 +68,10 @@ const MFA = () => {
           style={{ backgroundImage: `url(${mfa_bg_img})` }}
         >
           <div className="absolute inset-0 bg-black opacity-35"></div>
-          <div className="flex items-center h-full px-20 bg-gray-9600 bg-opacity-40">
+          <div className="flex items-center h-full px-20 bg-gray-9600 bg-opacity-40 z-20">
             <div>
-              <h2 className="text-4xl font-bold text-black">ProMed Health Plus</h2>
-              <p className="max-w-xl mt-3 text-gray-900">
+              <h2 className="text-4xl font-semibold text-white">ProMed Health Plus</h2>
+              <p className="max-w-xl mt-3 text-gray-900 lg:text-white">
                 We sent you a code via SMS. Enter it below to verify your identity.
               </p>
             </div>

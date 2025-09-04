@@ -168,6 +168,7 @@ const Patients = () => {
   );
   const totalPages = Math.ceil(sortedPatients.length / patientsPerPage);
   const handleViewPdf = (patient) => {
+    console.log("Opening PDF modal for:", patient);
     setSelectedPatient(patient);
     setViewPdfModalOpen(true);
   };
@@ -594,10 +595,8 @@ const Patients = () => {
       </Modal>
       <Modal open={viewPdfModalOpen} onClose={() => setViewPdfModalOpen(false)}>
         <Box sx={modalStyle}>
-          <FillablePdf
-            patient={selectedPatient}
-            onClose={() => setViewPdfModalOpen(false)}
-          />
+          <FillablePdf selectedPatientId={selectedPatient?.id} 
+                       onClose={() => setViewPdfModalOpen(false)} />
         </Box>
       </Modal>
     </div>
