@@ -20,6 +20,7 @@ const VerifyEmail = () => {
       } catch (error) {
         setVerificationStatus("error");
         console.error("Email verification failed:", error);
+        console.error("Email verification failed:", error.response?.data || error);
       }
     };
 

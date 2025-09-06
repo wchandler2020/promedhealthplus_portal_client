@@ -24,7 +24,8 @@ const ContactRepModal = ({ open, onClose }) => {
 
     try {
       const response = await axiosInstance.post(
-        `${process.env.REACT_APP_PYTHONANYWHERE_API}/provider/contact-rep/`,
+        // `${process.env.REACT_APP_PYTHONANYWHERE_API}/provider/contact-rep/`,
+        `${process.env.REACT_APP_API_BASE_URL}/provider/contact-rep/`,
         formData
       );
       console.log("Message sent successfully:", response.data);
