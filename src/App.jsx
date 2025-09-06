@@ -20,6 +20,7 @@ import "./App.css";
 import VerifyEmail from "./components/verifyEmail/VerifyEmail";
 import ForgotPassword from "./components/login/ForgotPassword";
 import ResetPassword from "./components/login/ResetPassword";
+import IvrForm from "./components/dashboard/patient/IvrForm";
 
 function ErrorButton() {
   return (
@@ -109,6 +110,7 @@ function AppWrapper() {
       {!shouldHideNavAndFooter && <Navbar />}
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/ivr-form" element={<IvrForm />} />
         <Route path="/register" element={<Register />} />
         <Route path="/verify-email/:token" element={<VerifyEmail />} /> 
         <Route

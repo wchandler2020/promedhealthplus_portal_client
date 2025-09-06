@@ -30,8 +30,11 @@ const NewOrderForm = ({ open, onClose, patient }) => {
     patientName: `${patient?.first_name || ""} ${patient?.last_name || ""}`,
     patientDob: patient?.date_of_birth || "",
     patientPhoneNumber: patient?.phone_number || "",
-    patientAddress: `${patient?.address || ""}, ${patient?.city || ""}, ${patient?.state || ""} ${patient?.zip_code || ""}`,
+    patientAddress: `${patient?.address || ""}, ${patient?.city || ""}, ${
+      patient?.state || ""
+    } ${patient?.zip_code || ""}`,
     patientCountry: patient?.country || "",
+    deliveryDate: "",
   });
 
   const handleFormChange = (event) => {
@@ -106,13 +109,15 @@ const NewOrderForm = ({ open, onClose, patient }) => {
       variants.forEach(({ variantId, quantity }) => {
         if (quantity > 0) {
           const item = itemsData.find((i) => i.id === parseInt(productId));
-          const variant = item?.variants.find((v) => v.id === parseInt(variantId));
+          const variant = item?.variants.find(
+            (v) => v.id === parseInt(variantId)
+          );
           if (variant) {
             orderItems.push({
               product: parseInt(productId),
               variant: parseInt(variantId),
               quantity,
-              price_at_order: variant.price,
+              // price_at_order: variant.price,
             });
           }
         }
@@ -135,6 +140,7 @@ const NewOrderForm = ({ open, onClose, patient }) => {
       zip_code: patient.zip_code,
       country: formData.patientCountry,
       items: orderItems,
+      delivery_date: formData.deliveryDate || null,
     };
 
     try {
@@ -179,7 +185,9 @@ const NewOrderForm = ({ open, onClose, patient }) => {
         patientName: `${patient?.first_name || ""} ${patient?.last_name || ""}`,
         patientDob: patient?.date_of_birth || "",
         patientPhoneNumber: patient?.phone_number || "",
-        patientAddress: `${patient?.address || ""}, ${patient?.city || ""}, ${patient?.state || ""} ${patient?.zip_code || ""}`,
+        patientAddress: `${patient?.address || ""}, ${patient?.city || ""}, ${
+          patient?.state || ""
+        } ${patient?.zip_code || ""}`,
         patientCountry: patient?.country || "",
       });
       fetchProducts();
@@ -189,7 +197,12 @@ const NewOrderForm = ({ open, onClose, patient }) => {
   const renderStepContent = () => {
     if (loading) {
       return (
-        <Box display="flex" justifyContent="center" alignItems="center" height="200px">
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          height="200px"
+        >
           <CircularProgress />
         </Box>
       );
@@ -202,20 +215,73 @@ const NewOrderForm = ({ open, onClose, patient }) => {
       case 1:
         return (
           <div className="p-4 space-y-4">
-            <TextField fullWidth label="Provider Name" name="providerName" value={formData.providerName} onChange={handleFormChange} />
-            <TextField fullWidth label="Facility Name" name="facilityName" value={formData.facilityName} onChange={handleFormChange} />
-            <TextField fullWidth label="Phone Number" name="providerPhoneNumber" value={formData.providerPhoneNumber} onChange={handleFormChange} />
-            <TextField fullWidth label="Address" name="providerAddress" value={formData.providerAddress} onChange={handleFormChange} />
+            <TextField
+              fullWidth
+              label="Provider Name"
+              name="providerName"
+              value={formData.providerName}
+              onChange={handleFormChange}
+            />
+            <TextField
+              fullWidth
+              label="Facility Name"
+              name="facilityName"
+              value={formData.facilityName}
+              onChange={handleFormChange}
+            />
+            <TextField
+              fullWidth
+              label="Phone Number"
+              name="providerPhoneNumber"
+              value={formData.providerPhoneNumber}
+              onChange={handleFormChange}
+            />
+            <TextField
+              fullWidth
+              label="Address"
+              name="providerAddress"
+              value={formData.providerAddress}
+              onChange={handleFormChange}
+            />
           </div>
         );
       case 2:
         return (
           <div className="p-4 space-y-4">
-            <TextField fullWidth label="Patient Name" name="patientName" value={formData.patientName} onChange={handleFormChange} />
-            <TextField fullWidth label="Date of Birth" name="patientDob" value={formData.patientDob} onChange={handleFormChange} />
-            <TextField fullWidth label="Phone Number" name="patientPhoneNumber" value={formData.patientPhoneNumber} onChange={handleFormChange} />
-            <TextField fullWidth label="Address" name="patientAddress" value={formData.patientAddress} onChange={handleFormChange} />
-            <Select fullWidth name="patientCountry" value={formData.patientCountry || "United States"} onChange={handleFormChange}>
+            <TextField
+              fullWidth
+              label="Patient Name"
+              name="patientName"
+              value={formData.patientName}
+              onChange={handleFormChange}
+            />
+            <TextField
+              fullWidth
+              label="Date of Birth"
+              name="patientDob"
+              value={formData.patientDob}
+              onChange={handleFormChange}
+            />
+            <TextField
+              fullWidth
+              label="Phone Number"
+              name="patientPhoneNumber"
+              value={formData.patientPhoneNumber}
+              onChange={handleFormChange}
+            />
+            <TextField
+              fullWidth
+              label="Address"
+              name="patientAddress"
+              value={formData.patientAddress}
+              onChange={handleFormChange}
+            />
+            <Select
+              fullWidth
+              name="patientCountry"
+              value={formData.patientCountry || "United States"}
+              onChange={handleFormChange}
+            >
               <MenuItem value="United States">United States</MenuItem>
             </Select>
           </div>
@@ -223,26 +289,52 @@ const NewOrderForm = ({ open, onClose, patient }) => {
       case 3:
         return (
           <div className="p-4">
-            <h3 className="text-xl font-semibold text-gray-700 mb-4">Order Items</h3>
+            <TextField
+              fullWidth
+              label="Requested Delivery Date"
+              name="deliveryDate"
+              type="date"
+              InputLabelProps={{ shrink: true }}
+              value={formData.deliveryDate}
+              onChange={handleFormChange}
+              // ADD THIS min ATTRIBUTE
+              inputProps={{ min: new Date().toISOString().split("T")[0] }}
+            />
+            <h3 className="text-xl font-semibold text-gray-700 mb-4">
+              Order Items
+            </h3>
             {itemsData.length > 0 ? (
               itemsData.map((item) => (
                 <OrderItem
                   key={item.id}
                   item={item}
                   selectedVariants={selectedVariants[item.id] || []}
-                  onVariantChange={(variants) => handleItemVariantChange(item.id, variants)}
+                  onVariantChange={(variants) =>
+                    handleItemVariantChange(item.id, variants)
+                  }
                 />
               ))
             ) : (
-              <p className="text-gray-500 text-center">No available products found.</p>
+              <p className="text-gray-500 text-center">
+                No available products found.
+              </p>
             )}
-            <OrderSummary total={total} />
+
+            {/* Show order summary without prices */}
+            <OrderSummary
+              selectedVariants={selectedVariants}
+              itemsData={itemsData}
+            />
           </div>
         );
       default:
         return null;
     }
   };
+
+  const hasSelectedItems = Object.values(selectedVariants).some((variants) =>
+    variants.some(({ quantity }) => quantity > 0)
+  );
 
   return (
     <Modal open={open} onClose={onClose}>
@@ -263,16 +355,41 @@ const NewOrderForm = ({ open, onClose, patient }) => {
         }}
       >
         <div className="relative">
-          <button onClick={onClose} className="absolute top-0 right-0 text-gray-500 hover:text-gray-800 transition">✕</button>
-          <h2 className="text-3xl font-semibold text-center text-gray-800 mb-2">New Order</h2>
-          <p className="text-center text-gray-500 mb-6">Complete the steps to place a new order.</p>
+          <button
+            onClick={onClose}
+            className="absolute top-0 right-0 text-gray-500 hover:text-gray-800 transition"
+          >
+            ✕
+          </button>
+          <h2 className="text-3xl font-semibold text-center text-gray-800 mb-2">
+            New Order
+          </h2>
+          <p className="text-center text-gray-500 mb-6">
+            Complete the steps to place a new order.
+          </p>
           {renderStepContent()}
           <div className="flex justify-center items-center mt-6 space-x-4">
-            <button onClick={() => setStep((prev) => prev - 1)} disabled={step === 1} className="px-3 py-2 rounded bg-gray-100 disabled:opacity-50">Back</button>
+            <button
+              onClick={() => setStep((prev) => prev - 1)}
+              disabled={step === 1}
+              className="px-3 py-2 rounded bg-gray-100 disabled:opacity-50"
+            >
+              Back
+            </button>
             {step < totalSteps ? (
-              <button onClick={() => setStep((prev) => prev + 1)} className="px-3 py-2 rounded bg-purple-600 text-white">Next</button>
+              <button
+                onClick={() => setStep((prev) => prev + 1)}
+                className="px-3 py-2 rounded bg-purple-600 text-white"
+              >
+                Next
+              </button>
             ) : (
-              <Button onClick={handleOrderNow} variant="contained" className="bg-purple-600 text-white font-bold" disabled={total === 0}>
+              <Button
+                onClick={handleOrderNow}
+                variant="contained"
+                className="bg-purple-600 text-white font-bold"
+                disabled={!hasSelectedItems}
+              >
                 Place Order
               </Button>
             )}
