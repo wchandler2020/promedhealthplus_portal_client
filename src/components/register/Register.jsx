@@ -14,14 +14,14 @@ const Register = () => {
   const { register } = useContext(AuthContext);
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState(""); // Add new state for phone number
-  const [countryCode, setCountryCode] = useState("+1"); // Add new state for country code with a default
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [npiNumber, setNpiNumber] = useState(""); // ⬅️ Add new state for NPI number
+  const [countryCode, setCountryCode] = useState("+1");
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
-  // const [successMsg, setSuccessMsg] = useState("");
   const navigate = useNavigate();
 
   // Validation functions
@@ -35,7 +35,6 @@ const Register = () => {
     e.preventDefault();
     setIsLoading(true);
     setErrorMsg("");
-    // setSuccessMsg("");
 
     const fullInternationalPhone = `${countryCode}${phoneNumber.replace(
       /\D/g,
@@ -48,23 +47,22 @@ const Register = () => {
       fullInternationalPhone,
       countryCode,
       password,
-      password2
+      password2,
+      npiNumber 
     );
 
     if (result.success) {
-      // ⬅️ IMPORTANT CHANGE HERE: Display success message and do NOT redirect
       toast.success(
-      "Account created! Please check your email to verify your account before logging in."
+        "Account created! We are reviewing your registration. You will be notified once your account is active."
       );
       setFullName("");
       setEmail("");
       setPhoneNumber("");
+      setNpiNumber("");
       setCountryCode("+1");
       setPassword("");
       setPassword2("");
-      // ⚠️ Do not navigate here! The user must verify their email first.
     } else {
-      // ... (existing error handling)
       const error = result.error;
       if (typeof error === "object") {
         const messages = Object.values(error).flat().join(" ");
@@ -79,7 +77,6 @@ const Register = () => {
   return (
     <div className="bg-white dark:bg-white">
       <div className="flex justify-center h-screen">
-        {/* Left Side with Background */}
         <div
           className="relative hidden bg-cover lg:block lg:w-2/3"
           style={{ backgroundImage: `url(${register_bg_img})` }}
@@ -98,21 +95,14 @@ const Register = () => {
                 ProMed Health Plus
               </h2>
               <p className="max-w-xl mt-3 text-white text-xl font-light">
-                Lorem ipsum dolor sit, amet consectetur adipisicing elit. In
-                autem ipsa, nulla laboriosam dolores, repellendus perferendis
-                libero suscipit nam temporibus molestiae
+                Securely manage your patient care and medical supplies with a single, intuitive platform.
               </p>
             </div>
           </div>
         </div>
-        {/* Right Side Form */}
         <div className="flex items-center w-full max-w-md px-6 mx-auto lg:w-2/6">
           <div className="flex-1">
             <div className="text-center">
-              {/* <h2 className="text-4xl font-bold text-center text-gray-700">
-                Brand
-              </h2> */}
-
               <p className="mt-3 text-gray-900 text-xl font-semibold uppercase">
                 Create your account
               </p>
@@ -177,7 +167,6 @@ const Register = () => {
                         </option>
                       ))}
                     </select>
-
                     <input
                       type="tel"
                       id="phoneNumber"
@@ -191,12 +180,30 @@ const Register = () => {
 
                 <div className="mt-4">
                   <label
+                    htmlFor="npiNumber"
+                    className="block mb-2 text-sm text-gray-800"
+                  >
+                    NPI Number
+                  </label>
+                  <input
+                    type="text"
+                    id="npiNumber"
+                    placeholder="Your 10-digit NPI number"
+                    value={npiNumber}
+                    onChange={(e) => setNpiNumber(e.target.value)}
+                    className="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-purple-400 focus:ring focus:ring-purple-400 focus:outline-none focus:ring-opacity-40"
+                    maxLength="10"
+                    required
+                  />
+                </div>
+
+                <div className="mt-4">
+                  <label
                     htmlFor="password"
                     className="block mb-2 text-sm text-gray-800"
                   >
                     Password
                   </label>
-
                   <input
                     type={showPassword ? "text" : "password"}
                     id="password"
@@ -206,7 +213,6 @@ const Register = () => {
                     className="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-purple-400 focus:ring focus:ring-purple-400 focus:outline-none focus:ring-opacity-40"
                     required
                   />
-
                   <div className="mt-2 text-sm">
                     <ul className="list-disc list-inside text-gray-500">
                       <li
@@ -221,7 +227,6 @@ const Register = () => {
                         )}
                         Minimum 12 characters
                       </li>
-
                       <li
                         className={
                           hasUppercase
@@ -234,7 +239,6 @@ const Register = () => {
                         )}
                         At least two uppercase letters
                       </li>
-
                       <li
                         className={
                           hasLowercase
@@ -247,7 +251,6 @@ const Register = () => {
                         )}
                         At least two lowercase letters
                       </li>
-
                       <li
                         className={
                           hasNumbers
@@ -260,7 +263,6 @@ const Register = () => {
                         )}
                         At least two numbers
                       </li>
-
                       <li
                         className={
                           hasSpecialChars
@@ -284,7 +286,6 @@ const Register = () => {
                   >
                     Confirm Password
                   </label>
-
                   <input
                     type={showPassword ? "text" : "password"}
                     id="confirmPassword"
@@ -318,13 +319,9 @@ const Register = () => {
                   >
                     {isLoading ? "Registering..." : "Register"}
                   </button>
-
                   {errorMsg && (
                     <p className="mt-2 text-sm text-red-500">{errorMsg}</p>
                   )}
-                  {/* {successMsg && (
-                    <p className="mt-2 text-sm text-purple-500">{successMsg}</p>
-                  )} */}
                 </div>
               </form>
               <p className="mt-6 text-sm text-center text-gray-400">

@@ -1,6 +1,6 @@
 import React from "react";
 
-const OrderSummary = ({ selectedVariants = {}, itemsData = [] }) => {
+const OrderSummary = ({ selectedVariants = {}, itemsData = [], orderDate }) => {
   const renderSummaryItems = () => {
     return Object.entries(selectedVariants).map(([productId, variants]) => {
       const product = itemsData.find((item) => item.id === parseInt(productId));
@@ -32,6 +32,9 @@ const OrderSummary = ({ selectedVariants = {}, itemsData = [] }) => {
 
   return (
     <div className="mt-6 p-4 border-t">
+      <h3 className="text-sm font-semibold text-gray-800 mb-2">
+        Order By Date: <span className="text-sm font-light text-gray-800 ml-2">{orderDate}</span>
+      </h3>
       <h3 className="text-xl font-semibold text-gray-800 mb-2">
         Order Summary
       </h3>

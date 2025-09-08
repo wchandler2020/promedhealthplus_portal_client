@@ -12,6 +12,9 @@ import { AuthContext } from "../../utils/auth";
 import OrderItem from "./OrderItem";
 import OrderSummary from "./OrderSummary";
 import toast from "react-hot-toast";
+import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+
 
 const NewOrderForm = ({ open, onClose, patient }) => {
   const [step, setStep] = useState(1);
@@ -289,17 +292,6 @@ const NewOrderForm = ({ open, onClose, patient }) => {
       case 3:
         return (
           <div className="p-4">
-            <TextField
-              fullWidth
-              label="Requested Delivery Date"
-              name="deliveryDate"
-              type="date"
-              InputLabelProps={{ shrink: true }}
-              value={formData.deliveryDate}
-              onChange={handleFormChange}
-              // ADD THIS min ATTRIBUTE
-              inputProps={{ min: new Date().toISOString().split("T")[0] }}
-            />
             <h3 className="text-xl font-semibold text-gray-700 mb-4">
               Order Items
             </h3>
@@ -319,11 +311,43 @@ const NewOrderForm = ({ open, onClose, patient }) => {
                 No available products found.
               </p>
             )}
+            {/* <TextField
+              fullWidth
+              label="Requested Delivery Date"
+              name="deliveryDate"
+              type="date"
+              InputLabelProps={{ shrink: true }}
+              value={formData.deliveryDate}
+              onChange={handleFormChange}
+              // ADD THIS min ATTRIBUTE
+              inputProps={{ min: new Date().toISOString().split("T")[0] }}
+            /> */}
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <DatePicker
+                label="Requested Delivery Date"
+                value={
+                  formData.deliveryDate ? new Date(formData.deliveryDate) : null
+                }
+                onChange={(newValue) => {
+                  setFormData((prev) => ({
+                    ...prev,
+                    deliveryDate: newValue?.toISOString().split("T")[0] || "",
+                  }));
+                }}
+                disablePast
+                slotProps={{
+                  textField: {
+                    fullWidth: true,
+                    variant: "outlined",
+                  },
+                }}
+              />
+            </LocalizationProvider>
 
-            {/* Show order summary without prices */}
             <OrderSummary
               selectedVariants={selectedVariants}
               itemsData={itemsData}
+              orderDate={formData.deliveryDate}
             />
           </div>
         );
