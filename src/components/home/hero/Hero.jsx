@@ -99,10 +99,10 @@ const Hero = () => {
         <div className="container mx-auto flex flex-col md:flex-row lg:items-center h-[75%] justify-between">
           <div className="md:w-1/2 mb-8 md:mb-0">
             <h1 className="text-lg sm:text-1xl md:text-2xl lg:text-4xl font-semibold leading-tight text-center lg:text-start uppercase">
-              Health is Our Priority
+              Promed Health Plus
             </h1>
             <p className="mt-4 text-sm sm:text-base md:text-lg text-center lg:text-start">
-              Providing exceptional medical care with compassion and expertise.
+              Empowering Providers with Comprehensive Wound Care Solutions
             </p>
 
             <div className="mt-8 flex justify-center lg:justify-start">
