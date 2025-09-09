@@ -1,14 +1,23 @@
 import { useEffect, useState } from "react";
 import default_item from "../../assets/images/default_item.png";
 
+// Helper to extract area from a size string. 
+// This takes a string like "2 x 2 " and returns 4 for the size.
+function getAreaFromSize(sizeStr) {
+  if (!sizeStr) return 0;
+  const match = sizeStr.match(/(\d+(?:\.\d+)?)\s*[x×]\s*(\d+(?:\.\d+)?)/i);
+  if (!match) return 0;
+  const length = parseFloat(match[1]);
+  const width = parseFloat(match[2]);
+  return length * width;
+}
+
 const OrderItem = ({ item, selectedVariants = [], onVariantChange }) => {
   const [localSelections, setLocalSelections] = useState(
     selectedVariants.length > 0 ? selectedVariants : [{ variantId: "", quantity: 0 }]
   );
 
   useEffect(() => {
-    // This effect ensures the local state is synchronized with the parent's state
-    // when the component's props change (e.g., when a user navigates between steps).
     setLocalSelections(
       selectedVariants.length > 0 ? selectedVariants : [{ variantId: "", quantity: 0 }]
     );
@@ -16,13 +25,13 @@ const OrderItem = ({ item, selectedVariants = [], onVariantChange }) => {
 
   const handleLocalChange = (updatedSelections) => {
     setLocalSelections(updatedSelections);
-    // Propagate the change up to the parent component
     onVariantChange(updatedSelections);
   };
 
   const handleVariantChange = (index, value) => {
     const updated = [...localSelections];
     updated[index].variantId = value;
+    updated[index].quantity = 0; // Reset quantity if variant changes
     handleLocalChange(updated);
   };
 
@@ -41,6 +50,24 @@ const OrderItem = ({ item, selectedVariants = [], onVariantChange }) => {
     const updated = localSelections.filter((_, i) => i !== index);
     handleLocalChange(updated);
   };
+
+  // Max size logic of the area allowed
+  const maxAllowed = Math.floor((item.max_size || 0) * 1.2);
+
+  // Helper to get variant object by id
+  const getVariantById = (id) => item.variants.find((v) => String(v.id) === String(id));
+
+  // Calculate total selected area
+  const totalSelected = localSelections.reduce((sum, v) => {
+    const variant = getVariantById(v.variantId);
+    const area = getAreaFromSize(variant?.size);
+    return sum + (area * (v.quantity || 0));
+  }, 0);
+
+  const canAddMore = totalSelected < maxAllowed;
+
+  // For duplicate size prevention
+  const selectedVariantIds = localSelections.map((entry) => entry.variantId);
 
   return (
     <div className="border-b py-4 space-y-2">
@@ -62,49 +89,81 @@ const OrderItem = ({ item, selectedVariants = [], onVariantChange }) => {
         </div>
       </div>
 
-      {localSelections.map((entry, index) => (
-        <div key={index} className="flex gap-2 items-center">
-          <select
-            className="border rounded px-2 py-1 w-full"
-            value={entry.variantId}
-            onChange={(e) => handleVariantChange(index, e.target.value)}
-          >
-            <option value="">Select Size</option>
-            {item.variants.map((variant) => (
-              <option key={variant.id} value={variant.id}>
-                {variant.size}
-              </option>
-            ))}
-          </select>
+      {localSelections.map((entry, index) => {
+        const variant = getVariantById(entry.variantId);
+        const thisRowArea = getAreaFromSize(variant?.size) * (entry.quantity || 0);
+        const otherRowsArea = totalSelected - thisRowArea;
+        const maxForThisRowArea = Math.max(0, maxAllowed - otherRowsArea);
+        const variantArea = getAreaFromSize(variant?.size);
+        let maxQty = 0;
+        if (variantArea > 0) {
+          maxQty = Math.floor(maxForThisRowArea / variantArea);
+        }
+        const disableRow = totalSelected >= maxAllowed && thisRowArea === 0;
 
-          <select
-            className="border rounded px-2 py-1 w-24"
-            value={entry.quantity}
-            onChange={(e) => handleQuantityChange(index, e.target.value)}
-            disabled={!entry.variantId}
-          >
-            {[...Array(11).keys()].map((qty) => (
-              <option key={qty} value={qty}>
-                {qty}
-              </option>
-            ))}
-          </select>
+        // Prevent duplicate variant selection
+        const usedIds = selectedVariantIds.filter((id, i) => i !== index);
 
-          {localSelections.length > 1 && (
-            <button
-              onClick={() => removeVariantRow(index)}
-              className="text-red-500 text-lg px-2"
-              aria-label="Remove variant"
+        return (
+          <div key={index} className="flex gap-2 items-center">
+            <select
+              className="border rounded px-2 py-1 w-full"
+              value={entry.variantId}
+              onChange={(e) => handleVariantChange(index, e.target.value)}
+              disabled={disableRow}
             >
-              ✕
-            </button>
-          )}
-        </div>
-      ))}
+              <option value="">Select Size</option>
+              {item.variants
+                .filter((variant) => !usedIds.includes(String(variant.id)))
+                .map((variant) => (
+                  <option key={variant.id} value={variant.id}>
+                    {variant.size} - ${variant.price}
+                  </option>
+                ))}
+            </select>
 
-      <button onClick={addVariantRow} className="text-sm text-blue-500 mt-2">
+            <select
+              className="border rounded px-2 py-1 w-24"
+              value={entry.quantity}
+              onChange={(e) => handleQuantityChange(index, e.target.value)}
+              disabled={!entry.variantId || disableRow}
+            >
+              {[...Array(maxQty + 1).keys()].map((qty) => (
+                <option key={qty} value={qty}>
+                  {qty}
+                </option>
+              ))}
+            </select>
+
+            {localSelections.length > 1 && (
+              <button
+                onClick={() => removeVariantRow(index)}
+                className="text-red-500 text-lg px-2"
+                aria-label="Remove variant"
+              >
+                ✕
+              </button>
+            )}
+          </div>
+        );
+      })}
+
+      <button
+        onClick={addVariantRow}
+        className={`text-sm mt-2 ${canAddMore ? "text-blue-500" : "text-gray-400 cursor-not-allowed"}`}
+        disabled={!canAddMore}
+      >
         + Add Another Selection
       </button>
+      <div className="text-xs text-gray-500 mt-1">
+        Max allowed area for this product: <span className="font-semibold">{maxAllowed}</span>.&nbsp;
+        Currently selected area: <span className="font-semibold">{totalSelected}</span>
+      </div>
+      {!canAddMore && (
+        <div className="text-xs text-red-500 mt-1">
+          You have reached the maximum allowed area for this product.
+        </div>
+      )}
     </div>
   );
 };

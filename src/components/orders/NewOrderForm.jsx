@@ -57,7 +57,7 @@ const NewOrderForm = ({ open, onClose, patient }) => {
 
       const response = await fetch(
         // `${process.env.REACT_APP_PYTHONANYWHERE_API}/products/`,
-        `${process.env.REACT_APP_API_BASE_URL}/products/`,
+        `${process.env.REACT_APP_API_URL}/products/`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -155,7 +155,7 @@ const NewOrderForm = ({ open, onClose, patient }) => {
 
       const response = await fetch(
         // `${process.env.REACT_APP_PYTHONANYWHERE_API}/provider/orders/`,
-        `${process.env.REACT_APP_API_BASE_URL}/provider/orders/`,
+        `${process.env.REACT_APP_API_URL}/provider/orders/`,
         {
           method: "POST",
           headers: {
