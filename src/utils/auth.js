@@ -1,5 +1,3 @@
-// utils/auth.js
-
 import { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
 import { API_BASE_URL } from './constants';
@@ -42,7 +40,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const register = async (fullName, email, phoneNumber, countryCode, password, password2) => {
+  const register = async (fullName, email, phoneNumber, countryCode, password, password2, npiNumber) => { // ⬅️ Add npiNumber as a parameter
     try {
       const response = await axios.post(`${API_BASE_URL}/provider/register/`, {
         full_name: fullName,
@@ -50,7 +48,8 @@ export const AuthProvider = ({ children }) => {
         phone_number: phoneNumber,
         country_code: countryCode,
         password,
-        password2
+        password2,
+        npi_number: npiNumber 
       });
       return { success: true, data: response.data };
     } catch (error) {
@@ -66,11 +65,10 @@ export const AuthProvider = ({ children }) => {
       const response = await axios.post(`${API_BASE_URL}/provider/token/`, {
         email,
         password,
-        method, // pass method to backend
+        method,
       });
 
       if (response.data.mfa_required) {
-        // Store tokens temporarily for verification step
         localStorage.setItem('accessToken', response.data.access);
         localStorage.setItem('refreshToken', response.data.refresh);
         localStorage.setItem('session_id', response.data.session_id)
@@ -84,7 +82,6 @@ export const AuthProvider = ({ children }) => {
       }
 
       const { access, refresh, user:userData } = response.data;
-      // const userData = { email, verified: true };
 
       localStorage.setItem('accessToken', access);
       localStorage.setItem('refreshToken', refresh);
@@ -113,7 +110,6 @@ export const AuthProvider = ({ children }) => {
           },
         }
       );
-      // Mark user as verified
       const userData =JSON.parse( localStorage.getItem('user'))
       userData.verified = true
       localStorage.setItem('user', JSON.stringify(userData));
@@ -149,7 +145,6 @@ const postPatient = async (patientData) => {
   }
 };
   
-
   const logout = () => {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');

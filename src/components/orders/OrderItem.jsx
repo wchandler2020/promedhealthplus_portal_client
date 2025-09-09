@@ -72,7 +72,7 @@ const OrderItem = ({ item, selectedVariants = [], onVariantChange }) => {
             <option value="">Select Size</option>
             {item.variants.map((variant) => (
               <option key={variant.id} value={variant.id}>
-                {variant.size} - ${variant.price}
+                {variant.size}
               </option>
             ))}
           </select>

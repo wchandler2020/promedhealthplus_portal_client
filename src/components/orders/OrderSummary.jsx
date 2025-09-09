@@ -1,24 +1,47 @@
 import React from "react";
 
-const OrderSummary = ({ total = 0 }) => {
-  const formattedTotal = new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-  }).format(total);
+const OrderSummary = ({ selectedVariants = {}, itemsData = [], orderDate }) => {
+  const renderSummaryItems = () => {
+    return Object.entries(selectedVariants).map(([productId, variants]) => {
+      const product = itemsData.find((item) => item.id === parseInt(productId));
+      if (!product) return null;
+
+      return (
+        <div key={productId} className="mb-4">
+          <h4 className="font-semibold text-gray-800">{product.name}</h4>
+          <ul className="ml-4 list-disc text-gray-700 text-sm">
+            {variants
+              .filter(({ quantity }) => quantity > 0)
+              .map(({ variantId, quantity }, index) => {
+                const variant = product.variants.find(
+                  (v) => v.id === parseInt(variantId)
+                );
+                if (!variant) return null;
+
+                return (
+                  <li key={index}>
+                    {variant.size} – Qty: {quantity}
+                  </li>
+                );
+              })}
+          </ul>
+        </div>
+      );
+    });
+  };
 
   return (
     <div className="mt-6 p-4 border-t">
-      <h3 className="text-xl font-semibold text-gray-800">Order Summary</h3>
-      <p className="mt-2 text-gray-700">
-        Total:{" "}
-        <span className="font-bold text-gray-900">
-          {formattedTotal}
-        </span>
-      </p>
-      {total === 0 && (
-        <p className="text-sm text-red-500 mt-1">
-          Please add at least one item to your order.
-        </p>
+      <h3 className="text-sm font-semibold text-gray-800 mb-2">
+        Order By Date: <span className="text-sm font-light text-gray-800 ml-2">{orderDate}</span>
+      </h3>
+      <h3 className="text-xl font-semibold text-gray-800 mb-2">
+        Order Summary
+      </h3>
+      {Object.keys(selectedVariants).length === 0 ? (
+        <p className="text-sm text-gray-500">No items selected.</p>
+      ) : (
+        renderSummaryItems()
       )}
     </div>
   );
