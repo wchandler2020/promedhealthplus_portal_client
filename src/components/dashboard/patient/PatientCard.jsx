@@ -1,6 +1,7 @@
 // src/components/dashboard/patients/PatientCard.jsx
 import React, { useState } from "react";
 import { FaEye, FaEdit, FaTrashAlt, FaShoppingCart } from "react-icons/fa";
+import { IoInformationCircleOutline } from "react-icons/io5";
 import { format } from "date-fns";
 import { formatPhoneNumber } from "react-phone-number-input";
 import Notes from "../documemts/Notes";
@@ -177,7 +178,8 @@ const PatientCard = ({ patient, onViewPdf }) => {
         style={{ marginTop: 25 }}
       ></div>
       <p className="text-sm font-semibold text-center mt-6">Patient Order</p>
-      <div className="flex justify-between items-center mt-2">
+
+      {/* <div className="flex justify-between items-center mt-2">
         <p className="text-xs text-gray-700">Place an order for this patient.</p>
         <button
           className={`text-xs px-3 py-1 rounded-full flex items-center gap-1 transition-all
@@ -189,10 +191,48 @@ const PatientCard = ({ patient, onViewPdf }) => {
           onClick={() => setOpenOrderModal(true)}
           disabled={patient.ivrStatus !== "Approved"}
         >
-           {/* <FaShoppingCart className="inline" />New Order */}
            + New Order
         </button>
+      </div> */}
+      <div className="flex justify-between items-center mt-2">
+        <p className="text-xs text-gray-700">
+          Place an order for this patient.
+        </p>
+        <div className="relative flex items-center gap-1">
+          <button
+            className={`text-xs px-3 py-1 rounded-full flex items-center gap-1 transition-all
+        ${
+          patient.ivrStatus === "Approved"
+            ? "bg-purple-500 text-white hover:bg-purple-600"
+            : "bg-gray-200 text-gray-500 cursor-not-allowed"
+        }`}
+            onClick={() => setOpenOrderModal(true)}
+            disabled={patient.ivrStatus !== "Approved"}
+            title={
+              patient.ivrStatus !== "Approved"
+                ? "Orders can only be placed for patients with an approved IVR."
+                : ""
+            }
+          >
+            + New Order
+          </button>
+
+          {patient.ivrStatus !== "Approved" && (
+            <div className="relative group">
+              <IoInformationCircleOutline className="text-xl text-red-400 font-semibold cursor-pointer" />
+
+              <div
+                className="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2
+                  bg-white border border-gray-200 shadow-lg px-3 py-1 text-sm text-gray-500
+                  rounded-xl w-max opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10 font-semibold"
+              >
+                Orders can only be placed for patients with an approved IVR.
+              </div>
+            </div>
+          )}
+        </div>
       </div>
+
       <div
         className="h-[2px] w-[90%] bg-gray-200 flex m-auto opacity-550"
         style={{ marginTop: 25 }}
@@ -203,7 +243,6 @@ const PatientCard = ({ patient, onViewPdf }) => {
         onClose={() => setOpenOrderModal(false)}
         patient={patient}
       />
-      
     </div>
   );
 };

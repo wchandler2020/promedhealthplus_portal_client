@@ -111,7 +111,7 @@ const OrderHistory = () => {
   }
 
   return (
-    <div className="mt-10 space-y-8 ">
+    <div className="border border-gray-200 rounded-lg p-6 mb-8 bg-gray-50">
       {history.map((patient) => (
         <div key={patient.id} className="bg-gray-50 p-4 rounded shadow">
           <h3 className="text-lg font-semibold text-gray-800 mb-2">
