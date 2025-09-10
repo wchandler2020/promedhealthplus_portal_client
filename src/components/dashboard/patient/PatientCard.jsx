@@ -223,7 +223,7 @@ const PatientCard = ({ patient, onViewPdf }) => {
 
               <div
                 className="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2
-                  bg-white border border-gray-200 shadow-lg px-3 py-1 text-sm text-gray-500
+                  bg-white border border-gray-200 shadow-lg px-3 py-1 text-xs text-gray-500
                   rounded-xl w-max opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10 font-semibold"
               >
                 Orders can only be placed for patients with an approved IVR.
