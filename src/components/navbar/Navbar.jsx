@@ -36,11 +36,12 @@ const CloseMenuIconSVG = () => (
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [notificationCount, setNotificationCount] = useState(2);
-  const [notifications] = useState([
-    { id: 1, text: "New appointment request" },
-    { id: 2, text: "Test results are available" },
-  ]);
+  const [notificationCount, setNotificationCount] = useState(0);
+  const [notifications, setNotifications] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [modalContent, setModalContent] = useState(null);
+  const [selectedNotification, setSelectedNotification] = useState(null);
+
   const [showDropdown, setShowDropdown] = useState(false);
   const [profile, setProfile] = useState(null);
   const [loadingProfile, setLoadingProfile] = useState(true);
@@ -111,6 +112,27 @@ const Navbar = () => {
     }
   }, [isAuthenticated, verifyToken]);
 
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      try {
+        const axiosInstance = axiosAuth();
+        const [notifRes, countRes] = await Promise.all([
+          axiosInstance.get("/notifications/"),
+          axiosInstance.get("/notifications/unread-count/"),
+        ]);
+
+        setNotifications(notifRes.data);
+        setNotificationCount(countRes.data.unread_count || 0);
+      } catch (error) {
+        console.error("Failed to fetch notifications:", error);
+      }
+    };
+
+    if (isAuthenticated) {
+      fetchNotifications();
+    }
+  }, [isAuthenticated]);
+
   function removeDuplicateMedia(url) {
     if (url && typeof url === "string") {
       const mediaUrl = "https://promedhealthplus.blob.core.windows.net/media/";
@@ -125,10 +147,53 @@ const Navbar = () => {
     return url;
   }
 
+  const markAsRead = async (id) => {
+    try {
+      const axiosInstance = axiosAuth();
+      await axiosInstance.patch(`/notifications/${id}/mark-read/`);
+      setNotificationCount((prev) => Math.max(prev - 1, 0));
+      setNotifications((prev) =>
+        prev.map((n) => (n.id === id ? { ...n, is_read: true } : n))
+      );
+    } catch (error) {
+      console.error("Failed to mark notification as read:", error);
+    }
+  };
+
+  const openNotificationModal = async (notification) => {
+    // Mark as read and update the UI
+    await markAsRead(notification.id);
+    // Set modal content and show the modal
+    setModalContent(notification.data);
+    setShowModal(true);
+    setShowDropdown(false); // Close the notifications dropdown
+  };
+
+  const handleNotificationClick = (notification) => {
+  setSelectedNotification(notification);
+  setShowModal(true);
+  markAsRead(notification.id); // Mark as read when opened
+  setShowDropdown(false); // Close the notification dropdown
+};
+
+const deleteNotification = async (id) => {
+  try {
+    const axiosInstance = axiosAuth();
+    await axiosInstance.delete(`/notifications/${id}/delete-notification/`)
+    setNotifications((prev) => prev.filter((n) => n.id !== id));
+    setShowModal(false); // Close the modal after deletion
+  } catch (error) {
+    console.error("Failed to delete notification:", error);
+  }
+};
+
   return (
     <div className="bg-white px-6 sm:px-8 mt-2 mb-10">
       <nav className="relative px-4 py-4 flex justify-between items-center bg-white">
-        <Link className="text-2xl sm:text-3xl font-semibold leading-none" to="/">
+        <Link
+          className="text-2xl sm:text-3xl font-semibold leading-none"
+          to="/"
+        >
           ProMed Health Plus
         </Link>
 
@@ -207,14 +272,32 @@ const Navbar = () => {
                     Notifications
                   </div>
                   <ul className="max-h-60 overflow-y-auto">
-                    {notifications.map((notif) => (
-                      <li
-                        key={notif.id}
-                        className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
-                      >
-                        {notif.text}
+                    {notifications.length > 0 ? (
+                      notifications.map((notif) => (
+                        // <li
+                        //   key={notif.id}
+                        //   onClick={() => markAsRead(notif.id)}
+                        //   className={`px-4 py-2 text-sm ${
+                        //     notif.is_read ? "text-gray-400" : "text-gray-700"
+                        //   } hover:bg-gray-100 cursor-pointer`}
+                        // >
+                        //   {notif.message}
+                        // </li>
+                        <li
+                          key={notif.id}
+                          onClick={() => openNotificationModal(notif)} // Call the new handler
+                          className={`px-4 py-2 text-sm ${
+                            notif.is_read ? "text-gray-400" : "text-gray-700"
+                          } hover:bg-gray-100 cursor-pointer`}
+                        >
+                          {notif.message}
+                        </li>
+                      ))
+                    ) : (
+                      <li className="px-4 py-2 text-sm text-gray-500 text-center">
+                        No notifications
                       </li>
-                    ))}
+                    )}
                   </ul>
                 </div>
               )}
@@ -436,6 +519,12 @@ const Navbar = () => {
           </div>
         </nav>
       </div>
+      <NotificationModal
+      open={showModal}
+      handleClose={() => setShowModal(false)}
+      notification={selectedNotification}
+      handleDelete={deleteNotification}
+    />
     </div>
   );
 };
