@@ -13,6 +13,7 @@ function getAreaFromSize(sizeStr) {
 }
 
 const OrderItem = ({ item, selectedVariants = [], onVariantChange }) => {
+  console.log("OrderItem Rendered with item:", item, "selectedVariants:", selectedVariants);
   const [localSelections, setLocalSelections] = useState(
     selectedVariants.length > 0 ? selectedVariants : [{ variantId: "", quantity: 0 }]
   );
@@ -51,8 +52,9 @@ const OrderItem = ({ item, selectedVariants = [], onVariantChange }) => {
     handleLocalChange(updated);
   };
 
+  console.log("Max allowed area calculation for item:", item);
   // Max size logic of the area allowed
-  const maxAllowed = Math.floor((item.max_size || 0) * 1.2);
+  const maxAllowed = Math.floor((item.woundSize || 0) * 1.2);
 
   // Helper to get variant object by id
   const getVariantById = (id) => item.variants.find((v) => String(v.id) === String(id));

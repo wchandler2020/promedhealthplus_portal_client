@@ -21,7 +21,7 @@ import Notes from "../documemts/Notes";
 import PatientCard from "./PatientCard";
 import NewOrderForm from "../../orders/NewOrderForm";
 
-const IVRStatusBadge = ({ status }) => {
+const ivr_statusBadge = ({ status }) => {
   const colors = {
     Approved: "bg-purple-100 text-purple-700",
     Pending: "bg-yellow-100 text-yellow-700",
@@ -67,9 +67,11 @@ const Patients = () => {
     tertiary_insurance: "",
     tertiary_insurance_number: "",
     medical_record_number: "",
-    ivrStatus: "Pending",
+    ivr_status: "Pending",
     date_created: "",
     date_updated: "",
+    wound_size_length: "",
+    wound_size_width: "",
   });
   const ValidateForm = () => {
     const newErrors = {};
@@ -142,14 +144,16 @@ const Patients = () => {
       tertiary_insurance: "",
       tertiary_insurance_number: "",
       medical_record_number: "",
-      ivrStatus: "Pending",
+      ivr_status: "Pending",
+      wound_size_length: "",
+      wound_size_width: "",
     });
   };
   const filteredPatients = patients.filter((patient) => {
     const fullName =
       `${patient.first_name} ${patient.last_name} ${patient.middle_initial}`.toLowerCase();
     const medRecord = patient.medical_record_number?.toLowerCase() || "";
-    const matchesFilter = ivrFilter ? patient.ivrStatus === ivrFilter : true;
+    const matchesFilter = ivrFilter ? patient.ivr_status === ivrFilter : true;
     return (
       (fullName.includes(searchTerm.toLowerCase()) ||
         medRecord.includes(searchTerm.toLowerCase())) &&
@@ -158,7 +162,7 @@ const Patients = () => {
   });
   const sortedPatients = [...filteredPatients].sort((a, b) => {
     const active = (status) => ["Approved", "Pending"].includes(status);
-    return active(b.ivrStatus) - active(a.ivrStatus);
+    return active(b.ivr_status) - active(a.ivr_status);
   });
   const indexOfLastPatient = currentPage * patientsPerPage;
   const indexOfFirstPatient = indexOfLastPatient - patientsPerPage;
@@ -576,6 +580,35 @@ const Patients = () => {
                     type="text"
                     name="tertiary_insurance_number"
                     value={formData.tertiary_insurance_number}
+                    onChange={handleInputChange}
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                  />
+                </div>
+              </div>
+              <h3 className="text-xl font-bold text-center text-gray-800 mb-2 mt-6">
+                Wound Size
+              </h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Wound Length (inches)
+                  </label>
+                  <input
+                    type="text"
+                    name="wound_size_length"
+                    value={formData.wound_size_length}
+                    onChange={handleInputChange}
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Wound Width (inches)
+                  </label>
+                  <input
+                    type="text"
+                    name="wound_size_width"
+                    value={formData.wound_size_width}
                     onChange={handleInputChange}
                     className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:outline-none"
                   />

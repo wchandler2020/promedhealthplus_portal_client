@@ -56,8 +56,8 @@ const NewOrderForm = ({ open, onClose, patient }) => {
       if (!accessToken) throw new Error("Authentication token not found.");
 
       const response = await fetch(
-        `${process.env.REACT_APP_PYTHONANYWHERE_API}/products/`,
-        // `${process.env.REACT_APP_API_URL}/products/`,
+        // `${process.env.REACT_APP_PYTHONANYWHERE_API}/products/`,
+        `${process.env.REACT_APP_API_URL}/products/`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -72,9 +72,19 @@ const NewOrderForm = ({ open, onClose, patient }) => {
         }
         throw new Error("Failed to fetch products.");
       }
-
       const data = await response.json();
-      setItemsData(data);
+
+      // Get wound size from patient prop 
+      const woundLength = parseFloat(patient?.wound_size_length) || 0;
+      const woundWidth = parseFloat(patient?.wound_size_width) || 0;
+      const woundSize = woundLength * woundWidth;
+
+      const dataWithWoundSize = data.map((product) => ({
+        ...product,
+        woundSize,
+      }));
+
+      setItemsData(dataWithWoundSize);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -154,8 +164,8 @@ const NewOrderForm = ({ open, onClose, patient }) => {
       }
 
       const response = await fetch(
-        `${process.env.REACT_APP_PYTHONANYWHERE_API}/provider/orders/`,
-        // `${process.env.REACT_APP_API_URL}/provider/orders/`,
+        // `${process.env.REACT_APP_PYTHONANYWHERE_API}/provider/orders/`,
+        `${process.env.REACT_APP_API_URL}/provider/orders/`,
         {
           method: "POST",
           headers: {
