@@ -310,18 +310,6 @@ const Navbar = () => {
                     profile?.user?.full_name ||
                     "Dr. Kara Johnson"}
                 </h6>
-
-                {/* <img
-                  src={
-                    profile?.image?.startsWith("http")
-                      ? profile.image
-                      : profile?.image
-                      ? `${process.env.REACT_APP_MEDIA_URL}${profile.image}`
-                      : default_user_img
-                  }
-                  alt="User Profile"
-                  className="w-10 h-10 rounded-full object-cover object-top border border-gray-300 shadow-sm"
-                /> */}
                 <img
                   src={
                     profile?.image?.startsWith("http")
