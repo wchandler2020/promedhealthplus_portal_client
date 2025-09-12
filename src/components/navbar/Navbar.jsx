@@ -149,28 +149,6 @@ const Navbar = () => {
     return url;
   }
 
-  const markAsRead = async (id) => {
-    try {
-      const axiosInstance = axiosAuth();
-      await axiosInstance.patch(`/notifications/${id}/mark-read/`);
-      setNotificationCount((prev) => Math.max(prev - 1, 0));
-      setNotifications((prev) =>
-        prev.map((n) => (n.id === id ? { ...n, is_read: true } : n))
-      );
-    } catch (error) {
-      console.error("Failed to mark notification as read:", error);
-    }
-  };
-
-  const openNotificationModal = async (notification) => {
-    // Mark as read and update the UI
-    await markAsRead(notification.id);
-    // Set modal content and show the modal
-    setModalContent(notification.data);
-    setShowModal(true);
-    setShowDropdown(false); // Close the notifications dropdown
-  };
-
   const handleNotificationClick = (notification) => {
     setSelectedNotification(notification);
     setShowModal(true);
@@ -178,16 +156,44 @@ const Navbar = () => {
     setShowDropdown(false); // Close the notification dropdown
   };
 
-  const deleteNotification = async (id) => {
-    try {
-      const axiosInstance = axiosAuth();
-      await axiosInstance.delete(`/notifications/${id}/delete-notification/`);
-      setNotifications((prev) => prev.filter((n) => n.id !== id));
-      setShowModal(false); // Close the modal after deletion
-    } catch (error) {
-      console.error("Failed to delete notification:", error);
-    }
-  };
+  const markAsRead = async (id) => {
+  try {
+    const axiosInstance = axiosAuth();
+    await axiosInstance.patch(`/${id}/provider/mark-read/`); // ✅ FIXED
+    setNotificationCount((prev) => Math.max(prev - 1, 0));
+    setNotifications((prev) =>
+      prev.map((n) => (n.id === id ? { ...n, is_read: true } : n))
+    );
+  } catch (error) {
+    console.error("Failed to mark notification as read:", error);
+  }
+};
+
+const deleteNotification = async (id) => {
+  try {
+    const axiosInstance = axiosAuth();
+    await axiosInstance.delete(`/${id}/provider/delete-notification/`); // ✅ FIXED
+    setNotifications((prev) => prev.filter((n) => n.id !== id));
+    setShowModal(false);
+  } catch (error) {
+    console.error("Failed to delete notification:", error);
+  }
+};
+
+  function getTimeLabel(dateCreated) {
+    const now = new Date();
+    const created = new Date(dateCreated);
+    const diffTime = Math.abs(now - created);
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+    if (diffDays === 0) return "Today";
+    if (diffDays === 1) return "1 day ago";
+    if (diffDays < 7) return `${diffDays} days ago`;
+    if (diffDays < 14) return "1 week ago";
+    if (diffDays < 21) return "2 weeks ago";
+    if (diffDays < 30) return "3 weeks ago";
+    return "More than 30 days ago";
+  }
 
   return (
     <div className="bg-white px-6 sm:px-8 mt-2 mb-10">
@@ -279,14 +285,19 @@ const Navbar = () => {
                         <li
                           key={notif.id}
                           onClick={() => handleNotificationClick(notif)}
-                          className={`px-4 py-2 text-xs flex items-center justify-between ${
+                          className={`px-4 py-2 text-xs flex flex-col ${
                             notif.is_read ? "text-gray-400" : "text-gray-700"
                           } hover:bg-gray-100 cursor-pointer`}
                         >
-                          <span className="text-gray-400 text-xs">{notif.message}</span>
-                          {notif.data && (
-                            <IoEyeOutline className="text-gray-400 text-lg ml-2 text-sm " />
-                          )}
+                          <div className="flex justify-between items-center">
+                            <span>{notif.message}</span>
+                            {notif.data && (
+                              <IoEyeOutline className="text-gray-400 text-lg ml-2" />
+                            )}
+                          </div>
+                          <span className="text-[10px] text-gray-400 mt-1 italic">
+                            {getTimeLabel(notif.date_created)}
+                          </span>
                         </li>
                       ))
                     ) : (
