@@ -21,7 +21,7 @@ import Notes from "../documemts/Notes";
 import PatientCard from "./PatientCard";
 import NewOrderForm from "../../orders/NewOrderForm";
 
-const IVRStatusBadge = ({ status }) => {
+const ivrStatusBadge = ({ status }) => {
   const colors = {
     Approved: "bg-purple-100 text-purple-700",
     Pending: "bg-yellow-100 text-yellow-700",
@@ -70,6 +70,8 @@ const Patients = () => {
     ivrStatus: "Pending",
     date_created: "",
     date_updated: "",
+    wound_size_length: "",
+    wound_size_width: "",
   });
   const ValidateForm = () => {
     const newErrors = {};
@@ -143,6 +145,8 @@ const Patients = () => {
       tertiary_insurance_number: "",
       medical_record_number: "",
       ivrStatus: "Pending",
+      wound_size_length: "",
+      wound_size_width: "",
     });
   };
   const filteredPatients = patients.filter((patient) => {
@@ -576,6 +580,35 @@ const Patients = () => {
                     type="text"
                     name="tertiary_insurance_number"
                     value={formData.tertiary_insurance_number}
+                    onChange={handleInputChange}
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                  />
+                </div>
+              </div>
+              <h3 className="text-xl font-bold text-center text-gray-800 mb-2 mt-6">
+                Wound Size
+              </h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Wound Length (inches)
+                  </label>
+                  <input
+                    type="text"
+                    name="wound_size_length"
+                    value={formData.wound_size_length}
+                    onChange={handleInputChange}
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Wound Width (inches)
+                  </label>
+                  <input
+                    type="text"
+                    name="wound_size_width"
+                    value={formData.wound_size_width}
                     onChange={handleInputChange}
                     className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:outline-none"
                   />
