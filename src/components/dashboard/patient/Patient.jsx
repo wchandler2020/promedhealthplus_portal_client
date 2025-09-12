@@ -21,7 +21,7 @@ import Notes from "../documemts/Notes";
 import PatientCard from "./PatientCard";
 import NewOrderForm from "../../orders/NewOrderForm";
 
-const ivr_statusBadge = ({ status }) => {
+const ivrStatusBadge = ({ status }) => {
   const colors = {
     Approved: "bg-purple-100 text-purple-700",
     Pending: "bg-yellow-100 text-yellow-700",
@@ -67,7 +67,7 @@ const Patients = () => {
     tertiary_insurance: "",
     tertiary_insurance_number: "",
     medical_record_number: "",
-    ivr_status: "Pending",
+    ivrStatus: "Pending",
     date_created: "",
     date_updated: "",
     wound_size_length: "",
@@ -144,7 +144,7 @@ const Patients = () => {
       tertiary_insurance: "",
       tertiary_insurance_number: "",
       medical_record_number: "",
-      ivr_status: "Pending",
+      ivrStatus: "Pending",
       wound_size_length: "",
       wound_size_width: "",
     });
@@ -153,7 +153,7 @@ const Patients = () => {
     const fullName =
       `${patient.first_name} ${patient.last_name} ${patient.middle_initial}`.toLowerCase();
     const medRecord = patient.medical_record_number?.toLowerCase() || "";
-    const matchesFilter = ivrFilter ? patient.ivr_status === ivrFilter : true;
+    const matchesFilter = ivrFilter ? patient.ivrStatus === ivrFilter : true;
     return (
       (fullName.includes(searchTerm.toLowerCase()) ||
         medRecord.includes(searchTerm.toLowerCase())) &&
@@ -162,7 +162,7 @@ const Patients = () => {
   });
   const sortedPatients = [...filteredPatients].sort((a, b) => {
     const active = (status) => ["Approved", "Pending"].includes(status);
-    return active(b.ivr_status) - active(a.ivr_status);
+    return active(b.ivrStatus) - active(a.ivrStatus);
   });
   const indexOfLastPatient = currentPage * patientsPerPage;
   const indexOfFirstPatient = indexOfLastPatient - patientsPerPage;
