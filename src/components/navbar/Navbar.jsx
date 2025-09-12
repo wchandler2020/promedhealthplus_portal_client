@@ -5,6 +5,8 @@ import { IoEyeOutline } from "react-icons/io5";
 import { IoMdLogOut } from "react-icons/io";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../utils/auth";
+import NotificationModal from "./NotificationModal";
+import axiosAuth from "../../utils/axios";
 
 const MobileMenuIconSVG = () => (
   <svg
@@ -117,8 +119,8 @@ const Navbar = () => {
       try {
         const axiosInstance = axiosAuth();
         const [notifRes, countRes] = await Promise.all([
-          axiosInstance.get("/notifications/"),
-          axiosInstance.get("/notifications/unread-count/"),
+          axiosInstance.get("/provider/notifications/"),
+          axiosInstance.get("/provider/notifications/unread-count/"),
         ]);
 
         setNotifications(notifRes.data);
@@ -170,22 +172,22 @@ const Navbar = () => {
   };
 
   const handleNotificationClick = (notification) => {
-  setSelectedNotification(notification);
-  setShowModal(true);
-  markAsRead(notification.id); // Mark as read when opened
-  setShowDropdown(false); // Close the notification dropdown
-};
+    setSelectedNotification(notification);
+    setShowModal(true);
+    markAsRead(notification.id); // Mark as read when opened
+    setShowDropdown(false); // Close the notification dropdown
+  };
 
-const deleteNotification = async (id) => {
-  try {
-    const axiosInstance = axiosAuth();
-    await axiosInstance.delete(`/notifications/${id}/delete-notification/`)
-    setNotifications((prev) => prev.filter((n) => n.id !== id));
-    setShowModal(false); // Close the modal after deletion
-  } catch (error) {
-    console.error("Failed to delete notification:", error);
-  }
-};
+  const deleteNotification = async (id) => {
+    try {
+      const axiosInstance = axiosAuth();
+      await axiosInstance.delete(`/notifications/${id}/delete-notification/`);
+      setNotifications((prev) => prev.filter((n) => n.id !== id));
+      setShowModal(false); // Close the modal after deletion
+    } catch (error) {
+      console.error("Failed to delete notification:", error);
+    }
+  };
 
   return (
     <div className="bg-white px-6 sm:px-8 mt-2 mb-10">
@@ -268,33 +270,27 @@ const deleteNotification = async (id) => {
               )}
               {showDropdown && (
                 <div className="absolute right-0 mt-2 w-64 bg-white border border-gray-200 rounded-lg shadow-lg z-50 transition-all duration-300 ease-in-out">
-                  <div className="p-3 border-b text-sm font-semibold text-gray-700">
+                  <div className="p-3 border-b text-sm font-semibold text-gray-700 text-center">
                     Notifications
                   </div>
                   <ul className="max-h-60 overflow-y-auto">
                     {notifications.length > 0 ? (
                       notifications.map((notif) => (
-                        // <li
-                        //   key={notif.id}
-                        //   onClick={() => markAsRead(notif.id)}
-                        //   className={`px-4 py-2 text-sm ${
-                        //     notif.is_read ? "text-gray-400" : "text-gray-700"
-                        //   } hover:bg-gray-100 cursor-pointer`}
-                        // >
-                        //   {notif.message}
-                        // </li>
                         <li
                           key={notif.id}
-                          onClick={() => openNotificationModal(notif)} // Call the new handler
-                          className={`px-4 py-2 text-sm ${
+                          onClick={() => handleNotificationClick(notif)}
+                          className={`px-4 py-2 text-xs flex items-center justify-between ${
                             notif.is_read ? "text-gray-400" : "text-gray-700"
                           } hover:bg-gray-100 cursor-pointer`}
                         >
-                          {notif.message}
+                          <span className="text-gray-400 text-xs">{notif.message}</span>
+                          {notif.data && (
+                            <IoEyeOutline className="text-gray-400 text-lg ml-2 text-sm " />
+                          )}
                         </li>
                       ))
                     ) : (
-                      <li className="px-4 py-2 text-sm text-gray-500 text-center">
+                      <li className="px-4 py-2 text-xs text-gray-500 text-center">
                         No notifications
                       </li>
                     )}
@@ -473,17 +469,6 @@ const deleteNotification = async (id) => {
                       alt="User Profile"
                       className="w-10 h-10 rounded-full object-cover object-top border border-gray-300 shadow-sm"
                     />
-                    {/* <img
-                      src={
-                        profile?.image?.startsWith("http")
-                          ? removeDuplicateMedia(profile.image)
-                          : profile?.image
-                          ? `${process.env.REACT_APP_MEDIA_URL}${profile.image}`
-                          : default_user_img
-                      }
-                      alt="User Profile"
-                      className="w-10 h-10 rounded-full object-cover object-top border border-gray-300 shadow-sm"
-                    /> */}
                   </div>
                 </div>
 
@@ -520,11 +505,11 @@ const deleteNotification = async (id) => {
         </nav>
       </div>
       <NotificationModal
-      open={showModal}
-      handleClose={() => setShowModal(false)}
-      notification={selectedNotification}
-      handleDelete={deleteNotification}
-    />
+        open={showModal}
+        handleClose={() => setShowModal(false)}
+        notification={selectedNotification}
+        handleDelete={deleteNotification}
+      />
     </div>
   );
 };
