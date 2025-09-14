@@ -1,45 +1,46 @@
-// public_kW2K8TM64y42BDQ65N3rMp87ZJPd
-
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { API_BASE_URL } from "../../../utils/constants";
-import { Uploader } from "uploader";
-import { UploadDropzone } from "react-uploader";
+import { FaUpload, FaFilePdf, FaFileWord, FaFileImage } from "react-icons/fa";
 
-// Uploader instance (replace `free` with your real API key if needed)
-const uploader = Uploader({ apiKey: "public_kW2K8TM64y42BDQ65N3rMp87ZJPd" });
-
-// Define an SVG for a subtle upload icon
+// Custom icons for a clean look
 const UploadIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    fill="none"
-    viewBox="0 0 24 24"
-    strokeWidth={1.5}
-    stroke="currentColor"
-    className="w-5 h-5 text-gray-400 group-hover:text-blue-500 transition-colors duration-200"
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.75 3.75 0 0118 19.5H6.75z"
-    />
-  </svg>
+  <FaUpload className="w-5 h-5 text-gray-400 group-hover:text-blue-500 transition-colors duration-200" />
 );
+
+// File type icons for visual feedback
+const FileIcon = ({ filename }) => {
+  const extension = filename.split('.').pop().toLowerCase();
+  switch (extension) {
+    case 'pdf':
+      return <FaFilePdf className="text-red-500" />;
+    case 'doc':
+    case 'docx':
+      return <FaFileWord className="text-blue-500" />;
+    case 'jpg':
+    case 'jpeg':
+    case 'png':
+    case 'gif':
+      return <FaFileImage className="text-green-500" />;
+    default:
+      return <FaUpload className="text-gray-500" />;
+  }
+};
 
 const Documents = () => {
   const [documents, setDocuments] = useState([]);
   const [docType, setDocType] = useState("BAA");
   const [uploadFile, setUploadFile] = useState(null);
-  const [isUploading, setIsUploading] = useState(false); // New state for loading indicator
+  const [isUploading, setIsUploading] = useState(false);
   const token = localStorage.getItem("accessToken");
+  const fileInputRef = useRef(null);
 
   // 📥 Fetch documents
   useEffect(() => {
     const fetchDocuments = async () => {
       try {
         const res = await axios.get(
-          `${API_BASE_URL}/docs/onboarding/documents/`,
+          `${API_BASE_URL}/onboarding/documents/`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -49,12 +50,19 @@ const Documents = () => {
         console.error("Error fetching documents:", error);
       }
     };
-
     if (token) {
-      // Ensure token exists before fetching
       fetchDocuments();
     }
   }, [token]);
+
+  // Handle file selection
+  const handleFileChange = (e) => {
+    if (e.target.files.length > 0) {
+      setUploadFile(e.target.files[0]);
+    } else {
+      setUploadFile(null);
+    }
+  };
 
   // ⬆️ Upload selected file to backend
   const handleUpload = async () => {
@@ -63,25 +71,26 @@ const Documents = () => {
       return;
     }
 
-    setIsUploading(true); // Set loading state
+    setIsUploading(true);
     const formData = new FormData();
-    formData.append("file", uploadFile.originalFile.file);
+    formData.append("file", uploadFile);
     formData.append("document_type", docType);
 
     try {
-      await axios.post(`${API_BASE_URL}/docs/onboarding/documents/`, formData, {
+      await axios.post(`${API_BASE_URL}/onboarding/documents/`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "multipart/form-data",
         },
       });
-
       alert("Document uploaded successfully!");
-      setUploadFile(null); // Clear selected file
+      setUploadFile(null);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
 
       // 🔁 Refresh document list
       const updated = await axios.get(
-        `${API_BASE_URL}/docs/onboarding/documents/`,
+        `${API_BASE_URL}/onboarding/documents/`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -91,21 +100,23 @@ const Documents = () => {
       console.error("Error uploading document:", err);
       alert("Failed to upload document. Please try again.");
     } finally {
-      setIsUploading(false); // Reset loading state
+      setIsUploading(false);
     }
   };
 
   return (
-    <div className="max-w-xl mx-auto mt-9 p-6 bg-white rounded-lg shadow-lg">
-      <h2 className="text-2xl font-semibold text-gray-800 mb-8 text-start">
+    <div className="max-w-xl mx-auto mt-9 p-4 sm:p-6 bg-white rounded-lg shadow-lg">
+      <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-6 sm:mb-8 text-center">
         Manage Provider Documents
       </h2>
 
       {/* Upload Section */}
-      <div className="border border-gray-200 rounded-lg p-6 mb-8 bg-gray-50">
-        <h3 className="text-lg font-semibold text-gray-700 mb-4">
+      <div className="border border-gray-200 rounded-lg p-4 sm:p-6 mb-8 bg-gray-50 transition-colors duration-200">
+        <h3 className="text-base sm:text-lg font-semibold text-gray-700 mb-4 text-center">
           Upload New Document
         </h3>
+        
+        {/* Document Type Selection */}
         <div className="mb-4">
           <label
             htmlFor="doc-type"
@@ -115,51 +126,68 @@ const Documents = () => {
           </label>
           <select
             id="doc-type"
-            className="w-full border border-gray-300 rounded-md px-3 py-2 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+            className="w-full border border-gray-300 rounded-md px-3 py-2 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-sm sm:text-base"
             value={docType}
             onChange={(e) => setDocType(e.target.value)}
           >
             <option value="BAA">Business Associate Agreement</option>
             <option value="PURCHASE_AGREEMENT">Purchase Agreement</option>
-            <option value="MANUFACTURER_DOC">
-              Manufacturer Onboarding Doc
-            </option>
+            <option value="MANUFACTURER_DOC">Manufacturer Onboarding Doc</option>
+            <option value="PROVIDER_REVIEW_DOC">Provider Document Review</option>
           </select>
         </div>
 
+        {/* File Dropzone */}
         <div className="mb-4">
-          <div className="w-full flex items-center">
-            <UploadDropzone
-              uploader={uploader}
-              options={{ multi: false }}
-              onUpdate={(files) => {
-                if (files.length > 0) {
-                  setUploadFile(files[0]);
-                } else {
-                  setUploadFile(null);
-                }
-              }}
-              className="w-full min-h-[200px] border border-gray-300 rounded-md text-center text-gray-500 hover:border-blue-500 hover:bg-gray-100 transition duration-200 cursor-pointer group"
-            >
-              <div className="flex flex-col items-center justify-center space-y-2">
-                <UploadIcon />
-                <span className="text-sm font-medium text-gray-600 group-hover:text-blue-600 transition-colors duration-200">
-                  {uploadFile ? (
-                    <span className="text-blue-700">
-                      File selected: {uploadFile.originalFile.file.name}
-                    </span>
-                  ) : (
-                    "Click to select file (PDF, DOCX, JPG, PNG)"
-                  )}
-                </span>
-              </div>
-            </UploadDropzone>
-          </div>
+          <label
+            htmlFor="file-upload"
+            className="w-full min-h-[120px] border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center p-6 text-center text-gray-500 hover:border-blue-500 hover:bg-gray-100 transition-all duration-200 cursor-pointer group"
+          >
+            <input
+              id="file-upload"
+              type="file"
+              ref={fileInputRef}
+              onChange={handleFileChange}
+              className="hidden"
+            />
+            <div className="flex flex-col items-center justify-center space-y-2">
+              <span className="text-2xl text-gray-400 group-hover:text-blue-500">
+                <FaUpload />
+              </span>
+              <span className="text-sm font-medium text-gray-600 group-hover:text-blue-600">
+                {uploadFile ? (
+                  <div className="flex items-center space-x-2 text-blue-700">
+                    <FileIcon filename={uploadFile.name} />
+                    <span>File selected: {uploadFile.name}</span>
+                  </div>
+                ) : (
+                  <>
+                    <p className="hidden sm:block">
+                      Drag & Drop files here or
+                      <span className="text-purple-600 font-bold ml-1">
+                        Browse
+                      </span>
+                    </p>
+                    <p className="block sm:hidden">
+                      Click here to
+                      <span className="text-purple-600 font-bold ml-1">
+                        Browse
+                      </span>
+                    </p>
+                  </>
+                )}
+              </span>
+              <span className="text-xs text-gray-400 mt-1">
+                (PDF, DOCX, JPG, PNG)
+              </span>
+            </div>
+          </label>
         </div>
 
+        {/* Submit Button */}
         <button
           onClick={handleUpload}
-          disabled={!uploadFile || isUploading} // Disable button if no file or uploading
+          disabled={!uploadFile || isUploading}
           className={`w-full py-2 px-4 rounded-md font-semibold transition duration-200 ${
             !uploadFile || isUploading
               ? "bg-gray-300 text-gray-600 cursor-not-allowed"
@@ -169,14 +197,14 @@ const Documents = () => {
           {isUploading ? "Uploading..." : "Submit Document"}
         </button>
       </div>
-
+      
       {/* Uploaded Documents List */}
       <div>
-        <h3 className="text-lg font-semibold text-gray-700 mb-4 border-b pb-2">
+        <h3 className="text-base sm:text-lg font-semibold text-gray-700 mb-4 border-b pb-2">
           Your Uploaded Documents
         </h3>
         {documents.length === 0 ? (
-          <p className="text-gray-500 text-center py-4">
+          <p className="text-gray-500 text-center py-4 text-sm sm:text-base">
             No documents uploaded yet. Start by adding one above!
           </p>
         ) : (
@@ -184,22 +212,22 @@ const Documents = () => {
             {documents.map((doc) => (
               <li
                 key={doc.id}
-                className="flex items-center justify-between bg-white border border-gray-200 rounded-md px-4 py-3 shadow-sm"
+                className="flex flex-col sm:flex-row items-start sm:items-center justify-between bg-white border border-gray-200 rounded-md p-3 sm:px-4 sm:py-3 shadow-sm"
               >
                 <div className="flex flex-col">
-                  <span className="font-medium text-gray-800">
+                  <span className="font-medium text-gray-800 text-sm sm:text-base">
                     {doc.document_type}
                   </span>
                   <span className="text-xs text-gray-500 mt-0.5">
                     Uploaded: {new Date(doc.uploaded_at).toLocaleDateString()}
                   </span>
                 </div>
-                {doc.file_url ? (
+                {doc.file ? (
                   <a
-                    href={doc.file_url}
+                    href={doc.file}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-blue-600 hover:text-blue-700 text-sm font-medium flex items-center space-x-1"
+                    className="text-blue-600 hover:text-blue-700 text-xs sm:text-sm font-medium flex items-center space-x-1 mt-2 sm:mt-0"
                   >
                     View
                     <svg
@@ -218,7 +246,7 @@ const Documents = () => {
                     </svg>
                   </a>
                 ) : (
-                  <span className="text-red-500 text-sm">
+                  <span className="text-red-500 text-xs sm:text-sm mt-2 sm:mt-0">
                     File not available
                   </span>
                 )}

@@ -71,8 +71,8 @@ const FillablePdf = ({ selectedPatientId }) => {
   };
 
   const loadBlankPdf = () => {
-    // const blankPdfUrl = `${process.env.REACT_APP_PYTHONANYWHERE_API}/onboarding/forms/blank/IVR_FORM/`;
-    const blankPdfUrl = `${process.env.REACT_APP_API_URL}/onboarding/forms/blank/IVR_FORM/`;
+    const blankPdfUrl = `${process.env.REACT_APP_PYTHONANYWHERE_API}/onboarding/forms/blank/IVR_FORM/`;
+    // const blankPdfUrl = `${process.env.REACT_APP_API_URL}/onboarding/forms/blank/IVR_FORM/`;
     setPdfUrl(blankPdfUrl);
     setFormData(null);
     setLoading(false);

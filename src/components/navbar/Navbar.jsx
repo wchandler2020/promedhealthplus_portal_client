@@ -217,7 +217,7 @@ const deleteNotification = async (id) => {
         <ul className="hidden absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 lg:flex lg:mx-auto lg:items-center lg:space-x-6">
           <li>
             <Link
-              className="text-base text-gray-800 hover:text-purple-500"
+              className="text-base text-gray-800 hover:text-purple-400 font-semibold"
               to="/"
             >
               Home
@@ -226,7 +226,7 @@ const deleteNotification = async (id) => {
           {isAuthenticated && (
             <li>
               <Link
-                className="text-base text-gray-800 hover:text-purple-500"
+                className="text-base text-gray-800 hover:text-purple-400 font-semibold"
                 to="/dashboard/"
               >
                 Dashboard
@@ -235,7 +235,7 @@ const deleteNotification = async (id) => {
           )}
           <li>
             <Link
-              className="text-base text-gray-800 hover:text-purple-500"
+              className="text-base text-gray-800 hover:text-purple-400 font-semibold"
               to="/about/"
             >
               About Us
@@ -243,7 +243,7 @@ const deleteNotification = async (id) => {
           </li>
           <li>
             <Link
-              className="text-base text-gray-800 hover:text-purple-500"
+              className="text-base text-gray-800 hover:text-purple-400 font-semibold"
               to="/services/"
             >
               Services
@@ -251,7 +251,7 @@ const deleteNotification = async (id) => {
           </li>
           <li>
             <Link
-              className="text-base text-gray-800 hover:text-purple-500"
+              className="text-base text-gray-800 hover:text-purple-400 font-semibold"
               to="/contact/"
             >
               Contact
@@ -266,7 +266,7 @@ const deleteNotification = async (id) => {
               ref={notificationRef}
             >
               <IoIosNotificationsOutline
-                className="text-3xl text-gray-600 cursor-pointer"
+                className="text-3xl text-gray-500 cursor-pointer font-semibold"
                 onClick={() => setShowDropdown((prev) => !prev)}
               />
               {notificationCount > 0 && (
@@ -301,7 +301,7 @@ const deleteNotification = async (id) => {
                         </li>
                       ))
                     ) : (
-                      <li className="px-4 py-2 text-xs text-gray-500 text-center">
+                      <li className="px-4 py-2 text-[10px] text-gray-500 text-center">
                         No notifications
                       </li>
                     )}
@@ -316,7 +316,7 @@ const deleteNotification = async (id) => {
               ref={profileRef}
             >
               <div className="flex items-center space-x-2 cursor-pointer">
-                <h6 className="text-sm font-medium text-gray-800">
+                <h6 className="text-xs font-semibold text-gray-800">
                   {profile?.full_name ||
                     profile?.user?.full_name ||
                     "Dr. Kara Johnson"}
@@ -338,18 +338,18 @@ const deleteNotification = async (id) => {
                 <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
                   <Link
                     to="/profile"
-                    className="flex items-center px-4 py-2 text-xs text-gray-700 hover:bg-gray-100 cursor-pointer uppercase"
+                    className="flex items-center px-4 py-2 text-[10px] text-gray-700 hover:bg-gray-100 cursor-pointer uppercase font-semibold"
                   >
                     <IoEyeOutline className="mr-1" />
                     View Profile
                   </Link>
-                  <a
+                  <Link
                     onClick={logout}
-                    className="flex items-center px-4 py-2 text-xs text-gray-700 hover:bg-gray-100 cursor-pointer uppercase"
+                    className="flex items-center px-4 py-2 text-[10px] text-gray-700 hover:bg-gray-100 cursor-pointer uppercase font-semibold"
                   >
                     <IoMdLogOut className="mr-1" />
                     Logout
-                  </a>
+                  </Link>
                 </div>
               )}
             </div>
@@ -451,7 +451,7 @@ const deleteNotification = async (id) => {
                     )}
                   </div>
                   <div className="flex flex-row items-center">
-                    <h6 className="text-sm font-medium text-gray-800">
+                    <h6 className="text-[12px] font-semibold text-gray-800">
                       {profile?.full_name ||
                         profile?.user?.full_name ||
                         "Dr. Kara Johnson"}

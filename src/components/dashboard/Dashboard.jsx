@@ -22,7 +22,7 @@ const Dashboard = () => {
       rounded-full shadow-lg 
       hover:bg-red-400 
       transition duration-300 
-      flex items-center
+      flex items-center text-xs
     "
         >
           <IoChatbubblesOutline className="text-lg mr-2" />

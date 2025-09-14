@@ -73,6 +73,24 @@ const Patients = () => {
     wound_size_length: "",
     wound_size_width: "",
   });
+  const formatPhoneNumberToE164 = (phone) => {
+    if (!phone) return "";
+    const digitsOnly = phone.replace(/\D/g, ""); // Remove all non-digit characters
+
+    if (digitsOnly.length === 10) {
+      // Assume US number without country code
+      return `+1${digitsOnly}`;
+    } else if (digitsOnly.length === 11 && digitsOnly.startsWith("1")) {
+      // Assume US number with leading 1
+      return `+${digitsOnly}`;
+    } else if (digitsOnly.length > 11 && digitsOnly.startsWith("1")) {
+      // Too long — potentially malformed but starts with 1
+      return `+${digitsOnly.slice(0, 11)}`;
+    }
+
+    // Fallback (leave unchanged or return empty string)
+    return `+${digitsOnly}`;
+  };
   const ValidateForm = () => {
     const newErrors = {};
     if (!formData.first_name.trim())
@@ -81,6 +99,13 @@ const Patients = () => {
       newErrors.last_name = "Last name is required";
     if (!formData.date_of_birth)
       newErrors.date_of_birth = "Date of birth is required";
+    if (formData.phone_number) {
+      const digitsOnly = formData.phone_number.replace(/\D/g, "");
+      if (digitsOnly.length !== 10) {
+        newErrors.phone_number = "Phone number must be 10 digits (US format)";
+      }
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -115,7 +140,10 @@ const Patients = () => {
   const handleAddPatient = async () => {
     setErrors({});
     if (!ValidateForm()) return;
-    const newPatient = { ...formData };
+    const newPatient = {
+      ...formData,
+      phone_number: formatPhoneNumberToE164(formData.phone_number),
+    };
     try {
       const res = await postPatient(newPatient);
       if (res.success) {
@@ -187,6 +215,7 @@ const Patients = () => {
     boxShadow: "none",
     outline: "none",
   };
+
   return (
     <div className="max-w-5xl mx-auto mt-10 p-6 bg-white shadow-lg rounded">
       <div className="flex justify-between items-center mb-6">
@@ -315,7 +344,7 @@ const Patients = () => {
         </button>
       </div>
       <Modal open={open} onClose={() => setOpen(false)}>
-      <Box sx={{...modalStyle, maxHeight: "90vh", overflowY: "auto",}}>
+        <Box sx={{ ...modalStyle, maxHeight: "90vh", overflowY: "auto" }}>
           <div className="bg-white rounded-2xl shadow-2xl p-8 mx-4 border border-gray-100 relative">
             <button
               onClick={() => setOpen(false)}
@@ -468,7 +497,7 @@ const Patients = () => {
                   />
                 </div>
               </div>
-              <div>
+              {/* <div>
                 <label className="block text-sm font-medium text-gray-700">
                   Phone Number
                 </label>
@@ -479,7 +508,35 @@ const Patients = () => {
                   onChange={handleInputChange}
                   className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:outline-none"
                 />
+              </div> */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Phone Number
+                </label>
+                <input
+                  type="tel"
+                  name="phone_number"
+                  placeholder="e.g. (212) 555-1212 or 212-555-1212"
+                  value={formData.phone_number}
+                  onChange={(e) => {
+                    // Only allow digits, spaces, parentheses, dashes
+                    const input = e.target.value;
+                    const cleaned = input.replace(/[^\d()-\s]/g, "");
+                    setFormData((prev) => ({
+                      ...prev,
+                      phone_number: cleaned,
+                    }));
+                  }}
+                  className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                  Format: (212) 555-1212 or 212-555-1212 — US numbers only
+                </p>
+                {errors.phone_number && (
+                  <p className="text-red-500 text-sm">{errors.phone_number}</p>
+                )}
               </div>
+
               <div>
                 <label className="block text-sm font-medium text-gray-700">
                   Email
@@ -591,7 +648,7 @@ const Patients = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700">
-                    Wound Length (inches)
+                    Wound Length (cm)
                   </label>
                   <input
                     type="text"
@@ -603,7 +660,7 @@ const Patients = () => {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700">
-                    Wound Width (inches)
+                    Wound Width (cm)
                   </label>
                   <input
                     type="text"
@@ -628,8 +685,10 @@ const Patients = () => {
       </Modal>
       <Modal open={viewPdfModalOpen} onClose={() => setViewPdfModalOpen(false)}>
         <Box sx={modalStyle}>
-          <FillablePdf selectedPatientId={selectedPatient?.id} 
-                       onClose={() => setViewPdfModalOpen(false)} />
+          <FillablePdf
+            selectedPatientId={selectedPatient?.id}
+            onClose={() => setViewPdfModalOpen(false)}
+          />
         </Box>
       </Modal>
     </div>
