@@ -84,7 +84,7 @@ const Register = () => {
           <div className="absolute inset-0 bg-black opacity-30 z-10"></div>
           <Link
             to="/"
-            className="absolute top-6 left-6 z-50 text-white hover:text-purple-300 transition duration-200"
+            className="absolute top-6 left-6 z-50 text-white hover:text-blue-300 transition duration-200"
             title="Back to Home"
           >
             <IoArrowBack size={28} />
@@ -122,7 +122,7 @@ const Register = () => {
                     placeholder="John Doe"
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
-                    className="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-purple-400 focus:ring focus:ring-purple-400 focus:outline-none focus:ring-opacity-40"
+                    className="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring focus:ring-blue-400 focus:outline-none focus:ring-opacity-40"
                     required
                   />
                 </div>
@@ -140,7 +140,7 @@ const Register = () => {
                     placeholder="example@example.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:bg-white focus:border-purple-400 focus:ring focus:ring-purple-400 focus:outline-none focus:ring-opacity-40"
+                    className="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:bg-white focus:border-blue-400 focus:ring focus:ring-blue-400 focus:outline-none focus:ring-opacity-40"
                     required
                   />
                 </div>
@@ -156,7 +156,7 @@ const Register = () => {
                     <select
                       value={countryCode}
                       onChange={(e) => setCountryCode(e.target.value)}
-                      className="w-1/3 px-3 py-2 border border-gray-200 rounded-l-md bg-white text-gray-700 focus:border-purple-400 focus:ring focus:ring-purple-400 focus:outline-none focus:ring-opacity-40"
+                      className="w-1/3 px-3 py-2 border border-gray-200 rounded-l-md bg-white text-gray-700 focus:border-blue-400 focus:ring focus:ring-blue-400 focus:outline-none focus:ring-opacity-40"
                     >
                       {countryCodesList.map((country) => (
                         <option
@@ -173,7 +173,7 @@ const Register = () => {
                       placeholder="555-555-5555"
                       value={phoneNumber}
                       onChange={(e) => setPhoneNumber(e.target.value)}
-                      className="w-2/3 px-4 py-2 border border-l-0 border-gray-200 rounded-r-md text-gray-700 placeholder-gray-400 bg-white focus:border-purple-400 focus:ring focus:ring-purple-400 focus:outline-none focus:ring-opacity-40"
+                      className="w-2/3 px-4 py-2 border border-l-0 border-gray-200 rounded-r-md text-gray-700 placeholder-gray-400 bg-white focus:border-blue-400 focus:ring focus:ring-blue-400 focus:outline-none focus:ring-opacity-40"
                     />
                   </div>
                 </div>
@@ -191,7 +191,7 @@ const Register = () => {
                     placeholder="Your 10-digit NPI number"
                     value={npiNumber}
                     onChange={(e) => setNpiNumber(e.target.value)}
-                    className="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-purple-400 focus:ring focus:ring-purple-400 focus:outline-none focus:ring-opacity-40"
+                    className="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring focus:ring-blue-400 focus:outline-none focus:ring-opacity-40"
                     maxLength="10"
                     required
                   />
@@ -210,7 +210,7 @@ const Register = () => {
                     placeholder="Create a password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-purple-400 focus:ring focus:ring-purple-400 focus:outline-none focus:ring-opacity-40"
+                    className="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring focus:ring-blue-400 focus:outline-none focus:ring-opacity-40"
                     required
                   />
                   <div className="mt-2 text-sm">
@@ -218,60 +218,60 @@ const Register = () => {
                       <li
                         className={
                           hasMinLength
-                            ? "text-purple-600 flex items-center"
+                            ? "text-blue-600 flex items-center"
                             : "flex items-center"
                         }
                       >
                         {hasMinLength && (
-                          <IoCheckmarkCircleOutline className="mr-1 text-purple-600" />
+                          <IoCheckmarkCircleOutline className="mr-1 text-blue-600" />
                         )}
                         Minimum 12 characters
                       </li>
                       <li
                         className={
                           hasUppercase
-                            ? "text-purple-600 flex items-center"
+                            ? "text-blue-600 flex items-center"
                             : "flex items-center"
                         }
                       >
                         {hasUppercase && (
-                          <IoCheckmarkCircleOutline className="mr-1 text-purple-600" />
+                          <IoCheckmarkCircleOutline className="mr-1 text-blue-600" />
                         )}
                         At least two uppercase letters
                       </li>
                       <li
                         className={
                           hasLowercase
-                            ? "text-purple-600 flex items-center"
+                            ? "text-blue-600 flex items-center"
                             : "flex items-center"
                         }
                       >
                         {hasLowercase && (
-                          <IoCheckmarkCircleOutline className="mr-1 text-purple-600" />
+                          <IoCheckmarkCircleOutline className="mr-1 text-blue-600" />
                         )}
                         At least two lowercase letters
                       </li>
                       <li
                         className={
                           hasNumbers
-                            ? "text-purple-600 flex items-center"
+                            ? "text-blue-600 flex items-center"
                             : "flex items-center"
                         }
                       >
                         {hasNumbers && (
-                          <IoCheckmarkCircleOutline className="mr-1 text-purple-600" />
+                          <IoCheckmarkCircleOutline className="mr-1 text-blue-600" />
                         )}
                         At least two numbers
                       </li>
                       <li
                         className={
                           hasSpecialChars
-                            ? "text-purple-600 flex items-center"
+                            ? "text-blue-600 flex items-center"
                             : "flex items-center"
                         }
                       >
                         {hasSpecialChars && (
-                          <IoCheckmarkCircleOutline className="mr-1 text-purple-600" />
+                          <IoCheckmarkCircleOutline className="mr-1 text-blue-600" />
                         )}
                         At least two special characters
                       </li>
@@ -292,7 +292,7 @@ const Register = () => {
                     placeholder="Repeat your password"
                     value={password2}
                     onChange={(e) => setPassword2(e.target.value)}
-                    className="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-purple-400 focus:ring focus:ring-purple-400 focus:outline-none focus:ring-opacity-40"
+                    className="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring focus:ring-blue-400 focus:outline-none focus:ring-opacity-40"
                     required
                   />
                 </div>
@@ -315,7 +315,7 @@ const Register = () => {
                   <button
                     type="submit"
                     disabled={isLoading}
-                    className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-purple-500 rounded-md hover:bg-purple-400 focus:outline-none focus:bg-purple-500 focus:ring focus:ring-purple-500 focus:ring-opacity-50 uppercase"
+                    className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-blue-500 rounded-md hover:bg-blue-400 focus:outline-none focus:bg-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 uppercase"
                   >
                     {isLoading ? "Registering..." : "Register"}
                   </button>
@@ -328,7 +328,7 @@ const Register = () => {
                 Already have an account?{" "}
                 <Link
                   to="/login"
-                  className="text-purple-500 focus:outline-none focus:underline hover:underline"
+                  className="text-blue-500 focus:outline-none focus:underline hover:underline"
                 >
                   Log in
                 </Link>

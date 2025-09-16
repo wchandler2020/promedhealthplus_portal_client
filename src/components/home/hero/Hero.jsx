@@ -3,6 +3,9 @@ import { Modal, Box, Typography } from "@mui/material";
 import hero_img from "../../../assets/images/bg_image_01.jpg";
 import hero_img_2 from "../../../assets/images/hero_img.jpg";
 import wound_care_img from "../../../assets/images/woundcare_illustration.png";
+import wound_care_bg from "../../../assets/images/woundcare_bg_img.jpg";
+import toast from 'react-hot-toast'
+import axios from "axios";
 
 const states = [
   "AL",
@@ -61,6 +64,7 @@ const Hero = () => {
   const [open, setOpen] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
+    facility: "",
     city: "",
     state: "",
     zip: "",
@@ -74,11 +78,50 @@ const Hero = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("Form submitted:", formData);
-    setOpen(false);
-    // TODO: Submit to API or trigger further action
+
+    // Basic Frontend Validation
+    const { name, email, phone, question } = formData;
+    if (!name || !email || !phone || !question) {
+      toast.error("Please fill in all required fields.");
+      return;
+    }
+
+    // Basic Email Format Check (a simple regex)
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      toast.error("Please enter a valid email address.");
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_PYTHONANYWHERE_API}/contact-us/`,
+        formData
+      );
+
+      console.log("Message sent successfully:", response.data);
+      toast.success("Your message has been sent. We'll get back to you soon!");
+      setOpen(false);
+      setFormData({
+        name: "",
+        facility: "",
+        city: "",
+        state: "",
+        zip: "",
+        phone: "",
+        email: "",
+        question: "",
+      });
+    } catch (error) {
+      console.error(
+        "Failed to send message:",
+        error.response?.data || error.message
+      );
+      toast.error("Failed to send message. Please try again.");
+    }
   };
 
   const modalStyle = {
@@ -95,11 +138,12 @@ const Hero = () => {
 
   return (
     <>
-      <section className="bg-white text-gray-800 px-4 md:px-8 h-[50vh] mt-10  sm:mb-2 mb-10">
+      {/* <section className="bg-white text-gray-800 px-4 md:px-8 h-[50vh] mt-10  sm:mb-2 mb-10"> */}
+      <section className="bg-white text-gray-800 px-4 md:px-8 mt-10 sm:mb-2 mb-10">
         <div className="container mx-auto flex flex-col md:flex-row lg:items-center h-[75%] justify-between">
           <div className="md:w-1/2 mb-8 md:mb-0">
             <h1 className="text-lg sm:text-1xl md:text-2xl lg:text-4xl font-semibold leading-tight text-center lg:text-start uppercase">
-              Promed Health Plus
+              Promed Health <span className="text-blue-500">Plus</span>
             </h1>
             <p className="mt-4 text-sm sm:text-base md:text-lg text-center lg:text-start">
               Empowering Providers with Comprehensive Wound Care Solutions
@@ -108,16 +152,15 @@ const Hero = () => {
             <div className="mt-8 flex justify-center lg:justify-start">
               <button
                 onClick={() => setOpen(true)}
-                className="bg-white text-purple-500 font-semibold 
+                className="bg-white text-blue-500 font-semibold 
                  text-sm sm:text-base 
                  py-2 sm:py-3 
                  px-5 sm:px-6 
                  rounded-full shadow-lg 
-                 hover:bg-purple-100 
+                 hover:bg-blue-100 
                  transition duration-300 
                  uppercase
                  "
-
               >
                 Contact Us
               </button>
@@ -127,7 +170,7 @@ const Hero = () => {
           <div className="w-full md:w-1/2">
             <div className="relative w-full h-[300px] sm:h-[350px] md:h-[400px] lg:h-[450px] rounded-lg shadow-lg">
               <img
-                src={hero_img_2}
+                src={wound_care_bg}
                 alt="Medical professional"
                 className="h-full w-full object-cover rounded-lg"
               />
@@ -185,7 +228,21 @@ const Hero = () => {
                   onChange={handleChange}
                   required
                   placeholder="e.g., Dr. John Smith"
-                  className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                  className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Facility Name
+                </label>
+                <input
+                  type="text"
+                  name="facility"
+                  value={formData.facility}
+                  onChange={handleChange}
+                  required
+                  placeholder="e.g., Your clinic, hospital, or practice name"
+                  className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                 />
               </div>
 
@@ -200,7 +257,7 @@ const Hero = () => {
                     value={formData.city}
                     onChange={handleChange}
                     required
-                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   />
                 </div>
 
@@ -214,7 +271,7 @@ const Hero = () => {
                       value={formData.state}
                       onChange={handleChange}
                       required
-                      className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md bg-white focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                      className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none"
                     >
                       <option value="">Select</option>
                       {states.map((state) => (
@@ -234,7 +291,7 @@ const Hero = () => {
                       value={formData.zip}
                       onChange={handleChange}
                       required
-                      className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                      className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                     />
                   </div>
                 </div>
@@ -251,7 +308,7 @@ const Hero = () => {
                   onChange={handleChange}
                   required
                   placeholder="(123) 456-7890"
-                  className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                  className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                 />
               </div>
 
@@ -266,7 +323,7 @@ const Hero = () => {
                   onChange={handleChange}
                   required
                   placeholder="you@example.com"
-                  className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                  className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                 />
               </div>
 
@@ -281,13 +338,13 @@ const Hero = () => {
                   required
                   rows={4}
                   placeholder="Type your message..."
-                  className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm resize-none focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                  className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm resize-none focus:ring-2 focus:ring-blue-500 focus:outline-none"
                 ></textarea>
               </div>
 
               <button
                 type="submit"
-                className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-6 rounded-lg shadow-lg transition duration-300"
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg shadow-lg transition duration-300"
               >
                 Send Message
               </button>

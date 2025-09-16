@@ -415,7 +415,7 @@ const NewOrderForm = ({ open, onClose, patient }) => {
             {step < totalSteps ? (
               <button
                 onClick={() => setStep((prev) => prev + 1)}
-                className="px-3 py-2 rounded bg-purple-600 text-white"
+                className="px-3 py-2 rounded bg-blue-600 text-white"
               >
                 Next
               </button>
@@ -423,7 +423,7 @@ const NewOrderForm = ({ open, onClose, patient }) => {
               <Button
                 onClick={handleOrderNow}
                 variant="contained"
-                className="bg-purple-600 text-white font-bold"
+                className="bg-blue-600 text-white font-bold"
                 disabled={!hasSelectedItems}
               >
                 Place Order

@@ -22,33 +22,23 @@ import ForgotPassword from "./components/login/ForgotPassword";
 import ResetPassword from "./components/login/ResetPassword";
 import IvrForm from "./components/dashboard/patient/IvrForm";
 
-function ErrorButton() {
-  return (
-    <button
-      onClick={() => {
-        throw new Error("This is your first error!");
-      }}
-    >
-      Break the world
-    </button>
-  );
-}
-
 function AppWrapper() {
   const location = useLocation();
   const hiddenPaths = [
-  "/login",
-  "/register",
-  "/mfa",
-  "/forgot-password",
-  "/reset-password",
-  "/verify-email"
+    "/login",
+    "/register",
+    "/mfa",
+    "/forgot-password",
+    "/reset-password",
+    "/verify-email",
   ];
-  const shouldHideNavAndFooter = hiddenPaths.some(path => location.pathname.startsWith(path));
+  const shouldHideNavAndFooter = hiddenPaths.some((path) =>
+    location.pathname.startsWith(path)
+  );
+
   const { logout, user } = useContext(AuthContext);
-  const timeoutRef = useRef(null);
   const warningTimeoutRef = useRef(null);
-  const logoutTimeoutRef = useRef(null); // <-- Add this
+  const logoutTimeoutRef = useRef(null);
 
   useEffect(() => {
     if (!user) return;
@@ -81,7 +71,7 @@ function AppWrapper() {
       logoutTimeoutRef.current = setTimeout(logoutAndRedirect, logoutDuration);
     };
 
-    resetTimers(); // Initialize on mount
+    resetTimers();
 
     const activityEvents = [
       "mousemove",
@@ -107,37 +97,43 @@ function AppWrapper() {
   return (
     <>
       <Toaster />
-      {!shouldHideNavAndFooter && <Navbar />}
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/ivr-form" element={<IvrForm />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/verify-email/:token" element={<VerifyEmail />} /> 
-        <Route
-          path="/dashboard"
-          element={
-            <PrivateRoute>
-              <Dashboard />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/profile"
-          element={
-            <PrivateRoute>
-              <ProviderProfileCard />
-            </PrivateRoute>
-          }
-        />
-        <Route path="/forgot-password" element={<ForgotPassword />}/>
-        <Route path="/reset-password/:token" element={<ResetPassword />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/mfa" element={<MFA />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/services" element={<Services />} />
-        <Route path="/contact" element={<Contact />} />
-      </Routes>
-      {!shouldHideNavAndFooter && <Footer />}
+      <div className="flex flex-col min-h-screen">
+        {!shouldHideNavAndFooter && <Navbar />}
+
+        <main className="flex-grow">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/ivr-form" element={<IvrForm />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/verify-email/:token" element={<VerifyEmail />} />
+            <Route
+              path="/dashboard"
+              element={
+                <PrivateRoute>
+                  <Dashboard />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <PrivateRoute>
+                  <ProviderProfileCard />
+                </PrivateRoute>
+              }
+            />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password/:token" element={<ResetPassword />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/mfa" element={<MFA />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/services" element={<Services />} />
+            <Route path="/contact" element={<Contact />} />
+          </Routes>
+        </main>
+
+        {!shouldHideNavAndFooter && <Footer />}
+      </div>
     </>
   );
 }

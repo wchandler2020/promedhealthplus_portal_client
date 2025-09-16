@@ -9,7 +9,7 @@ import NewOrderForm from "../../orders/NewOrderForm";
 
 const IVRStatusBadge = ({ status }) => {
   const colors = {
-    Approved: "bg-purple-100 text-purple-700",
+    Approved: "bg-blue-100 text-blue-700",
     Pending: "bg-yellow-100 text-yellow-700",
     Denied: "bg-red-100 text-red-700",
   };
@@ -22,7 +22,7 @@ const IVRStatusBadge = ({ status }) => {
   );
 };
 
-const PatientCard = ({ patient, onViewPdf }) => {
+const PatientCard = ({ patient, onViewPdf, onEdit, onDelete }) => {
   const [openOrderModal, setOpenOrderModal] = useState(false);
   const formattedDate = patient.date_of_birth
     ? format(new Date(patient.date_of_birth), "M/d/yyyy")
@@ -47,31 +47,37 @@ const PatientCard = ({ patient, onViewPdf }) => {
   };
   return (
     <div className="border p-4 rounded-lg border border-gray-200 bg-gray-50 shadow-sm space-y-2">
-      <div className="flex justify-between items-center">
-        <h3 className="text-lg font-semibold">{patient.name}</h3>
-        <div className="flex items-center justify-between w-full">
-          <p className="text-sm">
-            <strong>Patient Name:</strong> {patient.first_name}{" "}
-            {patient.last_name}, {patient.middle_initial}.
-          </p>
-          <strong className="text-sm">
-            IVR Status: <IVRStatusBadge status={patient.ivrStatus} />
-          </strong>
+      <div className="flex justify-between items-center mb-4">
+        <h3 className="text-lg font-semibold">
+          {patient.first_name} {patient.last_name}
+        </h3>
+        <div className="flex items-center space-x-3">
+          <FaEdit
+            className="text-gray-500 hover:text-blue-500 cursor-pointer text-base"
+            onClick={() => onEdit(patient)}
+            title="Edit Patient"
+          />
+          <FaTrashAlt
+            className="text-gray-500 hover:text-red-500 cursor-pointer text-base"
+            onClick={() => onDelete(patient.id)}
+            title="Delete Patient"
+          />
         </div>
       </div>
-      <div
-        className="text-xs text-gray-700 space-y-1"
-        style={{ marginTop: -4 }}
-      >
-        <p className="text-xs flex" style={{ fontSize: 10 }}>
-          <strong className="mr-1">Medical Record #:</strong>{" "}
-          {patient.medical_record_number}
+      <div className="flex items-center justify-between w-full" style={{ marginTop: -4 }}>
+        <p className="text-sm">
+          <strong>Medical Record #:</strong> {patient.medical_record_number}
         </p>
+        <strong className="text-sm">
+          IVR Status: <IVRStatusBadge status={patient.ivrStatus} />
+        </strong>
       </div>
-      <div className="text-sm text-gray-700 space-y-1" style={{ marginTop: 8 }}>
+      <div
+        className="text-sm text-gray-700 space-y-1"
+        style={{ marginTop: 8 }}
+      >
         <p className="text-xs flex">
-          <strong className="mr-1">Address:</strong> {patient.address}{" "}
-          {patient.city}, {patient.state} {patient.zip_code}
+          <strong className="mr-1">Address:</strong> {patient.address} {patient.city}, {patient.state} {patient.zip_code}
         </p>
       </div>
       <div
@@ -168,8 +174,6 @@ const PatientCard = ({ patient, onViewPdf }) => {
               className="text-gray-500 hover:text-blue-500 cursor-pointer"
               onClick={() => onViewPdf(patient)}
             />
-            <FaEdit className="text-gray-500 hover:text-purple-500 cursor-pointer" />
-            <FaTrashAlt className="text-gray-500 hover:text-red-500 cursor-pointer" />
           </div>
         </div>
       </div>
@@ -178,22 +182,6 @@ const PatientCard = ({ patient, onViewPdf }) => {
         style={{ marginTop: 25 }}
       ></div>
       <p className="text-sm font-semibold text-center mt-6">Patient Order</p>
-
-      {/* <div className="flex justify-between items-center mt-2">
-        <p className="text-xs text-gray-700">Place an order for this patient.</p>
-        <button
-          className={`text-xs px-3 py-1 rounded-full flex items-center gap-1 transition-all
-            ${
-              patient.ivrStatus === "Approved"
-                ? "bg-purple-500 text-white hover:bg-purple-600"
-                : "bg-gray-200 text-gray-500 cursor-not-allowed"
-            }`}
-          onClick={() => setOpenOrderModal(true)}
-          disabled={patient.ivrStatus !== "Approved"}
-        >
-           + New Order
-        </button>
-      </div> */}
       <div className="flex justify-between items-center mt-2">
         <p className="text-xs text-gray-700">
           Place an order for this patient.
@@ -201,11 +189,10 @@ const PatientCard = ({ patient, onViewPdf }) => {
         <div className="relative flex items-center gap-1">
           <button
             className={`text-xs px-3 py-1 rounded-full flex items-center gap-1 transition-all
-        ${
-          patient.ivrStatus === "Approved"
-            ? "bg-purple-500 text-white hover:bg-purple-600"
-            : "bg-gray-200 text-gray-500 cursor-not-allowed"
-        }`}
+            ${patient.ivrStatus === "Approved"
+              ? "bg-blue-500 text-white hover:bg-blue-600"
+              : "bg-gray-200 text-gray-500 cursor-not-allowed"
+            }`}
             onClick={() => setOpenOrderModal(true)}
             disabled={patient.ivrStatus !== "Approved"}
             title={
@@ -216,15 +203,13 @@ const PatientCard = ({ patient, onViewPdf }) => {
           >
             + New Order
           </button>
-
           {patient.ivrStatus !== "Approved" && (
             <div className="relative group">
               <IoInformationCircleOutline className="text-xl text-red-400 font-semibold cursor-pointer" />
-
               <div
                 className="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2
-                  bg-white border border-gray-200 shadow-lg px-3 py-1 text-xs text-gray-500
-                  rounded-xl w-max opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10 font-semibold"
+                bg-white border border-gray-200 shadow-lg px-3 py-1 text-xs text-gray-500
+                rounded-xl w-max opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10 font-semibold"
               >
                 Orders can only be placed for patients with an approved IVR.
               </div>
@@ -232,7 +217,6 @@ const PatientCard = ({ patient, onViewPdf }) => {
           )}
         </div>
       </div>
-
       <div
         className="h-[2px] w-[90%] bg-gray-200 flex m-auto opacity-550"
         style={{ marginTop: 25 }}

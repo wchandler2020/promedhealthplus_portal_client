@@ -106,7 +106,7 @@ const Documents = () => {
 
   return (
     <div className="max-w-xl mx-auto mt-9 p-4 sm:p-6 bg-white rounded-lg shadow-lg">
-      <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-6 sm:mb-8 text-center">
+      <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-6 sm:mb-8">
         Manage Provider Documents
       </h2>
 
@@ -164,13 +164,13 @@ const Documents = () => {
                   <>
                     <p className="hidden sm:block">
                       Drag & Drop files here or
-                      <span className="text-purple-600 font-bold ml-1">
+                      <span className="text-blue-600 font-bold ml-1">
                         Browse
                       </span>
                     </p>
                     <p className="block sm:hidden">
                       Click here to
-                      <span className="text-purple-600 font-bold ml-1">
+                      <span className="text-blue-600 font-bold ml-1">
                         Browse
                       </span>
                     </p>
@@ -191,7 +191,7 @@ const Documents = () => {
           className={`w-full py-2 px-4 rounded-md font-semibold transition duration-200 ${
             !uploadFile || isUploading
               ? "bg-gray-300 text-gray-600 cursor-not-allowed"
-              : "bg-purple-600 text-white hover:bg-purple-700 shadow-md"
+              : "bg-blue-600 text-white hover:bg-blue-700 shadow-md"
           }`}
         >
           {isUploading ? "Uploading..." : "Submit Document"}

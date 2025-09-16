@@ -138,7 +138,7 @@ const OrderHistory = () => {
                   <div className="mt-2">
                     <button
                       onClick={() => downloadInvoice(order.id)}
-                      className="text-xs text-purple-400 hover:underline cursor-pointer bg-transparent border-none p-0"
+                      className="text-xs text-blue-400 hover:underline cursor-pointer bg-transparent border-none p-0"
                     >
                       View Invoice PDF
                     </button>

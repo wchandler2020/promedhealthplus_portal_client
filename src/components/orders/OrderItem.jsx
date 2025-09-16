@@ -83,7 +83,7 @@ const OrderItem = ({ item, selectedVariants = [], onVariantChange }) => {
           <h3 className="text-lg font-semibold">{item.name}</h3>
           <span
             className={`text-sm font-medium ${
-              item.is_available ? "text-purple-600" : "text-red-500"
+              item.is_available ? "text-blue-600" : "text-red-500"
             }`}
           >
             {item.is_available ? "Available" : "Unavailable"}

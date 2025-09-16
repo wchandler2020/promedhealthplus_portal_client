@@ -11,7 +11,6 @@ import {
   Box,
   Modal,
 } from "@mui/material";
-
 import { format } from "date-fns";
 import { formatPhoneNumber } from "react-phone-number-input";
 import { FaEye, FaEdit, FaTrashAlt } from "react-icons/fa";
@@ -20,14 +19,14 @@ import FillablePdf from "../documemts/FillablePdf";
 import Notes from "../documemts/Notes";
 import PatientCard from "./PatientCard";
 import NewOrderForm from "../../orders/NewOrderForm";
+import toast from "react-hot-toast";
 
 const ivrStatusBadge = ({ status }) => {
   const colors = {
-    Approved: "bg-purple-100 text-purple-700",
+    Approved: "bg-blue-100 text-blue-700",
     Pending: "bg-yellow-100 text-yellow-700",
     Denied: "bg-red-100 text-red-700",
   };
-
   return (
     <span
       className={`px-2 py-1 text-xs font-semibold rounded ${colors[status]}`}
@@ -38,7 +37,9 @@ const ivrStatusBadge = ({ status }) => {
 };
 
 const Patients = () => {
-  const { getPatients, postPatient } = useContext(AuthContext);
+  // Added updatePatient and deletePatient to AuthContext consumption
+  const { getPatients, postPatient, updatePatient, deletePatient } =
+    useContext(AuthContext);
   const [patients, setPatients] = useState([]);
   const [errors, setErrors] = useState({});
   const [open, setOpen] = useState(false);
@@ -49,6 +50,9 @@ const Patients = () => {
   const [patientsPerPage, setPatientsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [savePage, setSavePage] = useState(1);
+
+  // New state for editing
+  const [editingPatient, setEditingPatient] = useState(null);
   const [formData, setFormData] = useState({
     first_name: "",
     last_name: "",
@@ -73,6 +77,7 @@ const Patients = () => {
     wound_size_length: "",
     wound_size_width: "",
   });
+
   const formatPhoneNumberToE164 = (phone) => {
     if (!phone) return "";
     const digitsOnly = phone.replace(/\D/g, ""); // Remove all non-digit characters
@@ -91,6 +96,7 @@ const Patients = () => {
     // Fallback (leave unchanged or return empty string)
     return `+${digitsOnly}`;
   };
+
   const ValidateForm = () => {
     const newErrors = {};
     if (!formData.first_name.trim())
@@ -109,6 +115,7 @@ const Patients = () => {
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
+
   useEffect(() => {
     const fetchPatients = async () => {
       if (getPatients) {
@@ -122,6 +129,7 @@ const Patients = () => {
     };
     fetchPatients();
   }, [getPatients]);
+
   useEffect(() => {
     if (searchTerm || ivrFilter) {
       setSavePage(currentPage);
@@ -130,6 +138,7 @@ const Patients = () => {
       setCurrentPage(savePage);
     }
   }, [searchTerm, ivrFilter]);
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -137,23 +146,8 @@ const Patients = () => {
       [name]: name === "middle_initial" ? value.trim().charAt(0) : value,
     }));
   };
-  const handleAddPatient = async () => {
-    setErrors({});
-    if (!ValidateForm()) return;
-    const newPatient = {
-      ...formData,
-      phone_number: formatPhoneNumberToE164(formData.phone_number),
-    };
-    try {
-      const res = await postPatient(newPatient);
-      if (res.success) {
-        console.log("Patient added successfully:", res.data);
-        setPatients((prev) => [res.data, ...prev]);
-      }
-    } catch (error) {
-      console.error("Failed to add patient:", error);
-    }
-    setOpen(false);
+
+  const resetForm = () => {
     setFormData({
       first_name: "",
       last_name: "",
@@ -176,8 +170,100 @@ const Patients = () => {
       wound_size_length: "",
       wound_size_width: "",
     });
+    setErrors({});
+    setEditingPatient(null);
+    setOpen(false);
   };
-  const filteredPatients = patients.filter((patient) => {
+
+  // This function now handles both adding and updating patients
+  const handleSavePatient = async () => {
+    setErrors({});
+    if (!ValidateForm()) return;
+
+    const newPatientData = {
+      ...formData,
+      phone_number: formatPhoneNumberToE164(formData.phone_number),
+    };
+
+    try {
+      if (editingPatient) {
+        // Handle editing
+        const res = await updatePatient(editingPatient.id, newPatientData);
+        if (res.success) {
+          setPatients((prev) =>
+            prev.map((p) => (p.id === editingPatient.id ? res.data : p))
+          );
+          toast.success("Patient profile updated successfully!"); 
+        } else {
+          console.error("Failed to update patient:", res.error);
+        }
+      } else {
+        // Handle adding
+        const res = await postPatient(newPatientData);
+        if (res.success) {
+          setPatients((prev) => [res.data, ...prev]);
+        } else {
+          console.error("Failed to add patient:", res.error);
+        }
+      }
+    } catch (error) {
+      console.error("Error saving patient:", error);
+    }
+    resetForm();
+  };
+
+  const handleEditPatient = (patient) => {
+  try {
+    if (!patient || typeof patient !== 'object') {
+      console.error("Invalid patient data:", patient);
+      return;
+    }
+    const sanitizedPatient = {};
+    Object.entries(formData).forEach(([key, _]) => {
+      let value = patient[key];
+      if (key === "date_of_birth") {
+        try {
+          sanitizedPatient[key] = value
+            ? format(new Date(value), "yyyy-MM-dd")
+            : "";
+        } catch (dateError) {
+          console.error("Invalid date_of_birth format:", value);
+          sanitizedPatient[key] = "";
+        }
+      } else {
+        sanitizedPatient[key] = value ?? ""; // convert null or undefined to ""
+      }
+    });
+
+    setFormData(sanitizedPatient);
+    setEditingPatient(patient);
+    setOpen(true);
+
+  } catch (error) {
+    console.error("Error in handleEditPatient:", error);
+  }
+};
+
+const handleDeletePatient = async (patientId) => {
+    if (
+      window.confirm(
+        "Are you sure you want to delete this patient? This action cannot be undone."
+      )
+    ) {
+      try {
+        const res = await deletePatient(patientId);
+        if (res.success) {
+          setPatients((prev) => prev.filter((p) => p.id !== patientId));
+        } else {
+          console.error("Failed to delete patient:", res.error);
+        }
+      } catch (error) {
+        console.error("Error deleting patient:", error);
+      }
+    }
+  };
+
+const filteredPatients = patients.filter((patient) => {
     const fullName =
       `${patient.first_name} ${patient.last_name} ${patient.middle_initial}`.toLowerCase();
     const medRecord = patient.medical_record_number?.toLowerCase() || "";
@@ -188,10 +274,12 @@ const Patients = () => {
       matchesFilter
     );
   });
+
   const sortedPatients = [...filteredPatients].sort((a, b) => {
     const active = (status) => ["Approved", "Pending"].includes(status);
     return active(b.ivrStatus) - active(a.ivrStatus);
   });
+
   const indexOfLastPatient = currentPage * patientsPerPage;
   const indexOfFirstPatient = indexOfLastPatient - patientsPerPage;
   const currentPatients = sortedPatients.slice(
@@ -199,11 +287,13 @@ const Patients = () => {
     indexOfLastPatient
   );
   const totalPages = Math.ceil(sortedPatients.length / patientsPerPage);
+
   const handleViewPdf = (patient) => {
     console.log("Opening PDF modal for:", patient);
     setSelectedPatient(patient);
     setViewPdfModalOpen(true);
   };
+
   const modalStyle = {
     position: "absolute",
     top: "50%",
@@ -217,12 +307,15 @@ const Patients = () => {
   };
 
   return (
-    <div className="max-w-5xl mx-auto mt-10 p-6 bg-white shadow-lg rounded">
+    <div className="max-w-5xl mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-semibold">Patient Applications</h2>
         <button
-          className="border border-purple-500 text-purple-500 hover:bg-purple-500 hover:text-white px-4 py-2 rounded-md transition-all text-xs"
-          onClick={() => setOpen(true)}
+          className="border border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white px-4 py-2 rounded-md transition-all text-xs"
+          onClick={() => {
+            setEditingPatient(null);
+            setOpen(true);
+          }}
         >
           + New Patient
         </button>
@@ -231,7 +324,7 @@ const Patients = () => {
         <input
           type="text"
           placeholder="Search Patients by Name or Med Record No."
-          className="w-full px-2 py-1 pl-10 text-gray-700 bg-white border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 text-sm"
+          className="w-full px-2 py-1 pl-10 text-gray-700 bg-white border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 text-sm"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
@@ -252,8 +345,8 @@ const Patients = () => {
             value={ivrFilter}
             onChange={(e) => setIvrFilter(e.target.value)}
             className="bg-gray-100 text-gray-800 border border-gray-300 rounded px-2 py-1 text-xs 
-         focus:bg-gray-200 focus:outline-none focus:ring-2 
-         focus:ring-purple-500 focus:border-purple-300 transition"
+            focus:bg-gray-200 focus:outline-none focus:ring-2 
+            focus:ring-blue-500 focus:border-blue-300 transition"
           >
             <option value="">All</option>
             <option value="Approved">Approved</option>
@@ -276,8 +369,8 @@ const Patients = () => {
               setCurrentPage(1);
             }}
             className="bg-gray-100 text-gray-800 border border-gray-300 rounded px-2 py-1 text-xs 
-         focus:bg-gray-200 focus:outline-none focus:ring-2 
-         focus:ring-purple-500 focus:border-purple-300 transition"
+            focus:bg-gray-200 focus:outline-none focus:ring-2 
+            focus:ring-blue-500 focus:border-blue-300 transition"
           >
             {[5, 10, 15, 25].map((num) => (
               <option key={num} value={num}>
@@ -293,6 +386,8 @@ const Patients = () => {
             key={patient.id}
             patient={patient}
             onViewPdf={handleViewPdf}
+            onEdit={handleEditPatient} // Pass the edit handler
+            onDelete={handleDeletePatient} // Pass the delete handler
           />
         ))}
       </div>
@@ -343,11 +438,11 @@ const Patients = () => {
           </svg>
         </button>
       </div>
-      <Modal open={open} onClose={() => setOpen(false)}>
+      <Modal open={open} onClose={resetForm}>
         <Box sx={{ ...modalStyle, maxHeight: "90vh", overflowY: "auto" }}>
           <div className="bg-white rounded-2xl shadow-2xl p-8 mx-4 border border-gray-100 relative">
             <button
-              onClick={() => setOpen(false)}
+              onClick={resetForm}
               className="absolute top-4 right-4 text-gray-500 hover:text-gray-800 transition"
               aria-label="Close"
             >
@@ -367,15 +462,19 @@ const Patients = () => {
               </svg>
             </button>
             <h2 className="text-3xl font-semibold text-center text-gray-800 mb-2">
-              Add New Patient
+              {editingPatient ? "Edit Patient" : "Add New Patient"}
             </h2>
             <p className="text-center text-gray-500 mb-6">
-              Fill out the form to register a new patient.
+              Fill out the form to{" "}
+              {editingPatient
+                ? "update patient details"
+                : "register a new patient"}
+              .
             </p>
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                handleAddPatient();
+                handleSavePatient();
               }}
               className="space-y-6"
             >
@@ -390,7 +489,7 @@ const Patients = () => {
                     value={formData.first_name}
                     onChange={handleInputChange}
                     required
-                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   />
                   {errors.first_name && (
                     <p className="text-red-500 text-sm">{errors.first_name}</p>
@@ -406,7 +505,7 @@ const Patients = () => {
                     value={formData.last_name}
                     onChange={handleInputChange}
                     required
-                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   />
                   {errors.last_name && (
                     <p className="text-red-500 text-sm">{errors.last_name}</p>
@@ -423,7 +522,7 @@ const Patients = () => {
                     name="middle_initial"
                     value={formData.middle_initial}
                     onChange={handleInputChange}
-                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   />
                 </div>
                 <div className="col-span-2">
@@ -436,7 +535,7 @@ const Patients = () => {
                     value={formData.date_of_birth}
                     onChange={handleInputChange}
                     required
-                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   />
                   {errors.date_of_birth && (
                     <p className="text-red-500 text-sm">
@@ -455,7 +554,7 @@ const Patients = () => {
                     name="address"
                     value={formData.address}
                     onChange={handleInputChange}
-                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   />
                 </div>
                 <div>
@@ -467,7 +566,7 @@ const Patients = () => {
                     name="city"
                     value={formData.city}
                     onChange={handleInputChange}
-                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   />
                 </div>
               </div>
@@ -481,7 +580,7 @@ const Patients = () => {
                     name="state"
                     value={formData.state}
                     onChange={handleInputChange}
-                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   />
                 </div>
                 <div className="w-1/3">
@@ -493,22 +592,10 @@ const Patients = () => {
                     name="zip_code"
                     value={formData.zip_code}
                     onChange={handleInputChange}
-                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   />
                 </div>
               </div>
-              {/* <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  Phone Number
-                </label>
-                <input
-                  type="text"
-                  name="phone_number"
-                  value={formData.phone_number}
-                  onChange={handleInputChange}
-                  className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:outline-none"
-                />
-              </div> */}
               <div>
                 <label className="block text-sm font-medium text-gray-700">
                   Phone Number
@@ -527,7 +614,7 @@ const Patients = () => {
                       phone_number: cleaned,
                     }));
                   }}
-                  className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                  className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
                 />
                 <p className="text-xs text-gray-500 mt-1">
                   Format: (212) 555-1212 or 212-555-1212 — US numbers only
@@ -536,7 +623,6 @@ const Patients = () => {
                   <p className="text-red-500 text-sm">{errors.phone_number}</p>
                 )}
               </div>
-
               <div>
                 <label className="block text-sm font-medium text-gray-700">
                   Email
@@ -546,7 +632,7 @@ const Patients = () => {
                   name="email"
                   value={formData.email}
                   onChange={handleInputChange}
-                  className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                  className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
                 />
               </div>
               <div>
@@ -558,7 +644,7 @@ const Patients = () => {
                   name="medical_record_number"
                   value={formData.medical_record_number}
                   onChange={handleInputChange}
-                  className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                  className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
                 />
               </div>
               <h3 className="text-xl font-bold text-center text-gray-800 mb-2">
@@ -574,7 +660,7 @@ const Patients = () => {
                     name="primary_insurance"
                     value={formData.primary_insurance}
                     onChange={handleInputChange}
-                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   />
                 </div>
                 <div>
@@ -586,7 +672,7 @@ const Patients = () => {
                     name="primary_insurance_number"
                     value={formData.primary_insurance_number}
                     onChange={handleInputChange}
-                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   />
                 </div>
               </div>
@@ -600,7 +686,7 @@ const Patients = () => {
                     name="secondary_insurance"
                     value={formData.secondary_insurance}
                     onChange={handleInputChange}
-                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   />
                 </div>
                 <div>
@@ -612,7 +698,7 @@ const Patients = () => {
                     name="secondary_insurance_number"
                     value={formData.secondary_insurance_number}
                     onChange={handleInputChange}
-                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   />
                 </div>
               </div>
@@ -626,7 +712,7 @@ const Patients = () => {
                     name="tertiary_insurance"
                     value={formData.tertiary_insurance}
                     onChange={handleInputChange}
-                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   />
                 </div>
                 <div>
@@ -638,59 +724,56 @@ const Patients = () => {
                     name="tertiary_insurance_number"
                     value={formData.tertiary_insurance_number}
                     onChange={handleInputChange}
-                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   />
+                </div>
+                <h3 className="text-xl font-bold text-center text-gray-800 mb-2">
+                  Wound Information
+                </h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">
+                      Wound Size (Length) in cm
+                    </label>
+                    <input
+                      type="text"
+                      name="wound_size_length"
+                      value={formData.wound_size_length}
+                      onChange={handleInputChange}
+                      className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">
+                      Wound Size (Width) in cm
+                    </label>
+                    <input
+                      type="text"
+                      name="wound_size_width"
+                      value={formData.wound_size_width}
+                      onChange={handleInputChange}
+                      className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    />
+                  </div>
                 </div>
               </div>
-              <h3 className="text-xl font-bold text-center text-gray-800 mb-2 mt-6">
-                Wound Size
-              </h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Wound Length (cm)
-                  </label>
-                  <input
-                    type="text"
-                    name="wound_size_length"
-                    value={formData.wound_size_length}
-                    onChange={handleInputChange}
-                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:outline-none"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Wound Width (cm)
-                  </label>
-                  <input
-                    type="text"
-                    name="wound_size_width"
-                    value={formData.wound_size_width}
-                    onChange={handleInputChange}
-                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:outline-none"
-                  />
-                </div>
-              </div>
-              <div className="flex justify-center mt-6">
+              <div className="flex justify-end">
                 <button
                   type="submit"
-                  className="px-6 py-3 bg-purple-600 text-white font-bold rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition-transform transform hover:scale-105"
+                  className="bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600 transition-all font-semibold"
                 >
-                  Add Patient
+                  {editingPatient ? "Save Changes" : "Add Patient"}
                 </button>
               </div>
             </form>
           </div>
         </Box>
       </Modal>
-      <Modal open={viewPdfModalOpen} onClose={() => setViewPdfModalOpen(false)}>
-        <Box sx={modalStyle}>
-          <FillablePdf
-            selectedPatientId={selectedPatient?.id}
-            onClose={() => setViewPdfModalOpen(false)}
-          />
-        </Box>
-      </Modal>
+      <FillablePdf
+        isOpen={viewPdfModalOpen}
+        onClose={() => setViewPdfModalOpen(false)}
+        patient={selectedPatient}
+      />
     </div>
   );
 };

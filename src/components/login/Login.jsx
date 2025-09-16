@@ -90,7 +90,7 @@ const Login = () => {
                     name="email"
                     id="email"
                     placeholder="example@example.com"
-                    className="block w-full px-4 py-2 mt-2 text-gray-600 placeholder-gray-400 bg-white border border-gray-200 rounded-md  focus:border-purple-500 focus:ring-purple-400 focus:outline-none focus:ring focus:ring-opacity-40"
+                    className="block w-full px-4 py-2 mt-2 text-gray-600 placeholder-gray-400 bg-white border border-gray-200 rounded-md  focus:border-blue-500 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
@@ -103,7 +103,7 @@ const Login = () => {
                     </label>
                     <Link
                       to='/forgot-password'
-                      className="text-sm text-gray-400 focus:text-purple-500 hover:text-purple-400 hover:underline"
+                      className="text-sm text-gray-400 focus:text-blue-500 hover:text-blue-400 hover:underline"
                     >
                       Forgot password?
                     </Link>
@@ -113,7 +113,7 @@ const Login = () => {
                     name="password"
                     id="password"
                     placeholder="Your Password"
-                    className="block w-full px-4 py-2 mt-2 text-gray-600 placeholder-gray-400 bg-white border border-gray-200 rounded-md  focus:border-purple-500 focus:ring-purple-400 focus:outline-none focus:ring focus:ring-opacity-40"
+                    className="block w-full px-4 py-2 mt-2 text-gray-600 placeholder-gray-400 bg-white border border-gray-200 rounded-md  focus:border-blue-500 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
@@ -122,7 +122,7 @@ const Login = () => {
                 <div className="mt-6">
                   <button
                     disabled={isLoading}
-                    className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-purple-500 rounded-md hover:bg-purple-400 focus:outline-none focus:bg-purple-500 focus:ring focus:ring-purple-500 focus:ring-opacity-50 uppercase"
+                    className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-blue-500 rounded-md hover:bg-blue-400 focus:outline-none focus:bg-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 uppercase"
                   >
                     {isLoading ? "Logging in..." : "Login"}
                   </button>
@@ -133,7 +133,7 @@ const Login = () => {
                 Don't have an account yet?{" "}
                 <Link
                   to="/register"
-                  className="text-purple-600 focus:outline-none focus:underline hover:underline"
+                  className="text-blue-600 focus:outline-none focus:underline hover:underline"
                 >
                   Register
                 </Link>

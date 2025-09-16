@@ -7,10 +7,11 @@ import { Link } from "react-router-dom";
 import { AuthContext } from "../../utils/auth";
 import NotificationModal from "./NotificationModal";
 import axiosAuth from "../../utils/axios";
+import logo from "../../assets/images/logo.png";
 
 const MobileMenuIconSVG = () => (
   <svg
-    className="block h-4 w-4 fill-current text-purple-400"
+    className="block h-4 w-4 fill-current text-blue-400"
     viewBox="0 0 20 20"
     xmlns="http://www.w3.org/2000/svg"
   >
@@ -157,28 +158,28 @@ const Navbar = () => {
   };
 
   const markAsRead = async (id) => {
-  try {
-    const axiosInstance = axiosAuth();
-    await axiosInstance.patch(`/${id}/provider/mark-read/`); // ✅ FIXED
-    setNotificationCount((prev) => Math.max(prev - 1, 0));
-    setNotifications((prev) =>
-      prev.map((n) => (n.id === id ? { ...n, is_read: true } : n))
-    );
-  } catch (error) {
-    console.error("Failed to mark notification as read:", error);
-  }
-};
+    try {
+      const axiosInstance = axiosAuth();
+      await axiosInstance.patch(`/${id}/provider/mark-read/`); // ✅ FIXED
+      setNotificationCount((prev) => Math.max(prev - 1, 0));
+      setNotifications((prev) =>
+        prev.map((n) => (n.id === id ? { ...n, is_read: true } : n))
+      );
+    } catch (error) {
+      console.error("Failed to mark notification as read:", error);
+    }
+  };
 
-const deleteNotification = async (id) => {
-  try {
-    const axiosInstance = axiosAuth();
-    await axiosInstance.delete(`/${id}/provider/delete-notification/`); // ✅ FIXED
-    setNotifications((prev) => prev.filter((n) => n.id !== id));
-    setShowModal(false);
-  } catch (error) {
-    console.error("Failed to delete notification:", error);
-  }
-};
+  const deleteNotification = async (id) => {
+    try {
+      const axiosInstance = axiosAuth();
+      await axiosInstance.delete(`/${id}/provider/delete-notification/`); // ✅ FIXED
+      setNotifications((prev) => prev.filter((n) => n.id !== id));
+      setShowModal(false);
+    } catch (error) {
+      console.error("Failed to delete notification:", error);
+    }
+  };
 
   function getTimeLabel(dateCreated) {
     const now = new Date();
@@ -198,12 +199,15 @@ const deleteNotification = async (id) => {
   return (
     <div className="bg-white px-6 sm:px-8 mt-2 mb-10">
       <nav className="relative px-4 py-4 flex justify-between items-center bg-white">
-        <Link
-          className="text-2xl sm:text-3xl font-semibold leading-none"
-          to="/"
-        >
-          ProMed Health Plus
-        </Link>
+        <div className="flex items-center justify-center">
+          <img src={logo} alt="" width={50} height={50} className="mr-1" />
+          <Link
+            className="text-2xl sm:text-3xl font-semibold leading-none"
+            to="/"
+          >
+            ProMed Health Plus
+          </Link>
+        </div>
 
         <div className="lg:hidden">
           <button
@@ -217,7 +221,7 @@ const deleteNotification = async (id) => {
         <ul className="hidden absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 lg:flex lg:mx-auto lg:items-center lg:space-x-6">
           <li>
             <Link
-              className="text-base text-gray-800 hover:text-purple-400 font-semibold"
+              className="text-base text-gray-800 hover:text-blue-400 font-semibold"
               to="/"
             >
               Home
@@ -226,7 +230,7 @@ const deleteNotification = async (id) => {
           {isAuthenticated && (
             <li>
               <Link
-                className="text-base text-gray-800 hover:text-purple-400 font-semibold"
+                className="text-base text-gray-800 hover:text-blue-400 font-semibold"
                 to="/dashboard/"
               >
                 Dashboard
@@ -235,7 +239,7 @@ const deleteNotification = async (id) => {
           )}
           <li>
             <Link
-              className="text-base text-gray-800 hover:text-purple-400 font-semibold"
+              className="text-base text-gray-800 hover:text-blue-400 font-semibold"
               to="/about/"
             >
               About Us
@@ -243,7 +247,7 @@ const deleteNotification = async (id) => {
           </li>
           <li>
             <Link
-              className="text-base text-gray-800 hover:text-purple-400 font-semibold"
+              className="text-base text-gray-800 hover:text-blue-400 font-semibold"
               to="/services/"
             >
               Services
@@ -251,7 +255,7 @@ const deleteNotification = async (id) => {
           </li>
           <li>
             <Link
-              className="text-base text-gray-800 hover:text-purple-400 font-semibold"
+              className="text-base text-gray-800 hover:text-blue-400 font-semibold"
               to="/contact/"
             >
               Contact
@@ -357,12 +361,12 @@ const deleteNotification = async (id) => {
         ) : (
           <div className="hidden lg:flex items-center space-x-4">
             <Link to="/login">
-              <button className="px-4 py-2 text-sm tracking-wide text-white transition-colors duration-200 transform bg-purple-500 rounded-md hover:bg-purple-400 focus:outline-none focus:bg-purple-500 focus:ring focus:ring-purple-500 focus:ring-opacity-50 uppercase">
+              <button className="px-4 py-2 text-sm tracking-wide text-white transition-colors duration-200 transform bg-blue-500 rounded-md hover:bg-blue-400 focus:outline-none focus:bg-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 uppercase">
                 Provider Login
               </button>
             </Link>
             <Link to="/register">
-              <button className="px-4 py-2 text-sm tracking-wide text-purple-500 border border-purple-500 rounded-md transition-colors duration-200 hover:bg-purple-100 focus:outline-none focus:ring focus:ring-purple-500 focus:ring-opacity-50 uppercase">
+              <button className="px-4 py-2 text-sm tracking-wide text-blue-500 border border-blue-500 rounded-md transition-colors duration-200 hover:bg-blue-100 focus:outline-none focus:ring focus:ring-blue-500 focus:ring-opacity-50 uppercase">
                 Provider Registration
               </button>
             </Link>
@@ -396,7 +400,7 @@ const deleteNotification = async (id) => {
           <ul>
             <li className="mb-1">
               <Link
-                className="block p-4 text-sm text-gray-800 hover:bg-purple-50 hover:text-purple-500 rounded"
+                className="block p-4 text-sm text-gray-800 hover:bg-blue-50 hover:text-blue-500 rounded"
                 to="/"
               >
                 Home
@@ -405,7 +409,7 @@ const deleteNotification = async (id) => {
             {isAuthenticated && (
               <li className="mb-1">
                 <Link
-                  className="block p-4 text-sm text-gray-800 hover:bg-purple-50 hover:text-purple-500 rounded"
+                  className="block p-4 text-sm text-gray-800 hover:bg-blue-50 hover:text-blue-500 rounded"
                   to="/dashboard/"
                 >
                   Dashboard
@@ -414,7 +418,7 @@ const deleteNotification = async (id) => {
             )}
             <li className="mb-1">
               <Link
-                className="block p-4 text-sm text-gray-800 hover:bg-purple-50 hover:text-purple-500 rounded"
+                className="block p-4 text-sm text-gray-800 hover:bg-blue-50 hover:text-blue-500 rounded"
                 to="/about/"
               >
                 About Us
@@ -422,7 +426,7 @@ const deleteNotification = async (id) => {
             </li>
             <li className="mb-1">
               <Link
-                className="block p-4 text-sm text-gray-800 hover:bg-purple-50 hover:text-purple-500 rounded"
+                className="block p-4 text-sm text-gray-800 hover:bg-blue-50 hover:text-blue-500 rounded"
                 to="/services/"
               >
                 Services
@@ -430,7 +434,7 @@ const deleteNotification = async (id) => {
             </li>
             <li className="mb-1">
               <Link
-                className="block p-4 text-sm text-gray-800 hover:bg-purple-50 hover:text-purple-500 rounded"
+                className="block p-4 text-sm text-gray-800 hover:bg-blue-50 hover:text-blue-500 rounded"
                 to="/contact/"
               >
                 Contact
@@ -485,12 +489,12 @@ const deleteNotification = async (id) => {
             ) : (
               <div className="flex flex-col space-y-4">
                 <Link to="/login">
-                  <button className="w-full px-4 py-2 text-sm tracking-wide text-white transition-colors duration-200 transform bg-purple-500 rounded-md hover:bg-purple-400 focus:outline-none focus:bg-purple-500 focus:ring focus:ring-purple-500 focus:ring-opacity-50 uppercase">
+                  <button className="w-full px-4 py-2 text-sm tracking-wide text-white transition-colors duration-200 transform bg-blue-500 rounded-md hover:bg-blue-400 focus:outline-none focus:bg-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 uppercase">
                     Provider Login
                   </button>
                 </Link>
                 <Link to="/register">
-                  <button className="w-full px-4 py-2 text-sm tracking-wide text-purple-500 border border-purple-500 rounded-md transition-colors duration-200 hover:bg-purple-100 focus:outline-none focus:ring focus:ring-purple-500 focus:ring-opacity-50 uppercase">
+                  <button className="w-full px-4 py-2 text-sm tracking-wide text-blue-500 border border-blue-500 rounded-md transition-colors duration-200 hover:bg-blue-100 focus:outline-none focus:ring focus:ring-blue-500 focus:ring-opacity-50 uppercase">
                     Provider Register
                   </button>
                 </Link>
