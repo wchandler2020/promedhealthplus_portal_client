@@ -61,12 +61,12 @@ const Footer = () => {
 
           {/* Useful Links */}
           <div className="flex-1 min-w-[150px]">
-            <h6 className="mb-4 font-bold uppercase text-sm">Useful links</h6>
+            <h6 className="mb-4 font-bold uppercase text-sm">Site links</h6>
             <ul className="text-xs space-y-2">
-              <li><a className="text-gray-800">Pricing</a></li>
-              <li><a className="text-gray-800">Settings</a></li>
-              <li><a className="text-gray-800">Orders</a></li>
-              <li><a className="text-gray-800">Help</a></li>
+              <li><Link to='/' className="text-gray-800 hover:text-blue-500">Home</Link></li>
+              <li><Link to='/about' className="text-gray-800 hover:text-blue-500">About</Link></li>
+              <li><Link to='/services' className="text-gray-800 hover:text-blue-500">Services</Link></li>
+              <li><Link to='/contact' className="text-gray-800 hover:text-blue-500">Contact</Link></li>
             </ul>
           </div>
 

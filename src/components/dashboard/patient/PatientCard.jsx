@@ -9,7 +9,7 @@ import NewOrderForm from "../../orders/NewOrderForm";
 
 const IVRStatusBadge = ({ status }) => {
   const colors = {
-    Approved: "bg-blue-100 text-blue-700",
+    Approved: "bg-green-100 text-green-700",
     Pending: "bg-yellow-100 text-yellow-700",
     Denied: "bg-red-100 text-red-700",
   };
@@ -55,16 +55,19 @@ const PatientCard = ({ patient, onViewPdf, onEdit, onDelete }) => {
           <FaEdit
             className="text-gray-500 hover:text-blue-500 cursor-pointer text-base"
             onClick={() => onEdit(patient)}
-            title="Edit Patient"
+            title="Edit Patient" // <-- native tooltip
           />
           <FaTrashAlt
             className="text-gray-500 hover:text-red-500 cursor-pointer text-base"
             onClick={() => onDelete(patient.id)}
-            title="Delete Patient"
+            title="Delete Patient" // <-- native tooltip
           />
         </div>
       </div>
-      <div className="flex items-center justify-between w-full" style={{ marginTop: -4 }}>
+      <div
+        className="flex items-center justify-between w-full"
+        style={{ marginTop: -4 }}
+      >
         <p className="text-sm">
           <strong>Medical Record #:</strong> {patient.medical_record_number}
         </p>
@@ -72,12 +75,10 @@ const PatientCard = ({ patient, onViewPdf, onEdit, onDelete }) => {
           IVR Status: <IVRStatusBadge status={patient.ivrStatus} />
         </strong>
       </div>
-      <div
-        className="text-sm text-gray-700 space-y-1"
-        style={{ marginTop: 8 }}
-      >
+      <div className="text-sm text-gray-700 space-y-1" style={{ marginTop: 8 }}>
         <p className="text-xs flex">
-          <strong className="mr-1">Address:</strong> {patient.address} {patient.city}, {patient.state} {patient.zip_code}
+          <strong className="mr-1">Address:</strong> {patient.address}{" "}
+          {patient.city}, {patient.state} {patient.zip_code}
         </p>
       </div>
       <div
@@ -189,9 +190,10 @@ const PatientCard = ({ patient, onViewPdf, onEdit, onDelete }) => {
         <div className="relative flex items-center gap-1">
           <button
             className={`text-xs px-3 py-1 rounded-full flex items-center gap-1 transition-all
-            ${patient.ivrStatus === "Approved"
-              ? "bg-blue-500 text-white hover:bg-blue-600"
-              : "bg-gray-200 text-gray-500 cursor-not-allowed"
+            ${
+              patient.ivrStatus === "Approved"
+                ? "bg-blue-500 text-white hover:bg-blue-600"
+                : "bg-gray-200 text-gray-500 cursor-not-allowed"
             }`}
             onClick={() => setOpenOrderModal(true)}
             disabled={patient.ivrStatus !== "Approved"}

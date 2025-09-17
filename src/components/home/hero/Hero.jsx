@@ -125,16 +125,19 @@ const Hero = () => {
   };
 
   const modalStyle = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: "100%",
-    maxWidth: 600,
-    bgcolor: "transparent",
-    boxShadow: "none",
-    outline: "none",
-  };
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: "100%",
+  maxWidth: 600,
+  maxHeight: "90vh", // 👈 Add this
+  overflowY: "auto",  // 👈 Add this
+  bgcolor: "transparent",
+  boxShadow: "none",
+  outline: "none",
+};
+
 
   return (
     <>
@@ -183,7 +186,7 @@ const Hero = () => {
       {/* Modal with Tailwind Form */}
       <Modal open={open} onClose={() => setOpen(false)}>
         <Box sx={modalStyle}>
-          <div className="bg-white rounded-2xl shadow-2xl p-8 mx-4 border border-gray-100 relative">
+          <div className="bg-white rounded-2xl shadow-2xl p-8 mx-4 border border-gray-100 relative h-full">
             {/* Close button */}
             <button
               onClick={() => setOpen(false)}
@@ -357,3 +360,6 @@ const Hero = () => {
 };
 
 export default Hero;
+
+
+
