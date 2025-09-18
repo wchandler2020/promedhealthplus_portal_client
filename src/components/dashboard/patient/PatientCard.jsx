@@ -145,7 +145,7 @@ const PatientCard = ({ patient, onViewPdf, onEdit, onDelete }) => {
       </div>
       <div className="text-sm text-gray-700 space-y-1" style={{ marginTop: 3 }}>
         <p className="text-xs flex">
-          <strong className="mr-1">Secondary Insurance Provider:</strong>{" "}
+          <strong className="mr-1">Tertiary Insurance Provider:</strong>{" "}
           {patient.tertiary_insurance ? patient.tertiary_insurance : "N/A"}
         </p>
       </div>
@@ -154,7 +154,7 @@ const PatientCard = ({ patient, onViewPdf, onEdit, onDelete }) => {
         style={{ marginTop: -0.5 }}
       >
         <p className="text-xs flex">
-          <strong className="mr-1">Secondary Insurance Number:</strong>{" "}
+          <strong className="mr-1">Tertiary Insurance Number:</strong>{" "}
           {patient.tertiary_insurance_number
             ? patient.tertiary_insurance_number
             : "N/A"}
