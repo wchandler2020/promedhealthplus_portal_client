@@ -36,7 +36,7 @@ const ivrStatusBadge = ({ status }) => {
   );
 };
 
-const Patients = () => {
+const Patients = ({ activationFilter, setActivationFilter }) => {
   // Added updatePatient and deletePatient to AuthContext consumption
   const { getPatients, postPatient, updatePatient, deletePatient } =
     useContext(AuthContext);
@@ -263,15 +263,17 @@ const handleDeletePatient = async (patientId) => {
     }
   };
 
+
 const filteredPatients = patients.filter((patient) => {
     const fullName =
       `${patient.first_name} ${patient.last_name} ${patient.middle_initial}`.toLowerCase();
     const medRecord = patient.medical_record_number?.toLowerCase() || "";
     const matchesFilter = ivrFilter ? patient.ivrStatus === ivrFilter : true;
+    const activationMatch = !activationFilter || patient.activate_Account === activationFilter;
     return (
       (fullName.includes(searchTerm.toLowerCase()) ||
         medRecord.includes(searchTerm.toLowerCase())) &&
-      matchesFilter
+      matchesFilter && activationMatch
     );
   });
 
@@ -352,6 +354,10 @@ const filteredPatients = patients.filter((patient) => {
             <option value="Approved">Approved</option>
             <option value="Pending">Pending</option>
             <option value="Denied">Denied</option>
+          </select>
+          <select value={activationFilter} onChange={e => setActivationFilter(e.target.value)} className="border rounded px-2 py-1">
+            <option value={"Activated"}>Activated</option>
+            <option value={"Deactivated"}>Deactivated</option>
           </select>
         </div>
         <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
@@ -554,6 +560,7 @@ const filteredPatients = patients.filter((patient) => {
                     name="address"
                     value={formData.address}
                     onChange={handleInputChange}
+                    required
                     className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   />
                 </div>
@@ -566,6 +573,7 @@ const filteredPatients = patients.filter((patient) => {
                     name="city"
                     value={formData.city}
                     onChange={handleInputChange}
+                    required
                     className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   />
                 </div>
@@ -580,6 +588,7 @@ const filteredPatients = patients.filter((patient) => {
                     name="state"
                     value={formData.state}
                     onChange={handleInputChange}
+                    required
                     className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   />
                 </div>
@@ -592,6 +601,7 @@ const filteredPatients = patients.filter((patient) => {
                     name="zip_code"
                     value={formData.zip_code}
                     onChange={handleInputChange}
+                    required
                     className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   />
                 </div>
@@ -727,34 +737,36 @@ const filteredPatients = patients.filter((patient) => {
                     className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   />
                 </div>
-                <h3 className="text-xl font-bold text-center text-gray-800 mb-2">
-                  Wound Information
-                </h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">
-                      Wound Size (Length) in cm
-                    </label>
-                    <input
-                      type="text"
-                      name="wound_size_length"
-                      value={formData.wound_size_length}
-                      onChange={handleInputChange}
-                      className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">
-                      Wound Size (Width) in cm
-                    </label>
-                    <input
-                      type="text"
-                      name="wound_size_width"
-                      value={formData.wound_size_width}
-                      onChange={handleInputChange}
-                      className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                    />
-                  </div>
+              </div>
+              <h3 className="text-xl font-bold text-center text-gray-800 mb-2">
+                Wound Information
+              </h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Wound Size (Length) in cm
+                  </label>
+                  <input
+                    type="text"
+                    name="wound_size_length"
+                    value={formData.wound_size_length}
+                    onChange={handleInputChange}
+                    required
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Wound Size (Width) in cm
+                  </label>
+                  <input
+                    type="text"
+                    name="wound_size_width"
+                    value={formData.wound_size_width}
+                    onChange={handleInputChange}
+                    required
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  />
                 </div>
               </div>
               <div className="flex justify-end">

@@ -5,7 +5,7 @@ import axios from "axios";
 import { API_BASE_URL } from "../../../utils/constants";
 import axiosAuth from "../../../utils/axios";
 
-const OrderHistory = () => {
+const OrderHistory = ({ activationFilter }) => {
   const [history, setHistory] = useState([]);
   const [expandedPatients, setExpandedPatients] = useState({});
 
@@ -101,8 +101,11 @@ const OrderHistory = () => {
       }
     }
   };
-
-  if (history.length === 0) {
+  // Filtering out deactivated patients orders
+  console.log("Activation Filter:", activationFilter);
+  const filteredHistory = history.filter(patient => patient.activate_Account === activationFilter);
+  console.log("Filtered Order history:", filteredHistory);
+  if (filteredHistory.length === 0) {
     return (
       <div className="text-gray-500 text-center mt-6">
         No order history yet.
@@ -110,9 +113,10 @@ const OrderHistory = () => {
     );
   }
 
+
   return (
     <div className="border border-gray-200 rounded-lg p-6 mb-8 bg-gray-50">
-      {history.map((patient) => (
+      {filteredHistory.map((patient) => (
         <div key={patient.id} className="bg-gray-50 p-4 rounded shadow">
           <h3 className="text-lg font-semibold text-gray-800 mb-2">
             {patient.first_name} {patient.last_name}
