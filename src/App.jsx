@@ -1,8 +1,8 @@
 import Dashboard from "./components/dashboard/Dashboard";
+import SalesRepDashboard from './components/salesRepDashboard/SalesRepDashboard'
 import Register from "./components/register/Register";
 import { Route, HashRouter, Routes, useLocation } from "react-router-dom";
-import { Toaster } from "react-hot-toast";
-import { toast } from "react-hot-toast";
+import { Toaster, toast } from "react-hot-toast";
 import Login from "./components/login/Login";
 import Navbar from "./components/navbar/Navbar";
 import About from "./components/about/About";
@@ -39,6 +39,8 @@ function AppWrapper() {
   const { logout, user } = useContext(AuthContext);
   const warningTimeoutRef = useRef(null);
   const logoutTimeoutRef = useRef(null);
+
+  console.log('AUTH USER: ', user)
 
   useEffect(() => {
     if (!user) return;
@@ -106,6 +108,17 @@ function AppWrapper() {
             <Route path="/ivr-form" element={<IvrForm />} />
             <Route path="/register" element={<Register />} />
             <Route path="/verify-email/:token" element={<VerifyEmail />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password/:token" element={<ResetPassword />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/mfa" element={<MFA />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/services" element={<Services />} />
+            <Route path="/contact" element={<Contact />} />
+
+            {/* --- Private Routes with Role-Based Redirection --- */}
+            
+            {/* The existing Provider Dashboard route */}
             <Route
               path="/dashboard"
               element={
@@ -114,6 +127,18 @@ function AppWrapper() {
                 </PrivateRoute>
               }
             />
+            
+            {/* The new Sales Rep Dashboard route */}
+            <Route
+              path="/sales-rep/dashboard"
+              element={
+                <PrivateRoute>
+                  <SalesRepDashboard />
+                </PrivateRoute>
+              }
+            />
+
+            {/* Other private routes */}
             <Route
               path="/profile"
               element={
@@ -122,13 +147,6 @@ function AppWrapper() {
                 </PrivateRoute>
               }
             />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route path="/reset-password/:token" element={<ResetPassword />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/mfa" element={<MFA />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/services" element={<Services />} />
-            <Route path="/contact" element={<Contact />} />
           </Routes>
         </main>
 

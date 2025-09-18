@@ -58,9 +58,7 @@ const Login = () => {
                 ProMed Health Plus
               </h2>
               <p className="max-w-xl mt-3 text-white text-xl font-light">
-                Lorem ipsum dolor sit, amet consectetur adipisicing elit. In
-                autem ipsa, nulla laboriosam dolores, repellendus perferendis
-                libero suscipit nam temporibus molestiae
+                Improving Patient Outcomes with Proven Wound Care Solutions 
               </p>
             </div>
           </div>

@@ -80,9 +80,7 @@ const ResetPassword = () => {
                 ProMed Health Plus
               </h2>
               <p className="max-w-xl mt-3 text-white text-xl font-light">
-                Lorem ipsum dolor sit, amet consectetur adipisicing elit. In
-                autem ipsa, nulla laboriosam dolores, repellendus perferendis
-                libero suscipit nam temporibus molestiae
+                Improving Patient Outcomes with Proven Wound Care Solutions 
               </p>
             </div>
           </div>
@@ -117,7 +115,7 @@ const ResetPassword = () => {
                       placeholder="Create a new password"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      className="block w-full px-4 py-2 mt-2 text-gray-600 placeholder-gray-500 bg-white border border-gray-200 rounded-md focus:border-purple-400 focus:ring-purple-400 focus:outline-none focus:ring focus:ring-opacity-40"
+                      className="block w-full px-4 py-2 mt-2 text-gray-600 placeholder-gray-500 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
                       required
                     />
 
@@ -200,7 +198,7 @@ const ResetPassword = () => {
                       placeholder="Repeat your password"
                       value={password2}
                       onChange={(e) => setPassword2(e.target.value)}
-                      className="block w-full px-4 py-2 mt-2 text-gray-600 placeholder-gray-500 bg-white border border-gray-200 rounded-md focus:border-purple-400 focus:ring-purple-400 focus:outline-none focus:ring focus:ring-opacity-40"
+                      className="block w-full px-4 py-2 mt-2 text-gray-600 placeholder-gray-500 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
                       required
                     />
                   </div>
@@ -220,7 +218,7 @@ const ResetPassword = () => {
                   <div className="mt-6">
                     <button
                       disabled={!allValid || isLoading}
-                      className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-purple-500 rounded-md hover:bg-purple-400 focus:outline-none focus:bg-purple-500 focus:ring focus:ring-purple-500 focus:ring-opacity-50 uppercase"
+                      className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-blue-500 rounded-md hover:bg-blue-400 focus:outline-none focus:bg-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 uppercase"
                       type="submit"
                     >
                       {isLoading ? "Resetting..." : "Reset Password"}

@@ -56,9 +56,7 @@ const ForgotPassword = () => {
                 ProMed Health Plus
               </h2>
               <p className="max-w-xl mt-3 text-white text-xl font-light">
-                Lorem ipsum dolor sit, amet consectetur adipisicing elit. In
-                autem ipsa, nulla laboriosam dolores, repellendus perferendis
-                libero suscipit nam temporibus molestiae
+               Improving Patient Outcomes with Proven Wound Care Solutions 
               </p>
             </div>
           </div>
@@ -76,8 +74,8 @@ const ForgotPassword = () => {
             </div>
             <div className="mt-8">
               {sent ? (
-                <div className="p-4 bg-purple-50 rounded-md">
-                  <p className="text-purple-500 text-center font-medium">
+                <div className="p-4 bg-blue-50 rounded-md">
+                  <p className="text-blue-500 text-center font-medium">
                     Password reset link sent! Please check your inbox.
                   </p>
                 </div>
@@ -95,7 +93,7 @@ const ForgotPassword = () => {
                       name="email"
                       id="email"
                       placeholder="example@example.com"
-                      className="block w-full px-4 py-2 mt-2 text-gray-600 placeholder-gray-500 bg-white border border-gray-200 rounded-md focus:border-purple-400 focus:ring-purple-400 focus:outline-none focus:ring focus:ring-opacity-40"
+                      className="block w-full px-4 py-2 mt-2 text-gray-600 placeholder-gray-500 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       required
@@ -104,7 +102,7 @@ const ForgotPassword = () => {
                   <div className="mt-6">
                     <button
                       disabled={isLoading}
-                      className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-purple-500 rounded-md hover:bg-purple-400 focus:outline-none focus:bg-purple-500 focus:ring focus:ring-purple-500 focus:ring-opacity-50 uppercase"
+                      className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-blue-500 rounded-md hover:bg-blue-400 focus:outline-none focus:bg-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 uppercase"
                       type="submit"
                     >
                       {isLoading ? "Sending..." : "Send Reset Link"}
@@ -119,7 +117,7 @@ const ForgotPassword = () => {
                 Remember your password?{" "}
                 <Link
                   to="/login"
-                  className="text-purple-600 focus:outline-none focus:underline hover:underline"
+                  className="text-blue-600 focus:outline-none focus:underline hover:underline"
                 >
                   Sign In
                 </Link>

@@ -2,6 +2,7 @@ import { createContext, useState, useEffect } from "react";
 import axios from "axios";
 import { API_BASE_URL } from "./constants";
 import axiosAuth from "./axios";
+import { jwtDecode } from "jwt-decode";
 
 export const AuthContext = createContext();
 
@@ -11,13 +12,32 @@ export const AuthProvider = ({ children }) => {
     return storedUser ? JSON.parse(storedUser) : null;
   });
 
+  // This useEffect ensures the user role is set on component mount,
+  // especially on page reload when the token is already in localStorage.
+  useEffect(() => {
+    const accessToken = localStorage.getItem("accessToken");
+    if (accessToken) {
+      try {
+        const decodedToken = jwtDecode(accessToken);
+        const storedUser = JSON.parse(localStorage.getItem("user"));
+        if (storedUser && storedUser.role !== decodedToken.role) {
+          const userWithRole = { ...storedUser, role: decodedToken.role };
+          setUser(userWithRole);
+          localStorage.setItem("user", JSON.stringify(userWithRole));
+        }
+      } catch (error) {
+        console.error("Failed to decode token on reload:", error);
+        logout();
+      }
+    }
+  }, []);
+
   const verifyToken = async (token) => {
     const axiosInstance = axiosAuth();
     try {
       const response = await axiosInstance.get(
         `${API_BASE_URL}/provider/profile/`
       );
-
       return { success: true, data: response.data };
     } catch (error) {
       console.error("Error verifying token:", error);
@@ -53,7 +73,6 @@ export const AuthProvider = ({ children }) => {
     password2,
     npiNumber
   ) => {
-    // ⬅️ Add npiNumber as a parameter
     try {
       const response = await axios.post(`${API_BASE_URL}/provider/register/`, {
         full_name: fullName,
@@ -81,15 +100,16 @@ export const AuthProvider = ({ children }) => {
         method,
       });
 
+      const { access, refresh, user: userData } = response.data;
+      const decodedToken = jwtDecode(access);
+      const userWithRole = { ...userData, role: decodedToken.role };
+
       if (response.data.mfa_required) {
-        localStorage.setItem("accessToken", response.data.access);
-        localStorage.setItem("refreshToken", response.data.refresh);
+        localStorage.setItem("accessToken", access);
+        localStorage.setItem("refreshToken", refresh);
         localStorage.setItem("session_id", response.data.session_id);
-        localStorage.setItem(
-          "user",
-          JSON.stringify({ email, verified: false })
-        );
-        setUser({ email, verified: false });
+        localStorage.setItem("user", JSON.stringify(userWithRole));
+        setUser(userWithRole);
         return {
           mfa_required: true,
           session_id: response.data.session_id,
@@ -97,12 +117,10 @@ export const AuthProvider = ({ children }) => {
         };
       }
 
-      const { access, refresh, user: userData } = response.data;
-
       localStorage.setItem("accessToken", access);
       localStorage.setItem("refreshToken", refresh);
-      localStorage.setItem("user", JSON.stringify(userData));
-      setUser(userData);
+      localStorage.setItem("user", JSON.stringify(userWithRole));
+      setUser(userWithRole);
 
       return { success: true };
     } catch (error) {
@@ -127,9 +145,10 @@ export const AuthProvider = ({ children }) => {
         }
       );
       const userData = JSON.parse(localStorage.getItem("user"));
-      userData.verified = true;
-      localStorage.setItem("user", JSON.stringify(userData));
-      setUser(userData);
+      const decodedToken = jwtDecode(accessToken);
+      const userWithRole = { ...userData, verified: true, role: decodedToken.role };
+      localStorage.setItem("user", JSON.stringify(userWithRole));
+      setUser(userWithRole);
       return { success: true };
     } catch (error) {
       return {
@@ -230,7 +249,7 @@ export const AuthProvider = ({ children }) => {
         logout,
         verifyToken,
         updatePatient,
-        deletePatient
+        deletePatient,
       }}
     >
       {children}

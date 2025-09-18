@@ -1,25 +1,12 @@
 import React, { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../../../utils/auth";
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Button,
-  TextField,
-  MenuItem,
-  Box,
-  Modal,
-} from "@mui/material";
+import { Box, Modal } from "@mui/material";
 import { format } from "date-fns";
-import { formatPhoneNumber } from "react-phone-number-input";
-import { FaEye, FaEdit, FaTrashAlt } from "react-icons/fa";
-import { FaSearch } from "react-icons/fa";
+import { FaEye, FaSearch } from "react-icons/fa";
 import FillablePdf from "../documemts/FillablePdf";
-import Notes from "../documemts/Notes";
 import PatientCard from "./PatientCard";
-import NewOrderForm from "../../orders/NewOrderForm";
 import toast from "react-hot-toast";
+import { states } from "../../../utils/data";
 
 const ivrStatusBadge = ({ status }) => {
   const colors = {
@@ -37,21 +24,18 @@ const ivrStatusBadge = ({ status }) => {
 };
 
 const Patients = () => {
-  // Added updatePatient and deletePatient to AuthContext consumption
   const { getPatients, postPatient, updatePatient, deletePatient } =
     useContext(AuthContext);
   const [patients, setPatients] = useState([]);
   const [errors, setErrors] = useState({});
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false); // For the patient details modal
   const [searchTerm, setSearchTerm] = useState("");
-  const [viewPdfModalOpen, setViewPdfModalOpen] = useState(false);
+  const [viewPdfModalOpen, setViewPdfModalOpen] = useState(false); // For the PDF modal
   const [selectedPatient, setSelectedPatient] = useState(null);
   const [ivrFilter, setIvrFilter] = useState("");
   const [patientsPerPage, setPatientsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [savePage, setSavePage] = useState(1);
-
-  // New state for editing
   const [editingPatient, setEditingPatient] = useState(null);
   const [formData, setFormData] = useState({
     first_name: "",
@@ -80,20 +64,14 @@ const Patients = () => {
 
   const formatPhoneNumberToE164 = (phone) => {
     if (!phone) return "";
-    const digitsOnly = phone.replace(/\D/g, ""); // Remove all non-digit characters
-
+    const digitsOnly = phone.replace(/\D/g, "");
     if (digitsOnly.length === 10) {
-      // Assume US number without country code
       return `+1${digitsOnly}`;
     } else if (digitsOnly.length === 11 && digitsOnly.startsWith("1")) {
-      // Assume US number with leading 1
       return `+${digitsOnly}`;
     } else if (digitsOnly.length > 11 && digitsOnly.startsWith("1")) {
-      // Too long — potentially malformed but starts with 1
       return `+${digitsOnly.slice(0, 11)}`;
     }
-
-    // Fallback (leave unchanged or return empty string)
     return `+${digitsOnly}`;
   };
 
@@ -111,7 +89,6 @@ const Patients = () => {
         newErrors.phone_number = "Phone number must be 10 digits (US format)";
       }
     }
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -175,7 +152,6 @@ const Patients = () => {
     setOpen(false);
   };
 
-  // This function now handles both adding and updating patients
   const handleSavePatient = async () => {
     setErrors({});
     if (!ValidateForm()) return;
@@ -187,18 +163,16 @@ const Patients = () => {
 
     try {
       if (editingPatient) {
-        // Handle editing
         const res = await updatePatient(editingPatient.id, newPatientData);
         if (res.success) {
           setPatients((prev) =>
             prev.map((p) => (p.id === editingPatient.id ? res.data : p))
           );
-          toast.success("Patient profile updated successfully!"); 
+          toast.success("Patient profile updated successfully!");
         } else {
           console.error("Failed to update patient:", res.error);
         }
       } else {
-        // Handle adding
         const res = await postPatient(newPatientData);
         if (res.success) {
           setPatients((prev) => [res.data, ...prev]);
@@ -213,38 +187,36 @@ const Patients = () => {
   };
 
   const handleEditPatient = (patient) => {
-  try {
-    if (!patient || typeof patient !== 'object') {
-      console.error("Invalid patient data:", patient);
-      return;
-    }
-    const sanitizedPatient = {};
-    Object.entries(formData).forEach(([key, _]) => {
-      let value = patient[key];
-      if (key === "date_of_birth") {
-        try {
-          sanitizedPatient[key] = value
-            ? format(new Date(value), "yyyy-MM-dd")
-            : "";
-        } catch (dateError) {
-          console.error("Invalid date_of_birth format:", value);
-          sanitizedPatient[key] = "";
-        }
-      } else {
-        sanitizedPatient[key] = value ?? ""; // convert null or undefined to ""
+    try {
+      if (!patient || typeof patient !== "object") {
+        console.error("Invalid patient data:", patient);
+        return;
       }
-    });
+      const sanitizedPatient = {};
+      Object.entries(formData).forEach(([key, _]) => {
+        let value = patient[key];
+        if (key === "date_of_birth") {
+          try {
+            sanitizedPatient[key] = value
+              ? format(new Date(value), "yyyy-MM-dd")
+              : "";
+          } catch (dateError) {
+            console.error("Invalid date_of_birth format:", value);
+            sanitizedPatient[key] = "";
+          }
+        } else {
+          sanitizedPatient[key] = value ?? "";
+        }
+      });
+      setFormData(sanitizedPatient);
+      setEditingPatient(patient);
+      setOpen(true);
+    } catch (error) {
+      console.error("Error in handleEditPatient:", error);
+    }
+  };
 
-    setFormData(sanitizedPatient);
-    setEditingPatient(patient);
-    setOpen(true);
-
-  } catch (error) {
-    console.error("Error in handleEditPatient:", error);
-  }
-};
-
-const handleDeletePatient = async (patientId) => {
+  const handleDeletePatient = async (patientId) => {
     if (
       window.confirm(
         "Are you sure you want to delete this patient? This action cannot be undone."
@@ -263,7 +235,7 @@ const handleDeletePatient = async (patientId) => {
     }
   };
 
-const filteredPatients = patients.filter((patient) => {
+  const filteredPatients = patients.filter((patient) => {
     const fullName =
       `${patient.first_name} ${patient.last_name} ${patient.middle_initial}`.toLowerCase();
     const medRecord = patient.medical_record_number?.toLowerCase() || "";
@@ -328,8 +300,8 @@ const filteredPatients = patients.filter((patient) => {
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
-        <div className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
-          <FaSearch />
+        <div className="absolute inset-y-0 left-0 flex items-center justify-center w-8 h-8 bg-blue-500 rounded-full">
+          <FaSearch className="text-white text-sm" />
         </div>
       </div>
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-5 gap-2 sm:gap-4 pl-1">
@@ -386,8 +358,8 @@ const filteredPatients = patients.filter((patient) => {
             key={patient.id}
             patient={patient}
             onViewPdf={handleViewPdf}
-            onEdit={handleEditPatient} // Pass the edit handler
-            onDelete={handleDeletePatient} // Pass the delete handler
+            onEdit={handleEditPatient}
+            onDelete={handleDeletePatient}
           />
         ))}
       </div>
@@ -438,6 +410,8 @@ const filteredPatients = patients.filter((patient) => {
           </svg>
         </button>
       </div>
+
+      {/* MODAL 1: For Editing/Adding Patients */}
       <Modal open={open} onClose={resetForm}>
         <Box sx={{ ...modalStyle, maxHeight: "90vh", overflowY: "auto" }}>
           <div className="bg-white rounded-2xl shadow-2xl p-8 mx-4 border border-gray-100 relative">
@@ -575,13 +549,21 @@ const filteredPatients = patients.filter((patient) => {
                   <label className="block text-sm font-medium text-gray-700">
                     State
                   </label>
-                  <input
-                    type="text"
+                  <select
                     name="state"
                     value={formData.state}
                     onChange={handleInputChange}
                     className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                  />
+                  >
+                    <option value="" disabled>
+                      Select a state
+                    </option>
+                    {states.map((stateAbbr) => (
+                      <option key={stateAbbr} value={stateAbbr}>
+                        {stateAbbr}
+                      </option>
+                    ))}
+                  </select>
                 </div>
                 <div className="w-1/3">
                   <label className="block text-sm font-medium text-gray-700">
@@ -606,7 +588,6 @@ const filteredPatients = patients.filter((patient) => {
                   placeholder="e.g. (212) 555-1212 or 212-555-1212"
                   value={formData.phone_number}
                   onChange={(e) => {
-                    // Only allow digits, spaces, parentheses, dashes
                     const input = e.target.value;
                     const cleaned = input.replace(/[^\d()-\s]/g, "");
                     setFormData((prev) => ({
@@ -769,12 +750,22 @@ const filteredPatients = patients.filter((patient) => {
           </div>
         </Box>
       </Modal>
-      <FillablePdf
-        isOpen={viewPdfModalOpen}
-        onClose={() => setViewPdfModalOpen(false)}
-        patient={selectedPatient}
-      />
+
+      {/* MODAL 2: For Viewing the PDF */}
+      <Modal open={viewPdfModalOpen} onClose={() => setViewPdfModalOpen(false)}>
+        <Box sx={{ ...modalStyle, maxHeight: "90vh", overflowY: "auto" }}>
+          <div className="bg-white rounded-2xl shadow-2xl p-8 mx-4 border border-gray-100 relative">
+            {selectedPatient && (
+              <FillablePdf
+                selectedPatientId={selectedPatient.id}
+                onClose={() => setViewPdfModalOpen(false)}
+              />
+            )}
+          </div>
+        </Box>
+      </Modal>
     </div>
   );
 };
+
 export default Patients;
