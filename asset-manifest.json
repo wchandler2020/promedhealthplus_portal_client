@@ -1,19 +1,25 @@
 {
   "files": {
-    "main.css": "/promedhealthplus_portal_client/static/css/main.d214d9c1.css",
-    "main.js": "/promedhealthplus_portal_client/static/js/main.a217c214.js",
+    "main.css": "/promedhealthplus_portal_client/static/css/main.f6e49c81.css",
+    "main.js": "/promedhealthplus_portal_client/static/js/main.1fb33385.js",
+    "static/js/977.e0f3e239.chunk.js": "/promedhealthplus_portal_client/static/js/977.e0f3e239.chunk.js",
+    "static/js/732.03a71649.chunk.js": "/promedhealthplus_portal_client/static/js/732.03a71649.chunk.js",
     "static/media/logo.png": "/promedhealthplus_portal_client/static/media/logo.6179fa6396e002912043.png",
     "static/media/login_img.jpg": "/promedhealthplus_portal_client/static/media/login_img.39474d946674fc7c005f.jpg",
     "static/media/hero_img.jpg": "/promedhealthplus_portal_client/static/media/hero_img.611390ba028b421fe5ee.jpg",
     "static/media/bg_image_01.jpg": "/promedhealthplus_portal_client/static/media/bg_image_01.adcfe6bf0a4abf90993b.jpg",
     "static/media/woundcare_bg_img.jpg": "/promedhealthplus_portal_client/static/media/woundcare_bg_img.426bb568715475c459c8.jpg",
+    "static/media/register_bg_img.jpg": "/promedhealthplus_portal_client/static/media/register_bg_img.8301235267ee7f244618.jpg",
     "static/media/default_user.jpg": "/promedhealthplus_portal_client/static/media/default_user.c0aa7f0870890e1f0df7.jpg",
+    "static/media/login_bg.jpg": "/promedhealthplus_portal_client/static/media/login_bg.476602e4d2cd7c75024d.jpg",
     "index.html": "/promedhealthplus_portal_client/index.html",
-    "main.d214d9c1.css.map": "/promedhealthplus_portal_client/static/css/main.d214d9c1.css.map",
-    "main.a217c214.js.map": "/promedhealthplus_portal_client/static/js/main.a217c214.js.map"
+    "main.f6e49c81.css.map": "/promedhealthplus_portal_client/static/css/main.f6e49c81.css.map",
+    "main.1fb33385.js.map": "/promedhealthplus_portal_client/static/js/main.1fb33385.js.map",
+    "977.e0f3e239.chunk.js.map": "/promedhealthplus_portal_client/static/js/977.e0f3e239.chunk.js.map",
+    "732.03a71649.chunk.js.map": "/promedhealthplus_portal_client/static/js/732.03a71649.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.d214d9c1.css",
-    "static/js/main.a217c214.js"
+    "static/css/main.f6e49c81.css",
+    "static/js/main.1fb33385.js"
   ]
 }
