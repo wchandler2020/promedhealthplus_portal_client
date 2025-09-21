@@ -10,21 +10,21 @@ const Dashboard = () => {
   const [openModal, setOpenModal] = useState(false);
 
   return (
-    <div className="flex-1">
+    <div className="flex-1 bg-white dark:bg-gray-900">
       <div className="px-4 sm:px-6 ml-6 font-bold">
         <button
           onClick={() => setOpenModal(true)}
           className="
-      bg-red-500 text-white 
-      py-1.5 px-3               /* small screens (default) */
-      md:py-2 md:px-4         /* medium screens */
-      lg:py-3 lg:px-6         /* large screens */
-      rounded-full shadow-lg 
-      hover:bg-red-400 
-      transition duration-300 
-      flex items-center text-xs
-      font-semibold
-    "
+            bg-red-500 text-white 
+            py-1.5 px-3               /* small screens (default) */
+            md:py-2 md:px-4         /* medium screens */
+            lg:py-3 lg:px-6         /* large screens */
+            rounded-full shadow-lg 
+            hover:bg-red-400 
+            transition duration-300 
+            flex items-center text-xs
+            font-semibold
+          "
         >
           <IoChatbubblesOutline className="text-lg mr-2" />
           Chat With Your Rep

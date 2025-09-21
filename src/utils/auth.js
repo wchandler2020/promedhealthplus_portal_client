@@ -3,35 +3,34 @@ import axios from "axios";
 import { API_BASE_URL } from "./constants";
 import axiosAuth from "./axios";
 import { jwtDecode } from "jwt-decode";
-
 export const AuthContext = createContext();
-
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(() => {
-    const storedUser = localStorage.getItem("user");
-    return storedUser ? JSON.parse(storedUser) : null;
-  });
-
-  // This useEffect ensures the user role is set on component mount,
-  // especially on page reload when the token is already in localStorage.
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const logout = () => {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    localStorage.removeItem("user");
+    setUser(null);
+  };
   useEffect(() => {
     const accessToken = localStorage.getItem("accessToken");
-    if (accessToken) {
+    const storedUser = localStorage.getItem("user");
+    if (accessToken && storedUser) {
       try {
         const decodedToken = jwtDecode(accessToken);
-        const storedUser = JSON.parse(localStorage.getItem("user"));
-        if (storedUser && storedUser.role !== decodedToken.role) {
-          const userWithRole = { ...storedUser, role: decodedToken.role };
-          setUser(userWithRole);
-          localStorage.setItem("user", JSON.stringify(userWithRole));
-        }
+        const parsedUser = JSON.parse(storedUser);
+        // Combine the stored user data with the role from the decoded token
+        const userWithRole = { ...parsedUser, role: decodedToken.role };
+        setUser(userWithRole);
+        localStorage.setItem("user", JSON.stringify(userWithRole));
       } catch (error) {
-        console.error("Failed to decode token on reload:", error);
+        console.error("Failed to decode token or parse user on reload:", error);
         logout();
       }
     }
+    setLoading(false); // Mark loading as complete after the checks
   }, []);
-
   const verifyToken = async (token) => {
     const axiosInstance = axiosAuth();
     try {
@@ -47,7 +46,6 @@ export const AuthProvider = ({ children }) => {
       };
     }
   };
-
   const sendVerificationToken = async (method = "sms") => {
     const axiosInstance = axiosAuth();
     try {
@@ -63,7 +61,6 @@ export const AuthProvider = ({ children }) => {
       };
     }
   };
-
   const register = async (
     fullName,
     email,
@@ -91,7 +88,6 @@ export const AuthProvider = ({ children }) => {
       };
     }
   };
-
   const login = async (email, password, method = "sms") => {
     try {
       const response = await axios.post(`${API_BASE_URL}/provider/token/`, {
@@ -99,11 +95,9 @@ export const AuthProvider = ({ children }) => {
         password,
         method,
       });
-
       const { access, refresh, user: userData } = response.data;
       const decodedToken = jwtDecode(access);
       const userWithRole = { ...userData, role: decodedToken.role };
-
       if (response.data.mfa_required) {
         localStorage.setItem("accessToken", access);
         localStorage.setItem("refreshToken", refresh);
@@ -116,12 +110,10 @@ export const AuthProvider = ({ children }) => {
           detail: response.data.detail,
         };
       }
-
       localStorage.setItem("accessToken", access);
       localStorage.setItem("refreshToken", refresh);
       localStorage.setItem("user", JSON.stringify(userWithRole));
       setUser(userWithRole);
-
       return { success: true };
     } catch (error) {
       return {
@@ -130,7 +122,6 @@ export const AuthProvider = ({ children }) => {
       };
     }
   };
-
   const verifyCode = async (code, method = "sms") => {
     try {
       const accessToken = localStorage.getItem("accessToken");
@@ -157,7 +148,6 @@ export const AuthProvider = ({ children }) => {
       };
     }
   };
-
   const getPatients = async () => {
     try {
       const axiosInstance = axiosAuth();
@@ -168,7 +158,6 @@ export const AuthProvider = ({ children }) => {
       return { success: false, error: error.response?.data || error };
     }
   };
-
   const postPatient = async (patientData) => {
     try {
       const axiosInstance = axiosAuth();
@@ -189,7 +178,6 @@ export const AuthProvider = ({ children }) => {
       };
     }
   };
-
   const updatePatient = async (id, patientData) => {
     try {
       const axiosInstance = axiosAuth();
@@ -210,7 +198,6 @@ export const AuthProvider = ({ children }) => {
       };
     }
   };
-
   const deletePatient = async (patientId) => {
     try {
       const axiosInstance = axiosAuth();
@@ -227,18 +214,25 @@ export const AuthProvider = ({ children }) => {
       };
     }
   };
-
-  const logout = () => {
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
-    localStorage.removeItem("user");
-    setUser(null);
+  const getSalesRepDashboardData = async () => {
+    try {
+      const axiosInstance = axiosAuth();
+      const response = await axiosInstance.get(`${API_BASE_URL}/sales-rep/dashboard/`);
+      return { success: true, data: response.data };
+    } catch (error) {
+      console.error("Failed to fetch dashboard data:", error);
+      return {
+        success: false,
+        error: error.response?.data || "Failed to fetch dashboard data",
+      };
+    }
   };
-
+  
   return (
     <AuthContext.Provider
       value={{
         user,
+        loading,
         getPatients,
         postPatient,
         setUser,
@@ -250,9 +244,10 @@ export const AuthProvider = ({ children }) => {
         verifyToken,
         updatePatient,
         deletePatient,
+        getSalesRepDashboardData,
       }}
     >
-      {children}
+      {!loading && children}
     </AuthContext.Provider>
   );
 };

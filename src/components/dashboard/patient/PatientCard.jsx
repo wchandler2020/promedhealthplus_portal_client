@@ -9,9 +9,11 @@ import NewOrderForm from "../../orders/NewOrderForm";
 
 const IVRStatusBadge = ({ status }) => {
   const colors = {
-    Approved: "bg-green-100 text-green-700",
-    Pending: "bg-yellow-100 text-yellow-700",
-    Denied: "bg-red-100 text-red-700",
+    Approved:
+      "bg-green-100 text-green-700 dark:bg-green-800 dark:text-green-200",
+    Pending:
+      "bg-yellow-100 text-yellow-700 dark:bg-yellow-800 dark:text-yellow-200",
+    Denied: "bg-red-100 text-red-700 dark:bg-red-800 dark:text-red-200",
   };
   return (
     <span
@@ -46,21 +48,21 @@ const PatientCard = ({ patient, onViewPdf, onEdit, onDelete }) => {
     return age;
   };
   return (
-    <div className="border p-4 rounded-lg border border-gray-200 bg-gray-50 shadow-sm space-y-2">
+    <div className="border p-4 rounded-lg border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 shadow-sm space-y-2 text-gray-900 dark:text-gray-200">
       <div className="flex justify-between items-center mb-4">
         <h3 className="text-lg font-semibold">
           {patient.first_name} {patient.last_name}
         </h3>
         <div className="flex items-center space-x-3">
           <FaEdit
-            className="text-gray-500 hover:text-blue-500 cursor-pointer text-base"
+            className="text-gray-500 dark:text-gray-400 hover:text-blue-500 cursor-pointer text-base"
             onClick={() => onEdit(patient)}
-            title="Edit Patient" // <-- native tooltip
+            title="Edit Patient"
           />
           <FaTrashAlt
-            className="text-gray-500 hover:text-red-500 cursor-pointer text-base"
+            className="text-gray-500 dark:text-gray-400 hover:text-red-500 cursor-pointer text-base"
             onClick={() => onDelete(patient.id)}
-            title="Delete Patient" // <-- native tooltip
+            title="Delete Patient"
           />
         </div>
       </div>
@@ -75,14 +77,17 @@ const PatientCard = ({ patient, onViewPdf, onEdit, onDelete }) => {
           IVR Status: <IVRStatusBadge status={patient.ivrStatus} />
         </strong>
       </div>
-      <div className="text-sm text-gray-700 space-y-1" style={{ marginTop: 8 }}>
+      <div
+        className="text-sm text-gray-700 dark:text-gray-300 space-y-1"
+        style={{ marginTop: 8 }}
+      >
         <p className="text-xs flex">
           <strong className="mr-1">Address:</strong> {patient.address}{" "}
           {patient.city}, {patient.state} {patient.zip_code}
         </p>
       </div>
       <div
-        className="text-sm text-gray-700 space-y-1"
+        className="text-sm text-gray-700 dark:text-gray-300 space-y-1"
         style={{ marginTop: -0.5 }}
       >
         <p className="text-xs flex">
@@ -90,7 +95,7 @@ const PatientCard = ({ patient, onViewPdf, onEdit, onDelete }) => {
         </p>
       </div>
       <div
-        className="text-sm text-gray-700 space-y-1"
+        className="text-sm text-gray-700 dark:text-gray-300 space-y-1"
         style={{ marginTop: -0.5 }}
       >
         <p className="text-xs flex">
@@ -98,7 +103,7 @@ const PatientCard = ({ patient, onViewPdf, onEdit, onDelete }) => {
         </p>
       </div>
       <div
-        className="text-sm text-gray-700 space-y-1"
+        className="text-sm text-gray-700 dark:text-gray-300 space-y-1"
         style={{ marginTop: -0.5 }}
       >
         <p className="text-xs flex">
@@ -107,18 +112,21 @@ const PatientCard = ({ patient, onViewPdf, onEdit, onDelete }) => {
         </p>
       </div>
       <div
-        className="h-[2px] w-[90%] bg-gray-200 flex m-auto opacity-550"
+        className="h-[2px] w-[90%] bg-gray-200 dark:bg-gray-700 flex m-auto opacity-550"
         style={{ marginTop: 25 }}
       ></div>
       <p className="text-sm font-semibold text-center">Insurance Information</p>
-      <div className="text-sm text-gray-700 space-y-1" style={{ marginTop: 5 }}>
+      <div
+        className="text-sm text-gray-700 dark:text-gray-300 space-y-1"
+        style={{ marginTop: 5 }}
+      >
         <p className="text-xs flex">
           <strong className="mr-1">Primary Insurance Provider :</strong>{" "}
           {patient.primary_insurance}
         </p>
       </div>
       <div
-        className="text-sm text-gray-700 space-y-1"
+        className="text-sm text-gray-700 dark:text-gray-300 space-y-1"
         style={{ marginTop: -0.5 }}
       >
         <p className="text-xs flex">
@@ -126,14 +134,17 @@ const PatientCard = ({ patient, onViewPdf, onEdit, onDelete }) => {
           {patient.primary_insurance_number}
         </p>
       </div>
-      <div className="text-sm text-gray-700 space-y-1" style={{ marginTop: 3 }}>
+      <div
+        className="text-sm text-gray-700 dark:text-gray-300 space-y-1"
+        style={{ marginTop: 3 }}
+      >
         <p className="text-xs flex">
           <strong className="mr-1">Secondary Insurance Provider:</strong>{" "}
           {patient.secondary_insurance ? patient.secondary_insurance : "N/A"}
         </p>
       </div>
       <div
-        className="text-sm text-gray-700 space-y-1"
+        className="text-sm text-gray-700 dark:text-gray-300 space-y-1"
         style={{ marginTop: -0.5 }}
       >
         <p className="text-xs flex">
@@ -143,14 +154,17 @@ const PatientCard = ({ patient, onViewPdf, onEdit, onDelete }) => {
             : "N/A"}
         </p>
       </div>
-      <div className="text-sm text-gray-700 space-y-1" style={{ marginTop: 3 }}>
+      <div
+        className="text-sm text-gray-700 dark:text-gray-300 space-y-1"
+        style={{ marginTop: 3 }}
+      >
         <p className="text-xs flex">
           <strong className="mr-1">Secondary Insurance Provider:</strong>{" "}
           {patient.tertiary_insurance ? patient.tertiary_insurance : "N/A"}
         </p>
       </div>
       <div
-        className="text-sm text-gray-700 space-y-1"
+        className="text-sm text-gray-700 dark:text-gray-300 space-y-1"
         style={{ marginTop: -0.5 }}
       >
         <p className="text-xs flex">
@@ -161,30 +175,33 @@ const PatientCard = ({ patient, onViewPdf, onEdit, onDelete }) => {
         </p>
       </div>
       <div
-        className="h-[2px] w-[90%] bg-gray-200 flex m-auto opacity-550"
+        className="h-[2px] w-[90%] bg-gray-200 dark:bg-gray-700 flex m-auto opacity-550"
         style={{ marginTop: 25 }}
       ></div>
       <p className="text-sm font-semibold text-center">Patient Documentation</p>
-      <div className="text-sm text-gray-700 space-y-1" style={{ marginTop: 5 }}>
+      <div
+        className="text-sm text-gray-700 dark:text-gray-300 space-y-1"
+        style={{ marginTop: 5 }}
+      >
         <div className="flex items-center justify-between">
           <p className="text-xs flex">
             <strong>Promed Healthcare Plus IVR</strong>
           </p>
           <div className="flex space-x-2">
             <FaEye
-              className="text-gray-500 hover:text-blue-500 cursor-pointer"
+              className="text-gray-500 dark:text-gray-400 hover:text-blue-500 cursor-pointer"
               onClick={() => onViewPdf(patient)}
             />
           </div>
         </div>
       </div>
       <div
-        className="h-[2px] w-[90%] bg-gray-200 flex m-auto opacity-550"
+        className="h-[2px] w-[90%] bg-gray-200 dark:bg-gray-700 flex m-auto opacity-550"
         style={{ marginTop: 25 }}
       ></div>
       <p className="text-sm font-semibold text-center mt-6">Patient Order</p>
       <div className="flex justify-between items-center mt-2">
-        <p className="text-xs text-gray-700">
+        <p className="text-xs text-gray-700 dark:text-gray-300">
           Place an order for this patient.
         </p>
         <div className="relative flex items-center gap-1">
@@ -193,7 +210,7 @@ const PatientCard = ({ patient, onViewPdf, onEdit, onDelete }) => {
             ${
               patient.ivrStatus === "Approved"
                 ? "bg-blue-500 text-white hover:bg-blue-600"
-                : "bg-gray-200 text-gray-500 cursor-not-allowed"
+                : "bg-gray-200 text-gray-500 cursor-not-allowed dark:bg-gray-700 dark:text-gray-400"
             }`}
             onClick={() => setOpenOrderModal(true)}
             disabled={patient.ivrStatus !== "Approved"}
@@ -207,11 +224,12 @@ const PatientCard = ({ patient, onViewPdf, onEdit, onDelete }) => {
           </button>
           {patient.ivrStatus !== "Approved" && (
             <div className="relative group">
-              <IoInformationCircleOutline className="text-xl text-red-400 font-semibold cursor-pointer" />
+              <IoInformationCircleOutline className="text-xl text-red-400 font-semibold cursor-pointer dark:text-red-300" />
               <div
                 className="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2
                 bg-white border border-gray-200 shadow-lg px-3 py-1 text-xs text-gray-500
-                rounded-xl w-max opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10 font-semibold"
+                rounded-xl w-max opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10 font-semibold
+                dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300"
               >
                 Orders can only be placed for patients with an approved IVR.
               </div>
@@ -220,7 +238,7 @@ const PatientCard = ({ patient, onViewPdf, onEdit, onDelete }) => {
         </div>
       </div>
       <div
-        className="h-[2px] w-[90%] bg-gray-200 flex m-auto opacity-550"
+        className="h-[2px] w-[90%] bg-gray-200 dark:bg-gray-700 flex m-auto opacity-550"
         style={{ marginTop: 25 }}
       ></div>
       <Notes key={patient.id} patientId={patient.id} />

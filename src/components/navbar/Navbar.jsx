@@ -3,6 +3,7 @@ import default_user_img from "../../assets/images/default_user.jpg";
 import { IoIosNotificationsOutline } from "react-icons/io";
 import { IoEyeOutline } from "react-icons/io5";
 import { IoMdLogOut } from "react-icons/io";
+import { MdDarkMode, MdLightMode } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../utils/auth";
 import NotificationModal from "./NotificationModal";
@@ -37,12 +38,11 @@ const CloseMenuIconSVG = () => (
   </svg>
 );
 
-const Navbar = () => {
+const Navbar = ({ isDarkMode, setIsDarkMode }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [notificationCount, setNotificationCount] = useState(0);
   const [notifications, setNotifications] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  const [modalContent, setModalContent] = useState(null);
   const [selectedNotification, setSelectedNotification] = useState(null);
 
   const [showDropdown, setShowDropdown] = useState(false);
@@ -50,13 +50,11 @@ const Navbar = () => {
   const [loadingProfile, setLoadingProfile] = useState(true);
   const notificationRef = useRef(null);
 
-  // const { user, logout } = useContext(AuthContext);
   const { user, logout, verifyToken } = useContext(AuthContext);
   const isAuthenticated = !!user && user.verified;
 
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const profileRef = useRef(null);
-  console.log("profile data: ", profile);
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -64,6 +62,17 @@ const Navbar = () => {
 
   const closeMobileMenu = () => {
     setIsMobileMenuOpen(false);
+  };
+
+  const toggleDarkMode = () => {
+    const newMode = !isDarkMode;
+    setIsDarkMode(newMode);
+    localStorage.setItem("darkMode", newMode);
+    if (newMode) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
   };
 
   useEffect(() => {
@@ -138,12 +147,8 @@ const Navbar = () => {
 
   function removeDuplicateMedia(url) {
     if (url && typeof url === "string") {
-      const mediaUrl = "https://promedhealthplus.blob.core.windows.net/media/";
-      const duplicatedSegment = "media/images/"; // The duplicated part
-
-      // Check for the duplicated segment in the URL
+      const duplicatedSegment = "media/images/";
       if (url.includes(duplicatedSegment)) {
-        // Replace the duplicated segment with the correct one
         return url.replace(duplicatedSegment, "images/");
       }
     }
@@ -153,14 +158,14 @@ const Navbar = () => {
   const handleNotificationClick = (notification) => {
     setSelectedNotification(notification);
     setShowModal(true);
-    markAsRead(notification.id); // Mark as read when opened
-    setShowDropdown(false); // Close the notification dropdown
+    markAsRead(notification.id);
+    setShowDropdown(false);
   };
 
   const markAsRead = async (id) => {
     try {
       const axiosInstance = axiosAuth();
-      await axiosInstance.patch(`/${id}/provider/mark-read/`); // ✅ FIXED
+      await axiosInstance.patch(`/${id}/provider/mark-read/`);
       setNotificationCount((prev) => Math.max(prev - 1, 0));
       setNotifications((prev) =>
         prev.map((n) => (n.id === id ? { ...n, is_read: true } : n))
@@ -173,7 +178,7 @@ const Navbar = () => {
   const deleteNotification = async (id) => {
     try {
       const axiosInstance = axiosAuth();
-      await axiosInstance.delete(`/${id}/provider/delete-notification/`); // ✅ FIXED
+      await axiosInstance.delete(`/${id}/provider/delete-notification/`);
       setNotifications((prev) => prev.filter((n) => n.id !== id));
       setShowModal(false);
     } catch (error) {
@@ -197,12 +202,12 @@ const Navbar = () => {
   }
 
   return (
-    <div className="bg-white px-6 sm:px-8 mt-2 mb-10">
-      <nav className="relative px-4 py-4 flex justify-between items-center bg-white">
+    <div className="bg-white dark:bg-gray-900 px-6 sm:px-8 mt-2 mb-10 transition-colors duration-500">
+      <nav className="relative px-4 py-4 flex justify-between items-center bg-white dark:bg-gray-900">
         <div className="flex items-center justify-center">
           <img src={logo} alt="" width={50} height={50} className="mr-1" />
           <Link
-            className="text-2xl sm:text-3xl font-semibold leading-none"
+            className="text-2xl sm:text-3xl font-semibold leading-none text-gray-900 dark:text-gray-100"
             to="/"
           >
             ProMed Health Plus
@@ -221,7 +226,7 @@ const Navbar = () => {
         <ul className="hidden absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 lg:flex lg:mx-auto lg:items-center lg:space-x-6">
           <li>
             <Link
-              className="text-base text-gray-800 hover:text-blue-400 font-semibold"
+              className="text-base text-gray-800 dark:text-gray-200 hover:text-blue-400 font-semibold"
               to="/"
             >
               Home
@@ -230,7 +235,7 @@ const Navbar = () => {
           {isAuthenticated && (
             <li>
               <Link
-                className="text-base text-gray-800 hover:text-blue-400 font-semibold"
+                className="text-base text-gray-800 dark:text-gray-200 hover:text-blue-400 font-semibold"
                 to="/dashboard/"
               >
                 Dashboard
@@ -239,7 +244,7 @@ const Navbar = () => {
           )}
           <li>
             <Link
-              className="text-base text-gray-800 hover:text-blue-400 font-semibold"
+              className="text-base text-gray-800 dark:text-gray-200 hover:text-blue-400 font-semibold"
               to="/about/"
             >
               About Us
@@ -247,7 +252,7 @@ const Navbar = () => {
           </li>
           <li>
             <Link
-              className="text-base text-gray-800 hover:text-blue-400 font-semibold"
+              className="text-base text-gray-800 dark:text-gray-200 hover:text-blue-400 font-semibold"
               to="/services/"
             >
               Services
@@ -255,7 +260,7 @@ const Navbar = () => {
           </li>
           <li>
             <Link
-              className="text-base text-gray-800 hover:text-blue-400 font-semibold"
+              className="text-base text-gray-800 dark:text-gray-200 hover:text-blue-400 font-semibold"
               to="/contact/"
             >
               Contact
@@ -265,12 +270,24 @@ const Navbar = () => {
 
         {isAuthenticated ? (
           <div className="hidden lg:flex items-center space-x-4">
+            {/* Updated Dark Mode Toggle for Desktop */}
+            <button
+              onClick={toggleDarkMode}
+              aria-label="Toggle Dark Mode"
+              className="p-1 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition"
+            >
+              {isDarkMode ? (
+                <MdLightMode size={20} className="text-yellow-500" />
+              ) : (
+                <MdDarkMode size={20} className="text-blue-500" />
+              )}
+            </button>
             <div
               className="relative notification-container"
               ref={notificationRef}
             >
               <IoIosNotificationsOutline
-                className="text-3xl text-gray-500 cursor-pointer font-semibold"
+                className="text-3xl text-gray-500 dark:text-gray-400 cursor-pointer font-semibold"
                 onClick={() => setShowDropdown((prev) => !prev)}
               />
               {notificationCount > 0 && (
@@ -279,8 +296,8 @@ const Navbar = () => {
                 </span>
               )}
               {showDropdown && (
-                <div className="absolute right-0 mt-2 w-64 bg-white border border-gray-200 rounded-lg shadow-lg z-50 transition-all duration-300 ease-in-out">
-                  <div className="p-3 border-b text-sm font-semibold text-gray-700 text-center">
+                <div className="absolute right-0 mt-2 w-64 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50 transition-all duration-300 ease-in-out">
+                  <div className="p-3 border-b border-gray-200 dark:border-gray-700 text-sm font-semibold text-gray-700 dark:text-gray-300 text-center">
                     Notifications
                   </div>
                   <ul className="max-h-60 overflow-y-auto">
@@ -290,22 +307,22 @@ const Navbar = () => {
                           key={notif.id}
                           onClick={() => handleNotificationClick(notif)}
                           className={`px-4 py-2 text-xs flex flex-col ${
-                            notif.is_read ? "text-gray-400" : "text-gray-700"
-                          } hover:bg-gray-100 cursor-pointer`}
+                            notif.is_read ? "text-gray-400" : "text-gray-700 dark:text-gray-300"
+                          } hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer`}
                         >
                           <div className="flex justify-between items-center">
                             <span>{notif.message}</span>
                             {notif.data && (
-                              <IoEyeOutline className="text-gray-400 text-lg ml-2" />
+                              <IoEyeOutline className="text-gray-400 dark:text-gray-500 text-lg ml-2" />
                             )}
                           </div>
-                          <span className="text-[10px] text-gray-400 mt-1 italic">
+                          <span className="text-[10px] text-gray-400 dark:text-gray-500 mt-1 italic">
                             {getTimeLabel(notif.date_created)}
                           </span>
                         </li>
                       ))
                     ) : (
-                      <li className="px-4 py-2 text-[10px] text-gray-500 text-center">
+                      <li className="px-4 py-2 text-[10px] text-gray-500 dark:text-gray-400 text-center">
                         No notifications
                       </li>
                     )}
@@ -316,11 +333,10 @@ const Navbar = () => {
             <div
               className="relative"
               onClick={() => setShowProfileDropdown(true)}
-              // onMouseLeave={() => setShowProfileDropdown(false)}
               ref={profileRef}
             >
               <div className="flex items-center space-x-2 cursor-pointer">
-                <h6 className="text-xs font-semibold text-gray-800">
+                <h6 className="text-xs font-semibold text-gray-800 dark:text-gray-200">
                   {profile?.full_name ||
                     profile?.user?.full_name ||
                     "Dr. Kara Johnson"}
@@ -339,17 +355,17 @@ const Navbar = () => {
               </div>
 
               {showProfileDropdown && (
-                <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+                <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50">
                   <Link
                     to="/profile"
-                    className="flex items-center px-4 py-2 text-[10px] text-gray-700 hover:bg-gray-100 cursor-pointer uppercase font-semibold"
+                    className="flex items-center px-4 py-2 text-[10px] text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer uppercase font-semibold"
                   >
                     <IoEyeOutline className="mr-1" />
                     View Profile
                   </Link>
                   <Link
                     onClick={logout}
-                    className="flex items-center px-4 py-2 text-[10px] text-gray-700 hover:bg-gray-100 cursor-pointer uppercase font-semibold"
+                    className="flex items-center px-4 py-2 text-[10px] text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer uppercase font-semibold"
                   >
                     <IoMdLogOut className="mr-1" />
                     Logout
@@ -360,9 +376,21 @@ const Navbar = () => {
           </div>
         ) : (
           <div className="hidden lg:flex items-center space-x-4">
+             {/* Updated Dark Mode Toggle for Desktop */}
+             <button
+              onClick={toggleDarkMode}
+              aria-label="Toggle Dark Mode"
+              className="p-1 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition"
+            >
+              {isDarkMode ? (
+                <MdLightMode size={20} className="text-yellow-500" />
+              ) : (
+                <MdDarkMode size={20} className="text-blue-500" />
+              )}
+            </button>
             <Link to="/login">
               <button className="px-4 py-2 text-sm tracking-wide text-white transition-colors duration-200 transform bg-blue-500 rounded-md hover:bg-blue-400 focus:outline-none focus:bg-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 uppercase">
-                Provider Login
+                Dashboard Login
               </button>
             </Link>
             <Link to="/register">
@@ -384,10 +412,10 @@ const Navbar = () => {
           className="navbar-backdrop fixed inset-0 bg-gray-800 opacity-25"
           onClick={closeMobileMenu}
         ></div>
-        <nav className="fixed top-0 left-0 bottom-0 flex flex-col w-5/6 max-w-sm py-6 px-6 bg-white border-r overflow-y-auto">
+        <nav className="fixed top-0 left-0 bottom-0 flex flex-col w-5/6 max-w-sm py-6 px-6 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 overflow-y-auto">
           <div className="flex items-center mb-8 justify-between">
             <Link
-              className="mr-auto text-2xl font-semibold leading-none pl-3"
+              className="mr-auto text-2xl font-semibold leading-none pl-3 text-gray-900 dark:text-gray-100"
               to="/"
             >
               ProMed Health Plus
@@ -400,42 +428,58 @@ const Navbar = () => {
           <ul>
             <li className="mb-1">
               <Link
-                className="block p-4 text-sm text-gray-800 hover:bg-blue-50 hover:text-blue-500 rounded"
+                className="block p-4 text-sm text-gray-800 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-blue-800 hover:text-blue-500 rounded"
                 to="/"
+                onClick={closeMobileMenu}
               >
                 Home
               </Link>
             </li>
             {isAuthenticated && (
-              <li className="mb-1">
-                <Link
-                  className="block p-4 text-sm text-gray-800 hover:bg-blue-50 hover:text-blue-500 rounded"
-                  to="/dashboard/"
-                >
-                  Dashboard
-                </Link>
-              </li>
+              <>
+                <li className="mb-1">
+                  <Link
+                    className="block p-4 text-sm text-gray-800 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-blue-800 hover:text-blue-500 rounded"
+                    to="/dashboard/"
+                    onClick={closeMobileMenu}
+                  >
+                    Dashboard
+                  </Link>
+                </li>
+                <li className="mb-1">
+                  <Link
+                    className="block p-4 text-sm text-gray-800 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-blue-800 hover:text-blue-500 rounded"
+                    to="/profile"
+                    onClick={closeMobileMenu}
+                  >
+                    Profile
+                  </Link>
+                </li>
+              </>
             )}
             <li className="mb-1">
               <Link
-                className="block p-4 text-sm text-gray-800 hover:bg-blue-50 hover:text-blue-500 rounded"
+                className="block p-4 text-sm text-gray-800 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-blue-800 hover:text-blue-500 rounded"
                 to="/about/"
+                onClick={closeMobileMenu}
               >
                 About Us
               </Link>
             </li>
             <li className="mb-1">
               <Link
-                className="block p-4 text-sm text-gray-800 hover:bg-blue-50 hover:text-blue-500 rounded"
+                className="block p-4 text-sm text-gray-800 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-blue-800 hover:text-blue-500 rounded"
                 to="/services/"
+                onClick={closeMobileMenu}
               >
                 Services
               </Link>
             </li>
             <li className="mb-1">
               <Link
-                className="block p-4 text-sm text-gray-800 hover:bg-blue-50 hover:text-blue-500 rounded"
+                className="block p-4 text-sm text-gray-800 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-blue-800 hover:text-blue-500 rounded"
                 to="/contact/"
+                onClick={closeMobileMenu}
               >
                 Contact
               </Link>
@@ -445,57 +489,122 @@ const Navbar = () => {
           <div className="mt-auto pt-6 flex flex-col">
             {isAuthenticated ? (
               <div className="flex flex-col space-y-4">
-                <div className="flex items-center space-x-4 justify-between">
-                  <div className="relative">
-                    <IoIosNotificationsOutline className="text-2xl text-gray-600 cursor-pointer" />
+                <div className="relative">
+                  <button
+                    onClick={() => setShowDropdown((prev) => !prev)}
+                    className="w-full px-4 py-2 text-sm tracking-wide text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-700 rounded-md transition-colors duration-200 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-50 flex items-center justify-center"
+                  >
+                    <IoIosNotificationsOutline className="text-xl mr-2" />
+                    Notifications
                     {notificationCount > 0 && (
-                      <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-semibold rounded-full h-5 w-5 flex items-center justify-center">
+                      <span className="ml-2 bg-red-500 text-white text-xs font-semibold rounded-full h-5 w-5 flex items-center justify-center">
                         {notificationCount}
                       </span>
                     )}
-                  </div>
-                  <div className="flex flex-row items-center">
-                    <h6 className="text-[12px] font-semibold text-gray-800">
-                      {profile?.full_name ||
-                        profile?.user?.full_name ||
-                        "Dr. Kara Johnson"}
-                    </h6>
-
-                    <img
-                      src={
-                        profile?.image?.startsWith("http")
-                          ? profile.image
-                          : profile?.image
-                          ? `${process.env.REACT_APP_MEDIA_URL}${profile.image}`
-                          : default_user_img
-                      }
-                      alt="User Profile"
-                      className="w-10 h-10 rounded-full object-cover object-top border border-gray-300 shadow-sm"
-                    />
-                  </div>
+                  </button>
+                  {showDropdown && (
+                    <div className="mt-2 w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50">
+                      <div className="p-3 border-b border-gray-200 dark:border-gray-700 text-sm font-semibold text-gray-700 dark:text-gray-300 text-center">
+                        Notifications
+                      </div>
+                      <ul className="max-h-60 overflow-y-auto">
+                        {notifications.length > 0 ? (
+                          notifications.map((notif) => (
+                            <li
+                              key={notif.id}
+                              onClick={() => {
+                                handleNotificationClick(notif);
+                                setShowDropdown(false);
+                              }}
+                              className={`px-4 py-2 text-xs flex flex-col ${
+                                notif.is_read ? "text-gray-400" : "text-gray-700 dark:text-gray-300"
+                              } hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer`}
+                            >
+                              <div className="flex justify-between items-center">
+                                <span>{notif.message}</span>
+                                {notif.data && (
+                                  <IoEyeOutline className="text-gray-400 dark:text-gray-500 text-lg ml-2" />
+                                )}
+                              </div>
+                              <span className="text-[10px] text-gray-400 dark:text-gray-500 mt-1 italic">
+                                {getTimeLabel(notif.date_created)}
+                              </span>
+                            </li>
+                          ))
+                        ) : (
+                          <li className="px-4 py-2 text-[10px] text-gray-500 dark:text-gray-400 text-center">
+                            No notifications
+                          </li>
+                        )}
+                      </ul>
+                    </div>
+                  )}
                 </div>
 
-                {/* 👇 New Logout button for mobile */}
+                <div className="flex items-center space-x-4">
+                  <img
+                    src={
+                      profile?.image?.startsWith("http")
+                        ? removeDuplicateMedia(profile.image)
+                        : profile?.image
+                        ? `${process.env.REACT_APP_MEDIA_URL}${profile.image}`
+                        : default_user_img
+                    }
+                    alt="User Profile"
+                    className="w-10 h-10 rounded-full object-cover object-top border border-gray-300 shadow-sm"
+                  />
+                  <h6 className="text-[12px] font-semibold text-gray-800 dark:text-gray-200">
+                    {profile?.full_name ||
+                      profile?.user?.full_name ||
+                      "Dr. Kara Johnson"}
+                  </h6>
+                </div>
+                 {/* Updated Dark Mode Toggle for Mobile */}
+                 <button
+                  onClick={toggleDarkMode}
+                  aria-label="Toggle Dark Mode"
+                  className="w-full px-4 py-2 text-sm tracking-wide text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-700 rounded-md transition-colors duration-200 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-50 flex items-center justify-center"
+                >
+                  {isDarkMode ? (
+                    <MdLightMode size={20} className="text-blue-500 mr-2" />
+                  ) : (
+                    <MdDarkMode size={20} className="text-yellow-500 mr-2" />
+                  )}
+                  Toggle Dark Mode
+                </button>
                 <button
                   onClick={() => {
                     logout();
                     closeMobileMenu();
                   }}
-                  className="w-full px-4 py-2 text-sm tracking-wide text-gray-700 border border-gray-300 rounded-md transition-colors duration-200 hover:bg-gray-100 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-50"
+                  className="w-full px-4 py-2 text-sm tracking-wide text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-700 rounded-md transition-colors duration-200 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-50"
                 >
                   Logout
                 </button>
               </div>
             ) : (
               <div className="flex flex-col space-y-4">
-                <Link to="/login">
+                 {/* Updated Dark Mode Toggle for Mobile */}
+                 <button
+                  onClick={toggleDarkMode}
+                  aria-label="Toggle Dark Mode"
+                  className="w-full px-4 py-2 text-sm tracking-wide text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-700 rounded-md transition-colors duration-200 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-50 flex items-center justify-center"
+                >
+                  {isDarkMode ? (
+                    <MdLightMode size={20} className="text-blue-500 mr-2" />
+                  ) : (
+                    <MdDarkMode size={20} className="text-yellow-500 mr-2" />
+                  )}
+                  Toggle Dark Mode
+                </button>
+                <Link to="/login" onClick={closeMobileMenu}>
                   <button className="w-full px-4 py-2 text-sm tracking-wide text-white transition-colors duration-200 transform bg-blue-500 rounded-md hover:bg-blue-400 focus:outline-none focus:bg-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 uppercase">
-                    Provider Login
+                    Dashboard Login
                   </button>
                 </Link>
-                <Link to="/register">
+                <Link to="/register" onClick={closeMobileMenu}>
                   <button className="w-full px-4 py-2 text-sm tracking-wide text-blue-500 border border-blue-500 rounded-md transition-colors duration-200 hover:bg-blue-100 focus:outline-none focus:ring focus:ring-blue-500 focus:ring-opacity-50 uppercase">
-                    Provider Register
+                    Provider Registration
                   </button>
                 </Link>
               </div>

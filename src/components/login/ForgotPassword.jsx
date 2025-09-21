@@ -1,5 +1,3 @@
-// src/components/login/ForgotPassword.jsx
-
 import React, { useState } from "react";
 import { API_BASE_URL } from "../../utils/constants";
 import axios from "axios";
@@ -32,7 +30,7 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div className="bg-white dark:bg-white">
+    <div className="bg-gray-100 dark:bg-gray-900 transition-colors duration-300">
       <div className="flex justify-center h-screen">
         <div
           className="relative hidden bg-cover lg:block lg:w-2/3"
@@ -62,20 +60,20 @@ const ForgotPassword = () => {
           </div>
         </div>
 
-        <div className="flex items-center w-full max-w-md px-6 mx-auto lg:w-2/6">
+        <div className="flex items-center w-full max-w-md px-6 mx-auto lg:w-2/6 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
           <div className="flex-1">
             <div className="text-center">
-              <p className="mt-3 text-gray-900 text-xl font-semibold uppercase">
+              <p className="mt-3 text-gray-900 dark:text-gray-100 text-xl font-semibold uppercase">
                 Forgot Your Password?
               </p>
-              <p className="mt-2 text-gray-500 text-sm">
+              <p className="mt-2 text-gray-500 dark:text-gray-300 text-sm">
                 Enter your email address to receive a password reset link.
               </p>
             </div>
             <div className="mt-8">
               {sent ? (
-                <div className="p-4 bg-blue-50 rounded-md">
-                  <p className="text-blue-500 text-center font-medium">
+                <div className="p-4 bg-blue-50 dark:bg-blue-900 rounded-md">
+                  <p className="text-blue-500 dark:text-blue-300 text-center font-medium">
                     Password reset link sent! Please check your inbox.
                   </p>
                 </div>
@@ -84,7 +82,7 @@ const ForgotPassword = () => {
                   <div>
                     <label
                       htmlFor="email"
-                      className="block mb-2 text-sm text-gray-800"
+                      className="block mb-2 text-sm text-gray-800 dark:text-gray-200"
                     >
                       Email Address
                     </label>
@@ -93,7 +91,7 @@ const ForgotPassword = () => {
                       name="email"
                       id="email"
                       placeholder="example@example.com"
-                      className="block w-full px-4 py-2 mt-2 text-gray-600 placeholder-gray-500 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
+                      className="block w-full px-4 py-2 mt-2 text-gray-600 dark:text-gray-200 placeholder-gray-500 dark:placeholder-gray-400 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-md focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       required
@@ -108,16 +106,16 @@ const ForgotPassword = () => {
                       {isLoading ? "Sending..." : "Send Reset Link"}
                     </button>
                     {error && (
-                      <p className="text-red-600 text-sm mt-2">{error}</p>
+                      <p className="text-red-600 dark:text-red-400 text-sm mt-2">{error}</p>
                     )}
                   </div>
                 </form>
               )}
-              <p className="mt-6 text-sm text-center text-gray-500">
+              <p className="mt-6 text-sm text-center text-gray-500 dark:text-gray-400">
                 Remember your password?{" "}
                 <Link
                   to="/login"
-                  className="text-blue-600 focus:outline-none focus:underline hover:underline"
+                  className="text-blue-600 dark:text-blue-400 focus:outline-none focus:underline hover:underline"
                 >
                   Sign In
                 </Link>

@@ -1,26 +1,27 @@
-import Dashboard from "./components/dashboard/Dashboard";
-import SalesRepDashboard from './components/salesRepDashboard/SalesRepDashboard'
-import Register from "./components/register/Register";
-import { Route, HashRouter, Routes, useLocation } from "react-router-dom";
+import { useEffect, useContext, useRef, useState } from "react";
+import { HashRouter, Routes, Route, useLocation } from "react-router-dom";
 import { Toaster, toast } from "react-hot-toast";
+import Dashboard from "./components/dashboard/Dashboard";
+import SalesRepDashboard from './components/salesRepDashboard/SalesRepDashboard';
+import Register from "./components/register/Register";
 import Login from "./components/login/Login";
 import Navbar from "./components/navbar/Navbar";
 import About from "./components/about/About";
 import Services from "./components/services/Services";
 import Contact from "./components/contact/Contact";
 import MFA from "./components/MFA/MFA";
-import PrivateRoute from "./utils/privateRoutes";
 import FillablePdf from "./components/dashboard/documemts/FillablePdf";
 import Home from "./components/home/Home";
 import Footer from "./components/footer/Footer";
 import ProviderProfileCard from "./components/profile/ProviderProfileCard";
-import { useContext, useEffect, useRef } from "react";
-import { AuthContext } from "./utils/auth";
-import "./App.css";
 import VerifyEmail from "./components/verifyEmail/VerifyEmail";
 import ForgotPassword from "./components/login/ForgotPassword";
 import ResetPassword from "./components/login/ResetPassword";
 import IvrForm from "./components/dashboard/patient/IvrForm";
+import DashboardWrapper from "./components/salesRepDashboard/DashboardWrapper";
+import PrivateRoute from "./utils/privateRoutes";
+import { AuthContext } from "./utils/auth";
+import "./App.css";
 
 function AppWrapper() {
   const location = useLocation();
@@ -40,7 +41,19 @@ function AppWrapper() {
   const warningTimeoutRef = useRef(null);
   const logoutTimeoutRef = useRef(null);
 
-  console.log('AUTH USER: ', user)
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  useEffect(() => {
+    const savedMode = localStorage.getItem("darkMode");
+    const isDark = savedMode === "true";
+    setIsDarkMode(isDark);
+
+    if (isDark) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }, []);
 
   useEffect(() => {
     if (!user) return;
@@ -66,8 +79,8 @@ function AppWrapper() {
     };
 
     const resetTimers = () => {
-      if (warningTimeoutRef.current) clearTimeout(warningTimeoutRef.current);
-      if (logoutTimeoutRef.current) clearTimeout(logoutTimeoutRef.current);
+      clearTimeout(warningTimeoutRef.current);
+      clearTimeout(logoutTimeoutRef.current);
 
       warningTimeoutRef.current = setTimeout(showWarning, warningDuration);
       logoutTimeoutRef.current = setTimeout(logoutAndRedirect, logoutDuration);
@@ -88,8 +101,8 @@ function AppWrapper() {
     );
 
     return () => {
-      if (warningTimeoutRef.current) clearTimeout(warningTimeoutRef.current);
-      if (logoutTimeoutRef.current) clearTimeout(logoutTimeoutRef.current);
+      clearTimeout(warningTimeoutRef.current);
+      clearTimeout(logoutTimeoutRef.current);
       activityEvents.forEach((event) =>
         window.removeEventListener(event, resetTimers)
       );
@@ -99,8 +112,10 @@ function AppWrapper() {
   return (
     <>
       <Toaster />
-      <div className="flex flex-col min-h-screen">
-        {!shouldHideNavAndFooter && <Navbar />}
+      <div className="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 flex flex-col min-h-screen transition-colors duration-300">
+        {!shouldHideNavAndFooter && (
+          <Navbar isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />
+        )}
 
         <main className="flex-grow">
           <Routes>
@@ -115,20 +130,14 @@ function AppWrapper() {
             <Route path="/about" element={<About />} />
             <Route path="/services" element={<Services />} />
             <Route path="/contact" element={<Contact />} />
-
-            {/* --- Private Routes with Role-Based Redirection --- */}
-            
-            {/* The existing Provider Dashboard route */}
             <Route
               path="/dashboard"
               element={
                 <PrivateRoute>
-                  <Dashboard />
+                  <DashboardWrapper />
                 </PrivateRoute>
               }
             />
-            
-            {/* The new Sales Rep Dashboard route */}
             <Route
               path="/sales-rep/dashboard"
               element={
@@ -137,8 +146,6 @@ function AppWrapper() {
                 </PrivateRoute>
               }
             />
-
-            {/* Other private routes */}
             <Route
               path="/profile"
               element={
