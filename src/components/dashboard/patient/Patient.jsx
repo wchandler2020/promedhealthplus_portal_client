@@ -10,9 +10,9 @@ import { states } from "../../../utils/data";
 
 const ivrStatusBadge = ({ status }) => {
   const colors = {
-    Approved: "bg-blue-100 text-blue-700",
-    Pending: "bg-yellow-100 text-yellow-700",
-    Denied: "bg-red-100 text-red-700",
+    Approved: "bg-blue-100 dark:bg-blue-800 text-blue-700 dark:text-blue-200",
+    Pending: "bg-yellow-100 dark:bg-yellow-800 text-yellow-700 dark:text-yellow-200",
+    Denied: "bg-red-100 dark:bg-red-800 text-red-700 dark:text-red-200",
   };
   return (
     <span
@@ -279,11 +279,11 @@ const Patients = () => {
   };
 
   return (
-    <div className="max-w-5xl mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
+    <div className="max-w-5xl mx-auto mt-10 p-6 bg-white dark:bg-gray-900 shadow-lg rounded-lg transition-colors duration-300">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-semibold">Patient Applications</h2>
+        <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-100">Patient Applications</h2>
         <button
-          className="border border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white px-4 py-2 rounded-md transition-all text-xs"
+          className="border border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white dark:hover:text-white dark:text-blue-400 dark:border-blue-400 dark:hover:bg-blue-500 px-4 py-2 rounded-md transition-all text-xs"
           onClick={() => {
             setEditingPatient(null);
             setOpen(true);
@@ -296,7 +296,7 @@ const Patients = () => {
         <input
           type="text"
           placeholder="Search Patients by Name or Med Record No."
-          className="w-full px-2 py-1 pl-10 text-gray-700 bg-white border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 text-sm"
+          className="w-full px-2 py-1 pl-10 text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 text-sm"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
@@ -308,7 +308,7 @@ const Patients = () => {
         <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
           <label
             htmlFor="ivr-filter"
-            className="text-xs font-medium text-gray-700"
+            className="text-xs font-medium text-gray-700 dark:text-gray-200"
           >
             Filter by IVR Status:
           </label>
@@ -316,8 +316,8 @@ const Patients = () => {
             id="ivr-filter"
             value={ivrFilter}
             onChange={(e) => setIvrFilter(e.target.value)}
-            className="bg-gray-100 text-gray-800 border border-gray-300 rounded px-2 py-1 text-xs 
-            focus:bg-gray-200 focus:outline-none focus:ring-2 
+            className="bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 border border-gray-300 dark:border-gray-600 rounded px-2 py-1 text-xs 
+            focus:bg-gray-200 dark:focus:bg-gray-600 focus:outline-none focus:ring-2 
             focus:ring-blue-500 focus:border-blue-300 transition"
           >
             <option value="">All</option>
@@ -329,7 +329,7 @@ const Patients = () => {
         <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
           <label
             htmlFor="patients-per-page"
-            className="text-xs font-medium text-gray-700"
+            className="text-xs font-medium text-gray-700 dark:text-gray-200"
           >
             Patient per page:
           </label>
@@ -340,8 +340,8 @@ const Patients = () => {
               setPatientsPerPage(Number(e.target.value));
               setCurrentPage(1);
             }}
-            className="bg-gray-100 text-gray-800 border border-gray-300 rounded px-2 py-1 text-xs 
-            focus:bg-gray-200 focus:outline-none focus:ring-2 
+            className="bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 border border-gray-300 dark:border-gray-600 rounded px-2 py-1 text-xs 
+            focus:bg-gray-200 dark:focus:bg-gray-600 focus:outline-none focus:ring-2 
             focus:ring-blue-500 focus:border-blue-300 transition"
           >
             {[5, 10, 15, 25].map((num) => (
@@ -367,7 +367,7 @@ const Patients = () => {
         <button
           onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
           disabled={currentPage === 1}
-          className="px-2 py-1 sm:px-3 sm:py-2 rounded-full border bg-gray-100 disabled:opacity-50 text-gray-700 hover:bg-gray-200 transition-colors duration-300"
+          className="px-2 py-1 sm:px-3 sm:py-2 rounded-full border bg-gray-100 dark:bg-gray-700 dark:border-gray-600 disabled:opacity-50 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-300"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -384,7 +384,7 @@ const Patients = () => {
             />
           </svg>
         </button>
-        <span className="text-sm font-medium text-gray-600 px-3 py-1 sm:px-4 sm:py-2 rounded-full border border-gray-300">
+        <span className="text-sm font-medium text-gray-600 dark:text-gray-300 px-3 py-1 sm:px-4 sm:py-2 rounded-full border border-gray-300 dark:border-gray-600">
           Page {currentPage} of {totalPages}
         </span>
         <button
@@ -392,7 +392,7 @@ const Patients = () => {
             setCurrentPage((prev) => Math.min(prev + 1, totalPages))
           }
           disabled={currentPage === totalPages}
-          className="px-2 py-1 sm:px-3 sm:py-2 rounded-full border bg-gray-100 disabled:opacity-50 text-gray-700 hover:bg-gray-200 transition-colors duration-300"
+          className="px-2 py-1 sm:px-3 sm:py-2 rounded-full border bg-gray-100 dark:bg-gray-700 dark:border-gray-600 disabled:opacity-50 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-300"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -414,10 +414,10 @@ const Patients = () => {
       {/* MODAL 1: For Editing/Adding Patients */}
       <Modal open={open} onClose={resetForm}>
         <Box sx={{ ...modalStyle, maxHeight: "90vh", overflowY: "auto" }}>
-          <div className="bg-white rounded-2xl shadow-2xl p-8 mx-4 border border-gray-100 relative">
+          <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-8 mx-4 border border-gray-100 dark:border-gray-800 relative transition-colors duration-300">
             <button
               onClick={resetForm}
-              className="absolute top-4 right-4 text-gray-500 hover:text-gray-800 transition"
+              className="absolute top-4 right-4 text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-100 transition"
               aria-label="Close"
             >
               <svg
@@ -435,10 +435,10 @@ const Patients = () => {
                 />
               </svg>
             </button>
-            <h2 className="text-3xl font-semibold text-center text-gray-800 mb-2">
+            <h2 className="text-3xl font-semibold text-center text-gray-800 dark:text-gray-100 mb-2">
               {editingPatient ? "Edit Patient" : "Add New Patient"}
             </h2>
-            <p className="text-center text-gray-500 mb-6">
+            <p className="text-center text-gray-500 dark:text-gray-400 mb-6">
               Fill out the form to{" "}
               {editingPatient
                 ? "update patient details"
@@ -454,7 +454,7 @@ const Patients = () => {
             >
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
                     First Name
                   </label>
                   <input
@@ -463,14 +463,14 @@ const Patients = () => {
                     value={formData.first_name}
                     onChange={handleInputChange}
                     required
-                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
                   />
                   {errors.first_name && (
                     <p className="text-red-500 text-sm">{errors.first_name}</p>
                   )}
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
                     Last Name
                   </label>
                   <input
@@ -479,7 +479,7 @@ const Patients = () => {
                     value={formData.last_name}
                     onChange={handleInputChange}
                     required
-                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
                   />
                   {errors.last_name && (
                     <p className="text-red-500 text-sm">{errors.last_name}</p>
@@ -488,7 +488,7 @@ const Patients = () => {
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
                     Middle Initial
                   </label>
                   <input
@@ -496,11 +496,11 @@ const Patients = () => {
                     name="middle_initial"
                     value={formData.middle_initial}
                     onChange={handleInputChange}
-                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
                   />
                 </div>
                 <div className="col-span-2">
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
                     Date of Birth
                   </label>
                   <input
@@ -509,7 +509,7 @@ const Patients = () => {
                     value={formData.date_of_birth}
                     onChange={handleInputChange}
                     required
-                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
                   />
                   {errors.date_of_birth && (
                     <p className="text-red-500 text-sm">
@@ -520,7 +520,7 @@ const Patients = () => {
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
                     Address
                   </label>
                   <input
@@ -528,11 +528,11 @@ const Patients = () => {
                     name="address"
                     value={formData.address}
                     onChange={handleInputChange}
-                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
                     City
                   </label>
                   <input
@@ -540,20 +540,20 @@ const Patients = () => {
                     name="city"
                     value={formData.city}
                     onChange={handleInputChange}
-                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
                   />
                 </div>
               </div>
               <div className="flex gap-2">
                 <div className="w-2/3">
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
                     State
                   </label>
                   <select
                     name="state"
                     value={formData.state}
                     onChange={handleInputChange}
-                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
                   >
                     <option value="" disabled>
                       Select a state
@@ -566,7 +566,7 @@ const Patients = () => {
                   </select>
                 </div>
                 <div className="w-1/3">
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
                     ZIP Code
                   </label>
                   <input
@@ -574,12 +574,12 @@ const Patients = () => {
                     name="zip_code"
                     value={formData.zip_code}
                     onChange={handleInputChange}
-                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
                   />
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
                   Phone Number
                 </label>
                 <input
@@ -595,9 +595,9 @@ const Patients = () => {
                       phone_number: cleaned,
                     }));
                   }}
-                  className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
                 />
-                <p className="text-xs text-gray-500 mt-1">
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                   Format: (212) 555-1212 or 212-555-1212 — US numbers only
                 </p>
                 {errors.phone_number && (
@@ -605,7 +605,7 @@ const Patients = () => {
                 )}
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
                   Email
                 </label>
                 <input
@@ -613,11 +613,11 @@ const Patients = () => {
                   name="email"
                   value={formData.email}
                   onChange={handleInputChange}
-                  className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
                   Medical Record Number
                 </label>
                 <input
@@ -625,15 +625,15 @@ const Patients = () => {
                   name="medical_record_number"
                   value={formData.medical_record_number}
                   onChange={handleInputChange}
-                  className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
                 />
               </div>
-              <h3 className="text-xl font-bold text-center text-gray-800 mb-2">
+              <h3 className="text-xl font-bold text-center text-gray-800 dark:text-gray-100 mb-2">
                 Insurance Information
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
                     Primary Insurance
                   </label>
                   <input
@@ -641,11 +641,11 @@ const Patients = () => {
                     name="primary_insurance"
                     value={formData.primary_insurance}
                     onChange={handleInputChange}
-                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
                     Primary Insurance Number
                   </label>
                   <input
@@ -653,13 +653,13 @@ const Patients = () => {
                     name="primary_insurance_number"
                     value={formData.primary_insurance_number}
                     onChange={handleInputChange}
-                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
                   />
                 </div>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
                     Secondary Insurance
                   </label>
                   <input
@@ -667,11 +667,11 @@ const Patients = () => {
                     name="secondary_insurance"
                     value={formData.secondary_insurance}
                     onChange={handleInputChange}
-                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
                     Secondary Insurance Number
                   </label>
                   <input
@@ -679,13 +679,13 @@ const Patients = () => {
                     name="secondary_insurance_number"
                     value={formData.secondary_insurance_number}
                     onChange={handleInputChange}
-                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
                   />
                 </div>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
                     Tertiary Insurance
                   </label>
                   <input
@@ -693,11 +693,11 @@ const Patients = () => {
                     name="tertiary_insurance"
                     value={formData.tertiary_insurance}
                     onChange={handleInputChange}
-                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
                     Tertiary Insurance Number
                   </label>
                   <input
@@ -705,15 +705,15 @@ const Patients = () => {
                     name="tertiary_insurance_number"
                     value={formData.tertiary_insurance_number}
                     onChange={handleInputChange}
-                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
                   />
                 </div>
-                <h3 className="text-xl font-bold text-center text-gray-800 mb-2">
+                <h3 className="text-xl font-bold text-center text-gray-800 dark:text-gray-100 mb-2">
                   Wound Information
                 </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
                       Wound Size (Length) in cm
                     </label>
                     <input
@@ -721,11 +721,11 @@ const Patients = () => {
                       name="wound_size_length"
                       value={formData.wound_size_length}
                       onChange={handleInputChange}
-                      className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                      className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
                       Wound Size (Width) in cm
                     </label>
                     <input
@@ -733,7 +733,7 @@ const Patients = () => {
                       name="wound_size_width"
                       value={formData.wound_size_width}
                       onChange={handleInputChange}
-                      className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                      className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
                     />
                   </div>
                 </div>
@@ -741,7 +741,7 @@ const Patients = () => {
               <div className="flex justify-end">
                 <button
                   type="submit"
-                  className="bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600 transition-all font-semibold"
+                  className="bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 transition-all font-semibold"
                 >
                   {editingPatient ? "Save Changes" : "Add Patient"}
                 </button>
@@ -754,7 +754,7 @@ const Patients = () => {
       {/* MODAL 2: For Viewing the PDF */}
       <Modal open={viewPdfModalOpen} onClose={() => setViewPdfModalOpen(false)}>
         <Box sx={{ ...modalStyle, maxHeight: "90vh", overflowY: "auto" }}>
-          <div className="bg-white rounded-2xl shadow-2xl p-8 mx-4 border border-gray-100 relative">
+          <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-8 mx-4 border border-gray-100 dark:border-gray-800 relative transition-colors duration-300">
             {selectedPatient && (
               <FillablePdf
                 selectedPatientId={selectedPatient.id}

@@ -72,15 +72,15 @@ const OrderItem = ({ item, selectedVariants = [], onVariantChange }) => {
   const selectedVariantIds = localSelections.map((entry) => entry.variantId);
 
   return (
-    <div className="border-b py-4 space-y-2">
+    <div className="border-b py-4 space-y-2 border-gray-200 dark:border-gray-700">
       <div className="flex items-center">
         <img
           src={item.image || default_item}
           alt={item.name}
-          className="w-16 h-16 rounded border object-cover mr-4"
+          className="w-16 h-16 rounded border object-cover mr-4 border-gray-200 dark:border-gray-700"
         />
         <div>
-          <h3 className="text-lg font-semibold">{item.name}</h3>
+          <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100">{item.name}</h3>
           <span
             className={`text-sm font-medium ${
               item.is_available ? "text-blue-600" : "text-red-500"
@@ -109,29 +109,29 @@ const OrderItem = ({ item, selectedVariants = [], onVariantChange }) => {
         return (
           <div key={index} className="flex gap-2 items-center">
             <select
-              className="border rounded px-2 py-1 w-full"
+              className="border rounded px-2 py-1 w-full bg-white text-black border-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600"
               value={entry.variantId}
               onChange={(e) => handleVariantChange(index, e.target.value)}
               disabled={disableRow}
             >
-              <option value="">Select Size</option>
+              <option className="bg-white text-black dark:bg-gray-700 dark:text-gray-200" value="">Select Size</option>
               {item.variants
                 .filter((variant) => !usedIds.includes(String(variant.id)))
                 .map((variant) => (
-                  <option key={variant.id} value={variant.id}>
+                  <option className="bg-white text-black dark:bg-gray-700 dark:text-gray-200" key={variant.id} value={variant.id}>
                     {variant.size} - ${variant.price}
                   </option>
                 ))}
             </select>
 
             <select
-              className="border rounded px-2 py-1 w-24"
+              className="border rounded px-2 py-1 w-24 bg-white text-black border-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600"
               value={entry.quantity}
               onChange={(e) => handleQuantityChange(index, e.target.value)}
               disabled={!entry.variantId || disableRow}
             >
               {[...Array(maxQty + 1).keys()].map((qty) => (
-                <option key={qty} value={qty}>
+                <option className="bg-white text-black dark:bg-gray-700 dark:text-gray-200" key={qty} value={qty}>
                   {qty}
                 </option>
               ))}
@@ -152,17 +152,17 @@ const OrderItem = ({ item, selectedVariants = [], onVariantChange }) => {
 
       <button
         onClick={addVariantRow}
-        className={`text-sm mt-2 ${canAddMore ? "text-blue-500" : "text-gray-400 cursor-not-allowed"}`}
+        className={`text-sm mt-2 ${canAddMore ? "text-blue-500 dark:text-blue-400" : "text-gray-400 cursor-not-allowed"}`}
         disabled={!canAddMore}
       >
         + Add Another Selection
       </button>
-      <div className="text-xs text-gray-500 mt-1">
+      <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
         Max allowed area for this product: <span className="font-semibold">{maxAllowed}</span>.&nbsp;
         Currently selected area: <span className="font-semibold">{totalSelected}</span>
       </div>
       {!canAddMore && (
-        <div className="text-xs text-red-500 mt-1">
+        <div className="text-xs text-red-500 dark:text-red-400 mt-1">
           You have reached the maximum allowed area for this product.
         </div>
       )}

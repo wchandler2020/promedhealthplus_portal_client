@@ -20,7 +20,6 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-
 // Register Chart.js components for bar charts
 ChartJS.register(
   CategoryScale,
@@ -30,7 +29,23 @@ ChartJS.register(
   Tooltip,
   Legend
 );
-
+// Helper function to format the patient's name
+const formatName = (fullName) => {
+  if (!fullName || fullName.length <= 6) {
+    return fullName;
+  }
+  const parts = fullName.split(' ');
+  const formattedParts = parts.map(part => {
+    if (part.length <= 6) {
+      return part;
+    }
+    const firstThree = part.substring(0, 3);
+    const lastThree = part.substring(part.length - 3);
+    const middleAsterisks = '*'.repeat(part.length - 6);
+    return `${firstThree}${middleAsterisks}${lastThree}`;
+  });
+  return formattedParts.join(' ');
+};
 // StatBox (simple numerical display)
 const StatBox = ({ title, current, total, icon, color }) => (
   <div className={`flex items-center p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg transition-transform transform hover:scale-105 animate-fade-in`}>
@@ -46,7 +61,6 @@ const StatBox = ({ title, current, total, icon, color }) => (
     </div>
   </div>
 );
-
 // ChartStatBox (reusable bar chart stat box)
 const ChartStatBox = ({ title, labels, data, colors }) => {
   const chartData = {
@@ -58,7 +72,6 @@ const ChartStatBox = ({ title, labels, data, colors }) => {
       },
     ],
   };
-
   const chartOptions = {
     responsive: true,
     maintainAspectRatio: false, // Ensures the chart respects its container's size
@@ -85,7 +98,6 @@ const ChartStatBox = ({ title, labels, data, colors }) => {
         }
     }
   };
-
   return (
     <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-md hover:shadow-lg transition-all">
       <div className="h-48 md:h-64"> {/* Fixed height for responsiveness on smaller screens */}
@@ -94,15 +106,12 @@ const ChartStatBox = ({ title, labels, data, colors }) => {
     </div>
   );
 };
-
 const SalesRepDashboard = () => {
   const { getSalesRepDashboardData } = useContext(AuthContext);
   const [dashboardData, setDashboardData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [expandedPatients, setExpandedPatients] = useState({});
-
-
   const getIvrStatusColor = (status) => {
     switch (status) {
       case "Approved": return "bg-green-500 text-white";
@@ -111,7 +120,6 @@ const SalesRepDashboard = () => {
       default: return "bg-gray-500 text-white";
     }
   };
-
   const getOrderStatusColor = (status) => {
     switch (status) {
       case "Delivered": return "bg-green-500 text-white";
@@ -120,7 +128,6 @@ const SalesRepDashboard = () => {
       default: return "bg-gray-500 text-white";
     }
   };
-
   useEffect(() => {
     const fetchData = async () => {
       const response = await getSalesRepDashboardData();
@@ -134,14 +141,12 @@ const SalesRepDashboard = () => {
     };
     fetchData();
   }, [getSalesRepDashboardData]);
-
   const toggleOrders = (patientId) => {
     setExpandedPatients((prev) => ({
       ...prev,
       [patientId]: !prev[patientId],
     }));
   };
-
   const exportPDF = () => {
     const input = document.getElementById("dashboard-root");
     if (!input) return;
@@ -154,7 +159,6 @@ const SalesRepDashboard = () => {
       pdf.save("SalesRepDashboard.pdf");
     });
   };
-
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-screen bg-gray-100 dark:bg-gray-900">
@@ -162,7 +166,6 @@ const SalesRepDashboard = () => {
       </div>
     );
   }
-
   if (error) {
     return (
       <div className="flex justify-center items-center min-h-screen bg-gray-100 dark:bg-gray-900">
@@ -170,7 +173,6 @@ const SalesRepDashboard = () => {
       </div>
     );
   }
-
   return (
     <div id="dashboard-root" className="bg-white dark:bg-gray-900 min-h-screen p-8 transition-colors duration-500">
       {/* Header */}
@@ -186,7 +188,6 @@ const SalesRepDashboard = () => {
           Export PDF
         </button>
       </div>
-
       {/* Stat Boxes (global) */}
       {dashboardData?.stats?.summary && (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -220,7 +221,6 @@ const SalesRepDashboard = () => {
           />
         </div>
       )}
-
       {/* Provider-Level Charts */}
       {dashboardData?.stats?.by_provider && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
@@ -251,7 +251,6 @@ const SalesRepDashboard = () => {
           ))}
         </div>
       )}
-
       <div className="space-y-8">
         {dashboardData?.providers?.map((provider) => (
           <div key={provider.id} className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
@@ -259,7 +258,6 @@ const SalesRepDashboard = () => {
               <MdOutlinePersonOutline className="mr-2 text-teal-600 text-2xl" />
               <span>Provider: {provider.full_name}</span>
             </div>
-
             {provider.patients?.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {provider.patients.map((patient) => {
@@ -267,11 +265,9 @@ const SalesRepDashboard = () => {
                     ? patient.orders
                     : patient.orders.slice(0, 3);
                   const hasMoreOrders = patient.orders.length > 3;
-
                   return (
                     <div key={patient.id} className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 shadow-sm">
-                      <p className="text-md font-bold text-gray-900 dark:text-gray-100">Patient: {patient.full_name}</p>
-
+                      <p className="text-md font-bold text-gray-900 dark:text-gray-100">Patient: {formatName(patient.full_name)}</p>
                       {/* IVRs */}
                       <div className="mt-3">
                         <h4 className="font-semibold text-gray-700 dark:text-gray-300 mb-1">IVRs:</h4>
@@ -290,7 +286,6 @@ const SalesRepDashboard = () => {
                           )}
                         </ul>
                       </div>
-
                       {/* Orders */}
                       <div className="mt-3">
                         <h4 className="font-semibold text-gray-700 dark:text-gray-300 mb-1">Orders:</h4>
@@ -311,7 +306,6 @@ const SalesRepDashboard = () => {
                             <li className="text-gray-500 dark:text-gray-400 text-sm">No orders</li>
                           )}
                         </ul>
-
                         {hasMoreOrders && (
                           <button
                             onClick={() => toggleOrders(patient.id)}
@@ -335,5 +329,4 @@ const SalesRepDashboard = () => {
     </div>
   );
 };
-
 export default SalesRepDashboard;

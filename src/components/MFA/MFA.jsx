@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useContext } from "react";
 import { AuthContext } from "../../utils/auth";
 import { useNavigate } from "react-router-dom";
 import mfa_bg_img from "../../assets/images/login_img.jpg";
+import mfa_bg_img_2 from '../../assets/images/mfa_bg_img.jpeg'
 
 const MFA = () => {
   const { verifyCode, user } = useContext(AuthContext);
@@ -65,7 +66,7 @@ const MFA = () => {
         {/* Left Side Image with Overlay */}
         <div
           className="relative hidden lg:block lg:w-2/3 bg-cover"
-          style={{ backgroundImage: `url(${mfa_bg_img})` }}
+          style={{ backgroundImage: `url(${mfa_bg_img_2})` }}
         >
           {/* Overlay for light & dark modes */}
           <div className="absolute inset-0 z-10 bg-white/60 dark:bg-gray-800/60" />

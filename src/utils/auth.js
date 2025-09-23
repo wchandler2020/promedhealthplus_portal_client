@@ -3,16 +3,20 @@ import axios from "axios";
 import { API_BASE_URL } from "./constants";
 import axiosAuth from "./axios";
 import { jwtDecode } from "jwt-decode";
+
 export const AuthContext = createContext();
+
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+
   const logout = () => {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
     localStorage.removeItem("user");
     setUser(null);
   };
+
   useEffect(() => {
     const accessToken = localStorage.getItem("accessToken");
     const storedUser = localStorage.getItem("user");
@@ -31,6 +35,7 @@ export const AuthProvider = ({ children }) => {
     }
     setLoading(false); // Mark loading as complete after the checks
   }, []);
+
   const verifyToken = async (token) => {
     const axiosInstance = axiosAuth();
     try {
@@ -46,6 +51,7 @@ export const AuthProvider = ({ children }) => {
       };
     }
   };
+
   const sendVerificationToken = async (method = "sms") => {
     const axiosInstance = axiosAuth();
     try {
@@ -61,33 +67,21 @@ export const AuthProvider = ({ children }) => {
       };
     }
   };
-  const register = async (
-    fullName,
-    email,
-    phoneNumber,
-    countryCode,
-    password,
-    password2,
-    npiNumber
-  ) => {
+  
+  // Adjusted `register` function to accept a single object as an argument.
+  const register = async (formData) => {
     try {
-      const response = await axios.post(`${API_BASE_URL}/provider/register/`, {
-        full_name: fullName,
-        email,
-        phone_number: phoneNumber,
-        country_code: countryCode,
-        password,
-        password2,
-        npi_number: npiNumber,
-      });
+      const response = await axios.post(`${API_BASE_URL}/provider/register/`, formData);
       return { success: true, data: response.data };
     } catch (error) {
+      console.error("Registration error:", error.response);
       return {
         success: false,
         error: error.response?.data || "Registration failed",
       };
     }
   };
+
   const login = async (email, password, method = "sms") => {
     try {
       const response = await axios.post(`${API_BASE_URL}/provider/token/`, {
@@ -98,6 +92,7 @@ export const AuthProvider = ({ children }) => {
       const { access, refresh, user: userData } = response.data;
       const decodedToken = jwtDecode(access);
       const userWithRole = { ...userData, role: decodedToken.role };
+
       if (response.data.mfa_required) {
         localStorage.setItem("accessToken", access);
         localStorage.setItem("refreshToken", refresh);
@@ -122,6 +117,7 @@ export const AuthProvider = ({ children }) => {
       };
     }
   };
+
   const verifyCode = async (code, method = "sms") => {
     try {
       const accessToken = localStorage.getItem("accessToken");
@@ -137,7 +133,11 @@ export const AuthProvider = ({ children }) => {
       );
       const userData = JSON.parse(localStorage.getItem("user"));
       const decodedToken = jwtDecode(accessToken);
-      const userWithRole = { ...userData, verified: true, role: decodedToken.role };
+      const userWithRole = {
+        ...userData,
+        verified: true,
+        role: decodedToken.role,
+      };
       localStorage.setItem("user", JSON.stringify(userWithRole));
       setUser(userWithRole);
       return { success: true };
@@ -148,6 +148,8 @@ export const AuthProvider = ({ children }) => {
       };
     }
   };
+  
+  // All other functions remain the same...
   const getPatients = async () => {
     try {
       const axiosInstance = axiosAuth();
@@ -217,7 +219,9 @@ export const AuthProvider = ({ children }) => {
   const getSalesRepDashboardData = async () => {
     try {
       const axiosInstance = axiosAuth();
-      const response = await axiosInstance.get(`${API_BASE_URL}/sales-rep/dashboard/`);
+      const response = await axiosInstance.get(
+        `${API_BASE_URL}/sales-rep/dashboard/`
+      );
       return { success: true, data: response.data };
     } catch (error) {
       console.error("Failed to fetch dashboard data:", error);
@@ -227,7 +231,54 @@ export const AuthProvider = ({ children }) => {
       };
     }
   };
-  
+
+  const uploadDocumentAndEmail = async (
+    documentType,
+    files,
+    recipientEmail
+  ) => {
+    try {
+      const axiosInstance = axiosAuth();
+      const formData = new FormData();
+      formData.append("document_type", documentType);
+      formData.append("recipient_email", recipientEmail);
+
+      // Append each file to the FormData object
+      files.forEach((file) => {
+        formData.append("files", file); // Use 'files' as the field name
+      });
+
+      const res = await axiosInstance.post(
+        `${API_BASE_URL}/onboarding/documents/upload/`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      return { success: true, data: res.data };
+    } catch (error) {
+      console.error("Failed to upload documents:", error);
+      return {
+        success: false,
+        error: error.response?.data || "Failed to upload documents",
+      };
+    }
+  };
+
+  const getProviderForms = async () => {
+    try {
+      const axiosInstance = axiosAuth();
+      const res = await axiosInstance.get(`${API_BASE_URL}/onboarding/forms/`);
+      return { success: true, data: res.data };
+    } catch (error) {
+      console.error("Failed to fetch provider forms:", error);
+      return { success: false, error: error.response?.data || error };
+    }
+  };
+
+
   return (
     <AuthContext.Provider
       value={{
@@ -245,6 +296,8 @@ export const AuthProvider = ({ children }) => {
         updatePatient,
         deletePatient,
         getSalesRepDashboardData,
+        uploadDocumentAndEmail,
+        getProviderForms,
       }}
     >
       {!loading && children}
