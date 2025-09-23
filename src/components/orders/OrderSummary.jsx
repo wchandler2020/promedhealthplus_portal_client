@@ -8,8 +8,8 @@ const OrderSummary = ({ selectedVariants = {}, itemsData = [], orderDate }) => {
 
       return (
         <div key={productId} className="mb-4">
-          <h4 className="font-semibold text-gray-800">{product.name}</h4>
-          <ul className="ml-4 list-disc text-gray-700 text-sm">
+          <h4 className="font-semibold text-gray-800 dark:text-gray-100">{product.name}</h4>
+          <ul className="ml-4 list-disc text-gray-700 dark:text-gray-300 text-sm">
             {variants
               .filter(({ quantity }) => quantity > 0)
               .map(({ variantId, quantity }, index) => {
@@ -31,15 +31,15 @@ const OrderSummary = ({ selectedVariants = {}, itemsData = [], orderDate }) => {
   };
 
   return (
-    <div className="mt-6 p-4 border-t">
-      <h3 className="text-sm font-semibold text-gray-800 mb-2">
-        Order By Date: <span className="text-sm font-light text-gray-800 ml-2">{orderDate}</span>
+    <div className="mt-6 p-4 border-t border-gray-200 dark:border-gray-700">
+      <h3 className="text-sm font-semibold text-gray-800 dark:text-gray-100 mb-2">
+        Order By Date: <span className="text-sm font-light text-gray-800 dark:text-gray-200 ml-2">{orderDate}</span>
       </h3>
-      <h3 className="text-xl font-semibold text-gray-800 mb-2">
+      <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-100 mb-2">
         Order Summary
       </h3>
       {Object.keys(selectedVariants).length === 0 ? (
-        <p className="text-sm text-gray-500">No items selected.</p>
+        <p className="text-sm text-gray-500 dark:text-gray-400">No items selected.</p>
       ) : (
         renderSummaryItems()
       )}

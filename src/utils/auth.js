@@ -2,14 +2,39 @@ import { createContext, useState, useEffect } from "react";
 import axios from "axios";
 import { API_BASE_URL } from "./constants";
 import axiosAuth from "./axios";
+import { jwtDecode } from "jwt-decode";
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(() => {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  const logout = () => {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    localStorage.removeItem("user");
+    setUser(null);
+  };
+
+  useEffect(() => {
+    const accessToken = localStorage.getItem("accessToken");
     const storedUser = localStorage.getItem("user");
-    return storedUser ? JSON.parse(storedUser) : null;
-  });
+    if (accessToken && storedUser) {
+      try {
+        const decodedToken = jwtDecode(accessToken);
+        const parsedUser = JSON.parse(storedUser);
+        // Combine the stored user data with the role from the decoded token
+        const userWithRole = { ...parsedUser, role: decodedToken.role };
+        setUser(userWithRole);
+        localStorage.setItem("user", JSON.stringify(userWithRole));
+      } catch (error) {
+        console.error("Failed to decode token or parse user on reload:", error);
+        logout();
+      }
+    }
+    setLoading(false); // Mark loading as complete after the checks
+  }, []);
 
   const verifyToken = async (token) => {
     const axiosInstance = axiosAuth();
@@ -17,7 +42,6 @@ export const AuthProvider = ({ children }) => {
       const response = await axiosInstance.get(
         `${API_BASE_URL}/provider/profile/`
       );
-
       return { success: true, data: response.data };
     } catch (error) {
       console.error("Error verifying token:", error);
@@ -43,29 +67,14 @@ export const AuthProvider = ({ children }) => {
       };
     }
   };
-
-  const register = async (
-    fullName,
-    email,
-    phoneNumber,
-    countryCode,
-    password,
-    password2,
-    npiNumber
-  ) => {
-    // ⬅️ Add npiNumber as a parameter
+  
+  // Adjusted `register` function to accept a single object as an argument.
+  const register = async (formData) => {
     try {
-      const response = await axios.post(`${API_BASE_URL}/provider/register/`, {
-        full_name: fullName,
-        email,
-        phone_number: phoneNumber,
-        country_code: countryCode,
-        password,
-        password2,
-        npi_number: npiNumber,
-      });
+      const response = await axios.post(`${API_BASE_URL}/provider/register/`, formData);
       return { success: true, data: response.data };
     } catch (error) {
+      console.error("Registration error:", error.response);
       return {
         success: false,
         error: error.response?.data || "Registration failed",
@@ -80,30 +89,26 @@ export const AuthProvider = ({ children }) => {
         password,
         method,
       });
+      const { access, refresh, user: userData } = response.data;
+      const decodedToken = jwtDecode(access);
+      const userWithRole = { ...userData, role: decodedToken.role };
 
       if (response.data.mfa_required) {
-        localStorage.setItem("accessToken", response.data.access);
-        localStorage.setItem("refreshToken", response.data.refresh);
+        localStorage.setItem("accessToken", access);
+        localStorage.setItem("refreshToken", refresh);
         localStorage.setItem("session_id", response.data.session_id);
-        localStorage.setItem(
-          "user",
-          JSON.stringify({ email, verified: false })
-        );
-        setUser({ email, verified: false });
+        localStorage.setItem("user", JSON.stringify(userWithRole));
+        setUser(userWithRole);
         return {
           mfa_required: true,
           session_id: response.data.session_id,
           detail: response.data.detail,
         };
       }
-
-      const { access, refresh, user: userData } = response.data;
-
       localStorage.setItem("accessToken", access);
       localStorage.setItem("refreshToken", refresh);
-      localStorage.setItem("user", JSON.stringify(userData));
-      setUser(userData);
-
+      localStorage.setItem("user", JSON.stringify(userWithRole));
+      setUser(userWithRole);
       return { success: true };
     } catch (error) {
       return {
@@ -127,9 +132,14 @@ export const AuthProvider = ({ children }) => {
         }
       );
       const userData = JSON.parse(localStorage.getItem("user"));
-      userData.verified = true;
-      localStorage.setItem("user", JSON.stringify(userData));
-      setUser(userData);
+      const decodedToken = jwtDecode(accessToken);
+      const userWithRole = {
+        ...userData,
+        verified: true,
+        role: decodedToken.role,
+      };
+      localStorage.setItem("user", JSON.stringify(userWithRole));
+      setUser(userWithRole);
       return { success: true };
     } catch (error) {
       return {
@@ -138,7 +148,8 @@ export const AuthProvider = ({ children }) => {
       };
     }
   };
-
+  
+  // All other functions remain the same...
   const getPatients = async () => {
     try {
       const axiosInstance = axiosAuth();
@@ -149,7 +160,6 @@ export const AuthProvider = ({ children }) => {
       return { success: false, error: error.response?.data || error };
     }
   };
-
   const postPatient = async (patientData) => {
     try {
       const axiosInstance = axiosAuth();
@@ -170,7 +180,6 @@ export const AuthProvider = ({ children }) => {
       };
     }
   };
-
   const updatePatient = async (id, patientData) => {
     try {
       const axiosInstance = axiosAuth();
@@ -191,7 +200,6 @@ export const AuthProvider = ({ children }) => {
       };
     }
   };
-
   const deletePatient = async (patientId) => {
     try {
       const axiosInstance = axiosAuth();
@@ -208,18 +216,74 @@ export const AuthProvider = ({ children }) => {
       };
     }
   };
-
-  const logout = () => {
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
-    localStorage.removeItem("user");
-    setUser(null);
+  const getSalesRepDashboardData = async () => {
+    try {
+      const axiosInstance = axiosAuth();
+      const response = await axiosInstance.get(
+        `${API_BASE_URL}/sales-rep/dashboard/`
+      );
+      return { success: true, data: response.data };
+    } catch (error) {
+      console.error("Failed to fetch dashboard data:", error);
+      return {
+        success: false,
+        error: error.response?.data || "Failed to fetch dashboard data",
+      };
+    }
   };
+
+  const uploadDocumentAndEmail = async (
+    documentType,
+    files,
+    recipientEmail
+  ) => {
+    try {
+      const axiosInstance = axiosAuth();
+      const formData = new FormData();
+      formData.append("document_type", documentType);
+      formData.append("recipient_email", recipientEmail);
+
+      // Append each file to the FormData object
+      files.forEach((file) => {
+        formData.append("files", file); // Use 'files' as the field name
+      });
+
+      const res = await axiosInstance.post(
+        `${API_BASE_URL}/onboarding/documents/upload/`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      return { success: true, data: res.data };
+    } catch (error) {
+      console.error("Failed to upload documents:", error);
+      return {
+        success: false,
+        error: error.response?.data || "Failed to upload documents",
+      };
+    }
+  };
+
+  const getProviderForms = async () => {
+    try {
+      const axiosInstance = axiosAuth();
+      const res = await axiosInstance.get(`${API_BASE_URL}/onboarding/forms/`);
+      return { success: true, data: res.data };
+    } catch (error) {
+      console.error("Failed to fetch provider forms:", error);
+      return { success: false, error: error.response?.data || error };
+    }
+  };
+
 
   return (
     <AuthContext.Provider
       value={{
         user,
+        loading,
         getPatients,
         postPatient,
         setUser,
@@ -230,10 +294,13 @@ export const AuthProvider = ({ children }) => {
         logout,
         verifyToken,
         updatePatient,
-        deletePatient
+        deletePatient,
+        getSalesRepDashboardData,
+        uploadDocumentAndEmail,
+        getProviderForms,
       }}
     >
-      {children}
+      {!loading && children}
     </AuthContext.Provider>
   );
 };

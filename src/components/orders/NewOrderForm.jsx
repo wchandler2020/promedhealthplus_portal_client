@@ -218,17 +218,131 @@ const NewOrderForm = ({ open, onClose, patient }) => {
           alignItems="center"
           height="200px"
         >
-          <CircularProgress />
+          <CircularProgress sx={{ color: 'primary.main' }} />
         </Box>
       );
     }
     if (error) {
-      return <div className="p-4 text-red-500 text-center">{error}</div>;
+      return <div className="p-4 text-red-500 dark:text-red-400 text-center">{error}</div>;
     }
 
-    switch (step) {
-      case 1:
-        return (
+    // Define common styles for MUI components
+    const commonTextFieldSx = {
+      '& .MuiOutlinedInput-root': {
+        '& fieldset': {
+          borderColor: 'divider',
+        },
+        '&:hover fieldset': {
+          borderColor: 'primary.main',
+        },
+        '&.Mui-focused fieldset': {
+          borderColor: 'primary.main',
+        },
+        backgroundColor: 'white',
+        color: 'black',
+        '@media (prefers-color-scheme: dark)': {
+            backgroundColor: '#1f2937',
+            color: '#e5e7eb',
+        },
+      },
+      '& .MuiInputLabel-root': {
+        color: 'gray',
+        '@media (prefers-color-scheme: dark)': {
+            color: '#9ca3af',
+        },
+      },
+    };
+
+    const commonSelectSx = {
+      '& .MuiOutlinedInput-notchedOutline': {
+        borderColor: 'divider',
+        '@media (prefers-color-scheme: dark)': {
+            borderColor: '#374151',
+        },
+      },
+      '&:hover .MuiOutlinedInput-notchedOutline': {
+        borderColor: 'primary.main',
+      },
+      '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+        borderColor: 'primary.main',
+      },
+      backgroundColor: 'white',
+      color: 'black',
+      '@media (prefers-color-scheme: dark)': {
+        backgroundColor: '#1f2937',
+        color: '#e5e7eb',
+      },
+      '& .MuiSvgIcon-root': {
+        color: 'text.secondary',
+        '@media (prefers-color-scheme: dark)': {
+            color: '#9ca3af',
+        },
+      },
+    };
+
+    const commonMenuItemSx = {
+        backgroundColor: 'white',
+        color: 'black',
+        '@media (prefers-color-scheme: dark)': {
+            backgroundColor: '#1f2937',
+            color: '#e5e7eb',
+        },
+        '&:hover': {
+            backgroundColor: 'action.hover',
+            '@media (prefers-color-scheme: dark)': {
+                backgroundColor: '#374151',
+            },
+        },
+    }
+
+    const commonDatePickerSx = {
+      '& .MuiInputBase-root': {
+        backgroundColor: 'white',
+        '@media (prefers-color-scheme: dark)': {
+            backgroundColor: '#1f2937',
+        },
+      },
+      '& .MuiSvgIcon-root': {
+        color: 'text.secondary',
+        '@media (prefers-color-scheme: dark)': {
+            color: '#9ca3af',
+        },
+      },
+    };
+
+    return (
+      <Box sx={{
+        // Global style for a consistent look on all MUI components inside this Box
+        '& .MuiTextField-root, & .MuiSelect-root': {
+          '& .MuiInputBase-input, & .MuiSelect-select': {
+            backgroundColor: 'white',
+            color: 'black',
+            '@media (prefers-color-scheme: dark)': {
+              backgroundColor: '#1f2937',
+              color: '#e5e7eb',
+            },
+          },
+          '& .MuiInputLabel-root': {
+            color: 'gray',
+            '@media (prefers-color-scheme: dark)': {
+                color: '#9ca3af',
+            },
+          },
+          '& .MuiOutlinedInput-notchedOutline': {
+            borderColor: 'divider',
+            '@media (prefers-color-scheme: dark)': {
+                borderColor: '#4b5563',
+            },
+          },
+          '&:hover .MuiOutlinedInput-notchedOutline': {
+            borderColor: 'primary.main',
+          },
+          '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+            borderColor: 'primary.main',
+          },
+        }
+      }}>
+        {step === 1 && (
           <div className="p-4 space-y-4">
             <TextField
               fullWidth
@@ -236,6 +350,7 @@ const NewOrderForm = ({ open, onClose, patient }) => {
               name="providerName"
               value={formData.providerName}
               onChange={handleFormChange}
+              sx={commonTextFieldSx}
             />
             <TextField
               fullWidth
@@ -243,6 +358,7 @@ const NewOrderForm = ({ open, onClose, patient }) => {
               name="facilityName"
               value={formData.facilityName}
               onChange={handleFormChange}
+              sx={commonTextFieldSx}
             />
             <TextField
               fullWidth
@@ -250,6 +366,7 @@ const NewOrderForm = ({ open, onClose, patient }) => {
               name="providerPhoneNumber"
               value={formData.providerPhoneNumber}
               onChange={handleFormChange}
+              sx={commonTextFieldSx}
             />
             <TextField
               fullWidth
@@ -257,11 +374,11 @@ const NewOrderForm = ({ open, onClose, patient }) => {
               name="providerAddress"
               value={formData.providerAddress}
               onChange={handleFormChange}
+              sx={commonTextFieldSx}
             />
           </div>
-        );
-      case 2:
-        return (
+        )}
+        {step === 2 && (
           <div className="p-4 space-y-4">
             <TextField
               fullWidth
@@ -269,6 +386,7 @@ const NewOrderForm = ({ open, onClose, patient }) => {
               name="patientName"
               value={formData.patientName}
               onChange={handleFormChange}
+              sx={commonTextFieldSx}
             />
             <TextField
               fullWidth
@@ -276,6 +394,7 @@ const NewOrderForm = ({ open, onClose, patient }) => {
               name="patientDob"
               value={formData.patientDob}
               onChange={handleFormChange}
+              sx={commonTextFieldSx}
             />
             <TextField
               fullWidth
@@ -283,6 +402,7 @@ const NewOrderForm = ({ open, onClose, patient }) => {
               name="patientPhoneNumber"
               value={formData.patientPhoneNumber}
               onChange={handleFormChange}
+              sx={commonTextFieldSx}
             />
             <TextField
               fullWidth
@@ -290,21 +410,22 @@ const NewOrderForm = ({ open, onClose, patient }) => {
               name="patientAddress"
               value={formData.patientAddress}
               onChange={handleFormChange}
+              sx={commonTextFieldSx}
             />
             <Select
               fullWidth
               name="patientCountry"
               value={formData.patientCountry || "United States"}
               onChange={handleFormChange}
+              sx={commonSelectSx}
             >
-              <MenuItem value="United States">United States</MenuItem>
+              <MenuItem value="United States" sx={commonMenuItemSx}>United States</MenuItem>
             </Select>
           </div>
-        );
-      case 3:
-        return (
+        )}
+        {step === 3 && (
           <div className="p-4">
-            <h3 className="text-xl font-semibold text-gray-700 mb-4">
+            <h3 className="text-xl font-semibold text-gray-700 dark:text-gray-200 mb-4">
               Order Items
             </h3>
             {itemsData.length > 0 ? (
@@ -316,24 +437,15 @@ const NewOrderForm = ({ open, onClose, patient }) => {
                   onVariantChange={(variants) =>
                     handleItemVariantChange(item.id, variants)
                   }
+                  selectSx={commonSelectSx}
+                  menuItemSx={commonMenuItemSx}
                 />
               ))
             ) : (
-              <p className="text-gray-500 text-center">
+              <p className="text-gray-500 dark:text-gray-400 text-center">
                 No available products found.
               </p>
             )}
-            {/* <TextField
-              fullWidth
-              label="Requested Delivery Date"
-              name="deliveryDate"
-              type="date"
-              InputLabelProps={{ shrink: true }}
-              value={formData.deliveryDate}
-              onChange={handleFormChange}
-              // ADD THIS min ATTRIBUTE
-              inputProps={{ min: new Date().toISOString().split("T")[0] }}
-            /> */}
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <DatePicker
                 label="Requested Delivery Date"
@@ -351,8 +463,10 @@ const NewOrderForm = ({ open, onClose, patient }) => {
                   textField: {
                     fullWidth: true,
                     variant: "outlined",
+                    sx: commonTextFieldSx
                   },
                 }}
+                sx={commonDatePickerSx}
               />
             </LocalizationProvider>
 
@@ -362,10 +476,9 @@ const NewOrderForm = ({ open, onClose, patient }) => {
               orderDate={formData.deliveryDate}
             />
           </div>
-        );
-      default:
-        return null;
-    }
+        )}
+      </Box>
+    );
   };
 
   const hasSelectedItems = Object.values(selectedVariants).some((variants) =>
@@ -388,19 +501,25 @@ const NewOrderForm = ({ open, onClose, patient }) => {
           bgcolor: "white",
           boxShadow: 24,
           p: 4,
+          // Dark mode styles
+          '@media (prefers-color-scheme: dark)': {
+            bgcolor: '#1f2937',
+            boxShadow: '0 8px 30px rgba(0, 0, 0, 0.6)',
+          },
         }}
+        className="bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 transition-colors duration-300"
       >
         <div className="relative">
           <button
             onClick={onClose}
-            className="absolute top-0 right-0 text-gray-500 hover:text-gray-800 transition"
+            className="absolute top-0 right-0 text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-100 transition"
           >
             ✕
           </button>
-          <h2 className="text-3xl font-semibold text-center text-gray-800 mb-2">
+          <h2 className="text-3xl font-semibold text-center text-gray-800 dark:text-gray-100 mb-2">
             New Order
           </h2>
-          <p className="text-center text-gray-500 mb-6">
+          <p className="text-center text-gray-500 dark:text-gray-400 mb-6">
             Complete the steps to place a new order.
           </p>
           {renderStepContent()}
@@ -408,7 +527,7 @@ const NewOrderForm = ({ open, onClose, patient }) => {
             <button
               onClick={() => setStep((prev) => prev - 1)}
               disabled={step === 1}
-              className="px-3 py-2 rounded bg-gray-100 disabled:opacity-50"
+              className="px-3 py-2 rounded bg-gray-100 disabled:opacity-50 dark:bg-gray-700 text-gray-700 dark:text-gray-200"
             >
               Back
             </button>
@@ -425,6 +544,20 @@ const NewOrderForm = ({ open, onClose, patient }) => {
                 variant="contained"
                 className="bg-blue-600 text-white font-bold"
                 disabled={!hasSelectedItems}
+                sx={{
+                  '&.Mui-disabled': {
+                    bgcolor: 'grey.500',
+                    color: 'grey.300',
+                    cursor: 'not-allowed',
+                  },
+                  '&:not(.Mui-disabled)': {
+                    bgcolor: 'primary.main',
+                    color: 'white',
+                    '&:hover': {
+                      bgcolor: 'primary.dark'
+                    }
+                  }
+                }}
               >
                 Place Order
               </Button>

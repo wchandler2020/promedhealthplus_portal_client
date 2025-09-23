@@ -8,6 +8,7 @@ import {
   IconButton,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import { useTheme } from "@mui/material/styles";
 
 const ProviderProfileEdit = ({
   profile,
@@ -24,6 +25,7 @@ const ProviderProfileEdit = ({
     facility: "",
     facility_phone_number: "",
   });
+  const theme = useTheme();
 
   useEffect(() => {
     if (profile) {
@@ -52,13 +54,22 @@ const ProviderProfileEdit = ({
     <Box
       component="form"
       onSubmit={handleSubmit}
-      sx={{ p: 4, width: "100%", maxWidth: 600, mx: "auto" }}
+      sx={{
+        p: 4,
+        width: "100%",
+        maxWidth: 600,
+        mx: "auto",
+        bgcolor: theme.palette.mode === "dark" ? "grey.900" : "background.paper",
+        color: theme.palette.text.primary,
+        borderRadius: "8px",
+        boxShadow: 3,
+      }}
     >
       <Box display="flex" justifyContent="space-between" alignItems="center">
-        <Typography variant="h5" gutterBottom>
+        <Typography variant="h5" gutterBottom color="text.primary">
           Edit Profile
         </Typography>
-        <IconButton onClick={onCancel}>
+        <IconButton onClick={onCancel} sx={{ color: theme.palette.text.primary }}>
           <CloseIcon />
         </IconButton>
       </Box>
@@ -69,60 +80,59 @@ const ProviderProfileEdit = ({
         </Typography>
       )}
 
-      <TextField
-        fullWidth
-        label="Full Name"
-        name="full_name"
-        value={formData.full_name}
-        onChange={handleChange}
-        margin="normal"
-      />
-      <TextField
-        fullWidth
-        label="City"
-        name="city"
-        value={formData.city}
-        onChange={handleChange}
-        margin="normal"
-      />
-      <TextField
-        fullWidth
-        label="Country"
-        name="country"
-        value={formData.country}
-        onChange={handleChange}
-        margin="normal"
-      />
-      <TextField
-        fullWidth
-        label="Role"
-        name="role"
-        value={formData.role}
-        onChange={handleChange}
-        margin="normal"
-      />
-      <TextField
-        fullWidth
-        label="Facility"
-        name="facility"
-        value={formData.facility}
-        onChange={handleChange}
-        margin="normal"
-      />
-      <TextField
-        fullWidth
-        label="Facility Phone Number"
-        name="facility_phone_number"
-        value={formData.facility_phone_number}
-        onChange={handleChange}
-        margin="normal"
-      />
+      {[
+        { label: "Full Name", name: "full_name" },
+        { label: "City", name: "city" },
+        { label: "Country", name: "country" },
+        { label: "Role", name: "role" },
+        { label: "Facility", name: "facility" },
+        { label: "Facility Phone Number", name: "facility_phone_number" },
+      ].map(({ label, name }) => (
+        <TextField
+          key={name}
+          fullWidth
+          label={label}
+          name={name}
+          value={formData[name]}
+          onChange={handleChange}
+          margin="normal"
+          variant="outlined"
+          sx={{
+            "& .MuiInputBase-root": {
+              backgroundColor: theme.palette.mode === "dark" ? theme.palette.grey[800] : theme.palette.background.paper,
+              color: theme.palette.text.primary,
+            },
+            "& .MuiOutlinedInput-notchedOutline": {
+              borderColor: theme.palette.mode === "dark" ? theme.palette.grey[700] : theme.palette.grey[400],
+            },
+            "&:hover .MuiOutlinedInput-notchedOutline": {
+              borderColor: theme.palette.mode === "dark" ? theme.palette.grey[500] : theme.palette.primary.main,
+            },
+            "& .Mui-focused .MuiOutlinedInput-notchedOutline": {
+              borderColor: theme.palette.primary.main,
+            },
+            "& .MuiInputLabel-root": {
+              color: theme.palette.text.secondary,
+            },
+          }}
+        />
+      ))}
+
       <Box sx={{ mt: 3, display: "flex", justifyContent: "flex-end", gap: 2 }}>
         <Button onClick={onCancel} variant="outlined" color="secondary">
           Cancel
         </Button>
-        <Button type="submit" variant="contained" color="primary" disabled={isLoading}>
-          {isLoading ? <CircularProgress size={24} /> : "Save Changes"}
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          disabled={isLoading}
+        >
+          {isLoading ? (
+            <CircularProgress size={24} sx={{ color: "white" }} />
+          ) : (
+            "Save Changes"
+          )}
         </Button>
       </Box>
     </Box>

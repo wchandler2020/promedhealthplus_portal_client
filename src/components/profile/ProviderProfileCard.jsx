@@ -57,7 +57,7 @@ const ProviderProfileCard = () => {
     try {
       const axiosInstance = axiosAuth();
       const response = await axiosInstance.put("/provider/profile/", updatedData);
-      setProfile(response.data);http://localhost:3000/login#/
+      setProfile(response.data);
       setIsEditing(false);
       toast.success('Profile edit is complete.')
     } catch (err) {
@@ -71,7 +71,7 @@ const ProviderProfileCard = () => {
   // Date formatting and other derived state should be done here
   if (loading)
     return (
-      <div className="text-center mt-20 text-gray-600 text-lg">Loading...</div>
+      <div className="text-center mt-20 text-gray-600 dark:text-gray-400 text-lg">Loading...</div>
     );
   if (!profile)
     return (
@@ -84,18 +84,22 @@ const ProviderProfileCard = () => {
   const profileCreatedDate = fullDateTime ? fullDateTime.split("T")[0] : "N/A";
   
   const formatUSPhoneNumber = (number) => {
-    if (!number || typeof number !== "string" || number.length !== 10) {
+    if (!number || typeof number !== "string") {
       return number;
     }
-    const areaCode = number.substring(0, 3);
-    const middle = number.substring(3, 6);
-    const last = number.substring(6, 10);
+    const cleanNumber = number.replace(/\D/g, "");
+    if (cleanNumber.length !== 10) {
+      return number; // Return original if not a 10-digit number
+    }
+    const areaCode = cleanNumber.substring(0, 3);
+    const middle = cleanNumber.substring(3, 6);
+    const last = cleanNumber.substring(6, 10);
     return `(${areaCode}) ${middle} - ${last}`;
   };
 
   return (
-    <div className="min-h-screen bg-white flex items-center justify-center py-10 px-4">
-      <div className="bg-white shadow-2xl rounded-2xl overflow-hidden w-full max-w-3xl">
+    <div className="min-h-screen bg-white dark:bg-gray-900 flex items-center justify-center py-10 px-4 transition-colors duration-500">
+      <div className="bg-white dark:bg-gray-800 shadow-2xl rounded-2xl overflow-hidden w-full max-w-3xl transition-colors duration-500">
         <div className="relative flex flex-col items-center py-10 px-6">
           <img
             src={
@@ -104,12 +108,12 @@ const ProviderProfileCard = () => {
                 : `${process.env.REACT_APP_MEDIA_URL}${profile.image}`
             }
             alt="Profile"
-            className="w-32 h-32 rounded-full border-4 border-white shadow-lg transform transition-transform duration-300 hover:scale-105 mt-2 object-cover object-top"
+            className="w-32 h-32 rounded-full border-4 border-white dark:border-gray-700 shadow-lg transform transition-transform duration-300 hover:scale-105 mt-2 object-cover object-top"
           />
-          <h1 className="mt-4 text-2xl md:text-3xl font-extrabold text-gray-800">
+          <h1 className="mt-4 text-2xl md:text-3xl font-extrabold text-gray-800 dark:text-gray-200">
             {profile.full_name || profile.user?.full_name}
           </h1>
-          <p className="text-sm text-gray-500 mt-1">
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
             {profile.city}, {profile.country}
           </p>
           <button
@@ -119,40 +123,47 @@ const ProviderProfileCard = () => {
             <FaRegEdit />
             Edit Profile
           </button>
-          <div className="flex mt-8 w-full border-t border-gray-200 items-center"></div>
+          <div className="flex mt-8 w-full border-t border-gray-200 dark:border-gray-700 items-center"></div>
           <div className="flex mt-8 w-full">
-            <h3 className="text-base font-bold text-gray-700 mr-2">Role: </h3>
-            <p className="text-gray-600 text-base">
+            <h3 className="text-base font-bold text-gray-700 dark:text-gray-300 mr-2">Role: </h3>
+            <p className="text-gray-600 dark:text-gray-400 text-base">
               {profile.role || "No Role provided."}
             </p>
           </div>
           <div className="flex mt-2 w-full">
-            <h3 className="text-base font-bold text-gray-700 mr-2">Facility: </h3>
-            <p className="text-gray-600 text-base">
+            <h3 className="text-base font-bold text-gray-700 dark:text-gray-300 mr-2">Facility: </h3>
+            <p className="text-gray-600 dark:text-gray-400 text-base">
               {profile.facility || "No Facility provided."}
             </p>
           </div>
           <div className="flex mt-2 w-full">
-            <h3 className="text-base font-bold text-gray-700 mr-2">
+            <h3 className="text-base font-bold text-gray-700 dark:text-gray-300 mr-2">
               Facility Phone Number:{" "}
             </h3>
-            <p className="text-gray-600 text-base">
+            <p className="text-gray-600 dark:text-gray-400 text-base">
               {formatUSPhoneNumber(profile.facility_phone_number) ||
                 "No facility phone number provided."}
             </p>
           </div>
           <div className="flex mt-2 w-full">
-            <h3 className="text-base font-bold text-gray-700 mr-2">
+            <h3 className="text-base font-bold text-gray-700 dark:text-gray-300 mr-2">
               Date Joined:{" "}
             </h3>
-            <p className="text-gray-600 text-base">
+            <p className="text-gray-600 dark:text-gray-400 text-base">
               {profileCreatedDate || "No date provided."}
             </p>
           </div>
         </div>
       </div>
       <Modal open={isEditing} onClose={handleCancelEdit}>
-        <Box sx={style}>
+        <Box sx={{
+          ...style,
+          bgcolor: 'background.paper', // Or a custom dark mode color
+          '@media (prefers-color-scheme: dark)': {
+            bgcolor: '#1f2937', // dark:bg-gray-800
+            color: '#d1d5db',   // dark:text-gray-300
+          },
+        }}>
           <ProviderProfileEdit
             profile={profile}
             onSave={handleSave}

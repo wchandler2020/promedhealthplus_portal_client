@@ -1,5 +1,3 @@
-// components/OrderHistory.js
-
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { API_BASE_URL } from "../../../utils/constants";
@@ -28,21 +26,30 @@ const OrderHistory = ({ activationFilter }) => {
   const orderStatus = (status) => {
     const lowerStatus = String(status).toLowerCase();
 
-    if (lowerStatus === "accepted") {
-      return "text-green-300";
-    } else if (lowerStatus === "pending") {
-      return "text-yellow-300";
-    } else if (lowerStatus === "delivered") {
-      return "text-green-300";
-    } else if (lowerStatus === "cancelled") {
-      return "text-red-300";
-    } else if (lowerStatus === "refunded") {
-      return "text-orange-300";
-    } else if (lowerStatus === "failed") {
-      return "text-red-300";
-    } else {
-      return "text-gray-300"; // fallback/default
-    }
+    // Using a dynamic class approach for dark mode
+    const baseColors = {
+      accepted: "text-green-500",
+      pending: "text-yellow-500",
+      delivered: "text-green-500",
+      cancelled: "text-red-500",
+      refunded: "text-orange-500",
+      failed: "text-red-500",
+      default: "text-gray-500",
+    };
+
+    const darkColors = {
+      accepted: "dark:text-green-400",
+      pending: "dark:text-yellow-400",
+      delivered: "dark:text-green-400",
+      cancelled: "dark:text-red-400",
+      refunded: "dark:text-orange-400",
+      failed: "dark:text-red-400",
+      default: "dark:text-gray-400",
+    };
+
+    const colorKey = baseColors[lowerStatus] ? lowerStatus : "default";
+
+    return `${baseColors[colorKey]} ${darkColors[colorKey]}`;
   };
 
   const downloadInvoice = async (orderId) => {
@@ -107,7 +114,7 @@ const OrderHistory = ({ activationFilter }) => {
   console.log("Filtered Order history:", filteredHistory);
   if (filteredHistory.length === 0) {
     return (
-      <div className="text-gray-500 text-center mt-6">
+      <div className="text-gray-500 dark:text-gray-400 text-center mt-6">
         No order history yet.
       </div>
     );
@@ -119,19 +126,30 @@ const OrderHistory = ({ activationFilter }) => {
       {filteredHistory.map((patient) => (
         <div key={patient.id} className="bg-gray-50 p-4 rounded shadow">
           <h3 className="text-lg font-semibold text-gray-800 mb-2">
+
+    <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-6 mb-8 bg-gray-50 dark:bg-gray-800">
+      {history.map((patient) => (
+        <div
+          key={patient.id}
+          className="bg-gray-50 dark:bg-gray-700 p-4 rounded shadow"
+        >
+          <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">
+
             {patient.first_name} {patient.last_name}
           </h3>
 
           {patient.orders.length === 0 ? (
-            <p className="text-gray-500 text-sm">No orders.</p>
+            <p className="text-gray-500 dark:text-gray-400 text-sm">
+              No orders.
+            </p>
           ) : (
             <ul className="space-y-4">
               {patient.orders.map((order) => (
                 <li
                   key={order.id}
-                  className="border border-gray-200 p-4 rounded bg-white flex-1 justify-center"
+                  className="border border-gray-200 dark:border-gray-600 p-4 rounded bg-white dark:bg-gray-800 flex-1 justify-center"
                 >
-                  <div className="text-sm font-medium text-gray-700">
+                  <div className="text-sm font-medium text-gray-700 dark:text-gray-300">
                     Order #{order.id} •{" "}
                     <span className={orderStatus(order.status)}>
                       {order.status}
@@ -142,7 +160,7 @@ const OrderHistory = ({ activationFilter }) => {
                   <div className="mt-2">
                     <button
                       onClick={() => downloadInvoice(order.id)}
-                      className="text-xs text-blue-400 hover:underline cursor-pointer bg-transparent border-none p-0"
+                      className="text-xs text-blue-400 dark:text-blue-300 hover:underline cursor-pointer bg-transparent border-none p-0"
                     >
                       View Invoice PDF
                     </button>
@@ -156,7 +174,7 @@ const OrderHistory = ({ activationFilter }) => {
             <div className="mt-3 text-right">
               <button
                 onClick={() => handleToggle(patient.id)}
-                className="text-blue-600 hover:underline text-xs"
+                className="text-blue-600 dark:text-blue-400 hover:underline text-xs"
               >
                 {expandedPatients[patient.id] ? "Show Less" : "Show All Orders"}
               </button>

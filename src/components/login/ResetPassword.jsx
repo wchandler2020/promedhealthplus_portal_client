@@ -56,7 +56,7 @@ const ResetPassword = () => {
   };
 
   return (
-    <div className="bg-white dark:bg-white">
+    <div className="bg-gray-100 dark:bg-gray-900 transition-colors duration-300">
       <div className="flex justify-center h-screen">
         <div
           className="relative hidden bg-cover lg:block lg:w-2/3"
@@ -80,25 +80,23 @@ const ResetPassword = () => {
                 ProMed Health Plus
               </h2>
               <p className="max-w-xl mt-3 text-white text-xl font-light">
-                Lorem ipsum dolor sit, amet consectetur adipisicing elit. In
-                autem ipsa, nulla laboriosam dolores, repellendus perferendis
-                libero suscipit nam temporibus molestiae
+                Improving Patient Outcomes with Proven Wound Care Solutions 
               </p>
             </div>
           </div>
         </div>
 
-        <div className="flex items-center w-full max-w-md px-6 mx-auto lg:w-2/6">
+        <div className="flex items-center w-full max-w-md px-6 mx-auto lg:w-2/6 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
           <div className="flex-1">
             <div className="text-center">
-              <p className="mt-3 text-gray-900 text-xl font-semibold uppercase">
+              <p className="mt-3 text-gray-900 dark:text-gray-100 text-xl font-semibold uppercase">
                 Reset Your Password
               </p>
             </div>
             <div className="mt-8">
               {success ? (
-                <div className="p-4 bg-green-50 rounded-md">
-                  <p className="text-green-600 text-center font-medium">
+                <div className="p-4 bg-green-50 dark:bg-green-900 rounded-md">
+                  <p className="text-green-600 dark:text-green-300 text-center font-medium">
                     Password reset successful! Redirecting to login...
                   </p>
                 </div>
@@ -107,7 +105,7 @@ const ResetPassword = () => {
                   <div>
                     <label
                       htmlFor="password"
-                      className="block mb-2 text-sm text-gray-800"
+                      className="block mb-2 text-sm text-gray-800 dark:text-gray-200"
                     >
                       New Password
                     </label>
@@ -117,69 +115,69 @@ const ResetPassword = () => {
                       placeholder="Create a new password"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      className="block w-full px-4 py-2 mt-2 text-gray-600 placeholder-gray-500 bg-white border border-gray-200 rounded-md focus:border-purple-400 focus:ring-purple-400 focus:outline-none focus:ring focus:ring-opacity-40"
+                      className="block w-full px-4 py-2 mt-2 text-gray-600 dark:text-gray-200 placeholder-gray-500 dark:placeholder-gray-400 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-md focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
                       required
                     />
 
                     <div className="mt-2 text-sm">
-                      <ul className="list-disc list-inside text-gray-500">
+                      <ul className="list-disc list-inside text-gray-500 dark:text-gray-400">
                         <li
                           className={
                             hasMinLength
-                              ? "text-green-600 flex items-center"
+                              ? "text-green-600 dark:text-green-400 flex items-center"
                               : "flex items-center"
                           }
                         >
                           {hasMinLength && (
-                            <IoCheckmarkCircleOutline className="mr-1 text-green-600" />
+                            <IoCheckmarkCircleOutline className="mr-1 text-green-600 dark:text-green-400" />
                           )}
                           Minimum 12 characters
                         </li>
                         <li
                           className={
                             hasUppercase
-                              ? "text-green-600 flex items-center"
+                              ? "text-green-600 dark:text-green-400 flex items-center"
                               : "flex items-center"
                           }
                         >
                           {hasUppercase && (
-                            <IoCheckmarkCircleOutline className="mr-1 text-green-600" />
+                            <IoCheckmarkCircleOutline className="mr-1 text-green-600 dark:text-green-400" />
                           )}
                           At least two uppercase letters
                         </li>
                         <li
                           className={
                             hasLowercase
-                              ? "text-green-600 flex items-center"
+                              ? "text-green-600 dark:text-green-400 flex items-center"
                               : "flex items-center"
                           }
                         >
                           {hasLowercase && (
-                            <IoCheckmarkCircleOutline className="mr-1 text-green-600" />
+                            <IoCheckmarkCircleOutline className="mr-1 text-green-600 dark:text-green-400" />
                           )}
                           At least two lowercase letters
                         </li>
                         <li
                           className={
                             hasNumbers
-                            ? "text-green-600 flex items-center"
+                            ? "text-green-600 dark:text-green-400 flex items-center"
                               : "flex items-center"
                           }
                         >
                           {hasNumbers && (
-                            <IoCheckmarkCircleOutline className="mr-1 text-green-600" />
+                            <IoCheckmarkCircleOutline className="mr-1 text-green-600 dark:text-green-400" />
                           )}
                           At least two numbers
                         </li>
                         <li
                           className={
                             hasSpecialChars
-                              ? "text-green-600 flex items-center"
+                              ? "text-green-600 dark:text-green-400 flex items-center"
                               : "flex items-center"
                           }
                         >
                           {hasSpecialChars && (
-                            <IoCheckmarkCircleOutline className="mr-1 text-green-600" />
+                            <IoCheckmarkCircleOutline className="mr-1 text-green-600 dark:text-green-400" />
                           )}
                           At least two special characters
                         </li>
@@ -190,7 +188,7 @@ const ResetPassword = () => {
                   <div className="mt-4">
                     <label
                       htmlFor="confirmPassword"
-                      className="block mb-2 text-sm text-gray-800"
+                      className="block mb-2 text-sm text-gray-800 dark:text-gray-200"
                     >
                       Confirm New Password
                     </label>
@@ -200,7 +198,7 @@ const ResetPassword = () => {
                       placeholder="Repeat your password"
                       value={password2}
                       onChange={(e) => setPassword2(e.target.value)}
-                      className="block w-full px-4 py-2 mt-2 text-gray-600 placeholder-gray-500 bg-white border border-gray-200 rounded-md focus:border-purple-400 focus:ring-purple-400 focus:outline-none focus:ring focus:ring-opacity-40"
+                      className="block w-full px-4 py-2 mt-2 text-gray-600 dark:text-gray-200 placeholder-gray-500 dark:placeholder-gray-400 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-md focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
                       required
                     />
                   </div>
@@ -213,19 +211,19 @@ const ResetPassword = () => {
                         checked={showPassword}
                         onChange={() => setShowPassword(!showPassword)}
                       />
-                      <span className="ml-2 text-sm text-gray-600">Show Password</span>
+                      <span className="ml-2 text-sm text-gray-600 dark:text-gray-400">Show Password</span>
                     </label>
                   </div>
 
                   <div className="mt-6">
                     <button
                       disabled={!allValid || isLoading}
-                      className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-purple-500 rounded-md hover:bg-purple-400 focus:outline-none focus:bg-purple-500 focus:ring focus:ring-purple-500 focus:ring-opacity-50 uppercase"
+                      className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-blue-500 rounded-md hover:bg-blue-400 focus:outline-none focus:bg-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 uppercase"
                       type="submit"
                     >
                       {isLoading ? "Resetting..." : "Reset Password"}
                     </button>
-                    {error && <p className="text-red-600 text-sm mt-2">{error}</p>}
+                    {error && <p className="text-red-600 dark:text-red-400 text-sm mt-2">{error}</p>}
                   </div>
                 </form>
               )}
