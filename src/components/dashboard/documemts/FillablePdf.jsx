@@ -27,8 +27,19 @@ const FillablePdf = ({ selectedPatientId, onClose }) => {
     }
   };
 
+  const loadBlankPdf = () => {
+    // const blankPdfUrl = `${process.env.REACT_APP_PYTHONANYWHERE_API}/onboarding/forms/blank/IVR_FORM/`;
+    const blankPdfUrl = `${process.env.REACT_APP_API_URL}/onboarding/forms/blank/IVR_FORM/`;
+    setPdfUrl(blankPdfUrl);
+    setFormData(null);
+    setLoading(false);
+  };
+
+  const handleGeneratePdf = async () => {
+
   // The main function to load an existing PDF or generate a new one.
   const loadOrCreatePdf = async () => {
+
     if (!selectedPatientId) {
       setLoading(false);
       return;

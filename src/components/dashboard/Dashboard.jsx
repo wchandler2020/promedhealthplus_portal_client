@@ -8,6 +8,7 @@ import ContactModal from "../contact/contactModal/ContactModal";
 
 const Dashboard = () => {
   const [openModal, setOpenModal] = useState(false);
+  const [activationFilter, setActivationFilter] = useState("Activated");
 
   return (
     <div className="flex-1 bg-white dark:bg-gray-900">
@@ -38,13 +39,13 @@ const Dashboard = () => {
                 grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
       >
         <div className="h-full">
-          <Patients />
+          <Patients activationFilter={activationFilter} setActivationFilter={setActivationFilter} />
         </div>
         <div className="h-full">
           <Documents />
         </div>
         <div className="h-full">
-          <OrderManagement />
+          <OrderManagement activationFilter={activationFilter}/>
         </div>
       </div>
     </div>
