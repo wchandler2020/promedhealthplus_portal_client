@@ -13,7 +13,6 @@ const OrderHistory = ({ activationFilter }) => {
 
   const fetchHistory = async () => {
     try {
-      const token = localStorage.getItem("token");
       const axiosInstance = axiosAuth();
       const res = await axiosInstance.get(`/provider/order-history/`);
       setHistory(res.data);
@@ -25,8 +24,6 @@ const OrderHistory = ({ activationFilter }) => {
 
   const orderStatus = (status) => {
     const lowerStatus = String(status).toLowerCase();
-
-    // Using a dynamic class approach for dark mode
     const baseColors = {
       accepted: "text-green-500",
       pending: "text-yellow-500",
@@ -36,7 +33,6 @@ const OrderHistory = ({ activationFilter }) => {
       failed: "text-red-500",
       default: "text-gray-500",
     };
-
     const darkColors = {
       accepted: "dark:text-green-400",
       pending: "dark:text-yellow-400",
@@ -46,9 +42,7 @@ const OrderHistory = ({ activationFilter }) => {
       failed: "dark:text-red-400",
       default: "dark:text-gray-400",
     };
-
     const colorKey = baseColors[lowerStatus] ? lowerStatus : "default";
-
     return `${baseColors[colorKey]} ${darkColors[colorKey]}`;
   };
 
@@ -61,17 +55,13 @@ const OrderHistory = ({ activationFilter }) => {
           responseType: "blob",
         }
       );
-
-      // Validate the Content-Type header
       const contentType = response.headers["content-type"];
       if (!contentType || !contentType.includes("application/pdf")) {
-        // Optionally: read the blob content for debugging
         const text = await response.data.text();
         console.error("Expected PDF, got:", text);
         alert("Failed to download PDF. Server returned unexpected content.");
         return;
       }
-
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement("a");
       link.href = url;
@@ -108,10 +98,8 @@ const OrderHistory = ({ activationFilter }) => {
       }
     }
   };
-  // Filtering out deactivated patients orders
-  console.log("Activation Filter:", activationFilter);
+
   const filteredHistory = history.filter(patient => patient.activate_Account === activationFilter);
-  console.log("Filtered Order history:", filteredHistory);
   if (filteredHistory.length === 0) {
     return (
       <div className="text-gray-500 dark:text-gray-400 text-center mt-6">
@@ -120,24 +108,13 @@ const OrderHistory = ({ activationFilter }) => {
     );
   }
 
-
   return (
-    <div className="border border-gray-200 rounded-lg p-6 mb-8 bg-gray-50">
-      {filteredHistory.map((patient) => (
-        <div key={patient.id} className="bg-gray-50 p-4 rounded shadow">
-          <h3 className="text-lg font-semibold text-gray-800 mb-2">
-
     <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-6 mb-8 bg-gray-50 dark:bg-gray-800">
-      {history.map((patient) => (
-        <div
-          key={patient.id}
-          className="bg-gray-50 dark:bg-gray-700 p-4 rounded shadow"
-        >
+      {filteredHistory.map((patient) => (
+        <div key={patient.id} className="bg-gray-50 dark:bg-gray-700 p-4 rounded shadow">
           <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">
-
             {patient.first_name} {patient.last_name}
           </h3>
-
           {patient.orders.length === 0 ? (
             <p className="text-gray-500 dark:text-gray-400 text-sm">
               No orders.
@@ -156,7 +133,6 @@ const OrderHistory = ({ activationFilter }) => {
                     </span>{" "}
                     • {new Date(order.created_at).toLocaleDateString()}
                   </div>
-
                   <div className="mt-2">
                     <button
                       onClick={() => downloadInvoice(order.id)}
@@ -169,7 +145,6 @@ const OrderHistory = ({ activationFilter }) => {
               ))}
             </ul>
           )}
-
           {patient.orders.length >= 5 && (
             <div className="mt-3 text-right">
               <button

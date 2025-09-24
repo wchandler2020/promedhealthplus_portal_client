@@ -1,5 +1,3 @@
-// src/components/dashboard/documemts/FillablePdf.jsx
-
 import React, { useState, useEffect } from "react";
 import authRequest from "../../../utils/axios";
 import toast from "react-hot-toast";
@@ -28,18 +26,19 @@ const FillablePdf = ({ selectedPatientId, onClose }) => {
   };
 
   const loadBlankPdf = () => {
-    // const blankPdfUrl = `${process.env.REACT_APP_PYTHONANYWHERE_API}/onboarding/forms/blank/IVR_FORM/`;
-    const blankPdfUrl = `${process.env.REACT_APP_API_URL}/onboarding/forms/blank/IVR_FORM/`;
+    const blankPdfUrl = `${process.env.REACT_APP_PYTHONANYWHERE_API}/onboarding/forms/blank/IVR_FORM/`;
+    // const blankPdfUrl = `${process.env.REACT_APP_API_URL}/onboarding/forms/blank/IVR_FORM/`;
     setPdfUrl(blankPdfUrl);
     setFormData(null);
     setLoading(false);
   };
 
   const handleGeneratePdf = async () => {
+    // This is where you would put the content of handleGeneratePdf if needed.
+  };
 
   // The main function to load an existing PDF or generate a new one.
   const loadOrCreatePdf = async () => {
-
     if (!selectedPatientId) {
       setLoading(false);
       return;
@@ -48,7 +47,6 @@ const FillablePdf = ({ selectedPatientId, onClose }) => {
     setLoading(true);
     try {
       const axiosInstance = authRequest();
-
       // Attempt to fetch existing data and blob path.
       const dataResponse = await axiosInstance.get(
         `/onboarding/forms/prepopulate-data/`,
@@ -71,7 +69,6 @@ const FillablePdf = ({ selectedPatientId, onClose }) => {
           return;
         }
       }
-
       // If no existing form, generate a new one.
       const pdfResponse = await axiosInstance.get(
         `/onboarding/forms/prepopulate/`,
@@ -112,7 +109,7 @@ const FillablePdf = ({ selectedPatientId, onClose }) => {
       });
       const newBlobPath = response.data.completed_form_blob_path;
 
-      // Start a polling loop to wait for the blob to exist.
+      // Start a polling loop to wait for the blob to be created.
       const pollInterval = setInterval(async () => {
         try {
           const axiosInstance = authRequest();
@@ -188,20 +185,20 @@ const FillablePdf = ({ selectedPatientId, onClose }) => {
       {!loading && pdfUrl && (
         <>
           <h3>Preview:</h3>
-          <iframe
+          {/* <iframe
             src={pdfUrl}
             width="100%"
             height="600px"
             title="PDF Preview"
             style={{ border: "1px solid #ccc" }}
-          ></iframe>
-          {/* <iframe
+          ></iframe> */}
+          <iframe
             src='https://form.jotform.com/252594933893069'
             width="100%"
             height="600px"
             title="PDF Preview"
             style={{ border: "1px solid #ccc" }}
-          ></iframe> */}
+          ></iframe>
           <div className="mt-4 flex gap-4">
             <a
               href={pdfUrl}

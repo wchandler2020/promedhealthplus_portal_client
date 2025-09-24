@@ -25,8 +25,7 @@ const ivrStatusBadge = ({ status }) => {
 
 const Patients = ({ activationFilter, setActivationFilter }) => {
   // Added updatePatient and deletePatient to AuthContext consumptio
-  
-const Patients = () => {
+
   const { getPatients, postPatient, updatePatient, deletePatient } =
     useContext(AuthContext);
   const [patients, setPatients] = useState([]);
@@ -238,8 +237,6 @@ const Patients = () => {
     }
   };
 
-const filteredPatients = patients.filter((patient) => {
-
   const filteredPatients = patients.filter((patient) => {
     const fullName =
       `${patient.first_name} ${patient.last_name} ${patient.middle_initial}`.toLowerCase();
@@ -311,7 +308,7 @@ const filteredPatients = patients.filter((patient) => {
         </div>
       </div>
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-5 gap-2 sm:gap-4 pl-1">
-        <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4">
           <label
             htmlFor="ivr-filter"
             className="text-xs font-medium text-gray-700 dark:text-gray-200"
@@ -331,10 +328,41 @@ const filteredPatients = patients.filter((patient) => {
             <option value="Pending">Pending</option>
             <option value="Denied">Denied</option>
           </select>
-          <select value={activationFilter} onChange={e => setActivationFilter(e.target.value)} className="border rounded px-2 py-1">
-            <option value={"Activated"}>Activated</option>
-            <option value={"Deactivated"}>Deactivated</option>
-          </select>
+
+          {/* New Radio Button Group for Activation Filter */}
+          <div className="flex items-center gap-2 border border-gray-300 dark:border-gray-600 rounded px-2 py-1 text-xs bg-gray-100 dark:bg-gray-700">
+            {/* <label className="text-gray-700 dark:text-gray-200 font-medium">
+              Active:
+            </label> */}
+            <div className="flex items-center gap-2">
+              <label htmlFor="active-activated" className="text-gray-700 dark:text-gray-200 text-xs">
+                <input
+                  type="radio"
+                  id="active-activated"
+                  name="activation-filter"
+                  value="Activated"
+                  checked={activationFilter === "Activated"}
+                  onChange={e => setActivationFilter(e.target.value)}
+                  className="mr-1 text-blue-500 focus:ring-blue-500 dark:focus:ring-blue-400 "
+                />
+                Activated
+              </label>
+              <label htmlFor="active-deactivated" className="text-gray-700 dark:text-gray-200 text-xs">
+                <input
+                  type="radio"
+                  id="active-deactivated"
+                  name="activation-filter"
+                  value="Deactivated"
+                  checked={activationFilter === "Deactivated"}
+                  onChange={e => setActivationFilter(e.target.value)}
+                  className="mr-1 text-blue-500 focus:ring-blue-500 dark:focus:ring-blue-400"
+                />
+                Deactivated
+              </label>
+            </div>
+          </div>
+          {/* End Radio Button Group */}
+
         </div>
         <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
           <label
@@ -538,12 +566,8 @@ const filteredPatients = patients.filter((patient) => {
                     name="address"
                     value={formData.address}
                     onChange={handleInputChange}
-
                     required
-                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
-
                     className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
-
                   />
                 </div>
                 <div>
@@ -555,12 +579,8 @@ const filteredPatients = patients.filter((patient) => {
                     name="city"
                     value={formData.city}
                     onChange={handleInputChange}
-
                     required
-                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
-
                     className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
-
                   />
                 </div>
               </div>
@@ -573,11 +593,7 @@ const filteredPatients = patients.filter((patient) => {
                     name="state"
                     value={formData.state}
                     onChange={handleInputChange}
-
                     required
-                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                  />
-
                     className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
                   >
                     <option value="" disabled>
@@ -589,7 +605,6 @@ const filteredPatients = patients.filter((patient) => {
                       </option>
                     ))}
                   </select>
-
                 </div>
                 <div className="w-1/3">
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
@@ -600,12 +615,8 @@ const filteredPatients = patients.filter((patient) => {
                     name="zip_code"
                     value={formData.zip_code}
                     onChange={handleInputChange}
-
                     required
-                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
-
                     className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
-
                   />
                 </div>
               </div>
@@ -739,14 +750,13 @@ const filteredPatients = patients.filter((patient) => {
                     className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
                   />
                 </div>
-
               </div>
-              <h3 className="text-xl font-bold text-center text-gray-800 mb-2">
+              <h3 className="text-xl font-bold text-center text-gray-800 dark:text-gray-100 mb-2">
                 Wound Information
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
                     Wound Size (Length) in cm
                   </label>
                   <input
@@ -755,11 +765,11 @@ const filteredPatients = patients.filter((patient) => {
                     value={formData.wound_size_length}
                     onChange={handleInputChange}
                     required
-                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
                     Wound Size (Width) in cm
                   </label>
                   <input
@@ -768,46 +778,23 @@ const filteredPatients = patients.filter((patient) => {
                     value={formData.wound_size_width}
                     onChange={handleInputChange}
                     required
-                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
                   />
-
-                <h3 className="text-xl font-bold text-center text-gray-800 dark:text-gray-100 mb-2">
-                  Wound Information
-                </h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
-                      Wound Size (Length) in cm
-                    </label>
-                    <input
-                      type="text"
-                      name="wound_size_length"
-                      value={formData.wound_size_length}
-                      onChange={handleInputChange}
-                      className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
-                      Wound Size (Width) in cm
-                    </label>
-                    <input
-                      type="text"
-                      name="wound_size_width"
-                      value={formData.wound_size_width}
-                      onChange={handleInputChange}
-                      className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
-                    />
-                  </div>
-
                 </div>
               </div>
-              <div className="flex justify-end">
+              <div className="flex justify-end mt-6 space-x-4">
+                <button
+                  type="button"
+                  onClick={resetForm}
+                  className="px-6 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+                >
+                  Cancel
+                </button>
                 <button
                   type="submit"
-                  className="bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 transition-all font-semibold"
+                  className="px-6 py-2 bg-blue-600 rounded-md text-white font-semibold hover:bg-blue-700 transition"
                 >
-                  {editingPatient ? "Save Changes" : "Add Patient"}
+                  Save Patient
                 </button>
               </div>
             </form>
@@ -815,17 +802,13 @@ const filteredPatients = patients.filter((patient) => {
         </Box>
       </Modal>
 
-      {/* MODAL 2: For Viewing the PDF */}
+      {/* MODAL 2: For Viewing Fillable PDF */}
       <Modal open={viewPdfModalOpen} onClose={() => setViewPdfModalOpen(false)}>
-        <Box sx={{ ...modalStyle, maxHeight: "90vh", overflowY: "auto" }}>
-          <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-8 mx-4 border border-gray-100 dark:border-gray-800 relative transition-colors duration-300">
-            {selectedPatient && (
-              <FillablePdf
-                selectedPatientId={selectedPatient.id}
-                onClose={() => setViewPdfModalOpen(false)}
-              />
-            )}
-          </div>
+        <Box sx={modalStyle}>
+          <FillablePdf
+            selectedPatientId={selectedPatient ? selectedPatient.id : null}
+            onClose={() => setViewPdfModalOpen(false)}
+          />
         </Box>
       </Modal>
     </div>
