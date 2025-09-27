@@ -1,6 +1,8 @@
 import React, { useState, useContext } from "react";
 import { AuthContext } from "../../utils/auth";
 import { useNavigate, Link } from "react-router-dom";
+// 1. Import motion
+import { motion } from "framer-motion"; 
 import login_bg_img_2 from "../../assets/images/login_bg.jpg";
 import { IoArrowBack } from "react-icons/io5";
 
@@ -30,51 +32,101 @@ const Login = () => {
     setIsLoading(false);
   };
 
-  return (
-    <div className="bg-white dark:bg-gray-900 transition-colors duration-300">
-      <div className="flex justify-center h-screen relative">
-        {/* Back arrow visible on all screen sizes */}
-        <Link
-          to="/"
-          className="absolute top-6 left-6 z-50 p-2 bg-black/60 hover:bg-black/80 text-white rounded-full shadow-lg transition duration-300"
-          title="Back to Home"
-        >
-          <IoArrowBack size={24} />
-        </Link>
+  // --- Framer Motion Variants ---
 
-        {/* Left image panel (only shown on large screens) */}
-        <div
+  // For the left (image) panel, slides in from the left
+  const imagePanelVariants = {
+    hidden: { x: "-100vw" },
+    visible: {
+      x: 0,
+      transition: { type: "spring", stiffness: 50, delay: 0.1 },
+    },
+  };
+
+  // For the right (login form) panel, fades and slides in from the right
+  const formPanelVariants = {
+    hidden: { opacity: 0, x: 50 },
+    visible: {
+      opacity: 1,
+      x: 0,
+      transition: { type: "spring", stiffness: 50, delay: 0.3 },
+    },
+  };
+
+  // For the content within the form (staggered entrance)
+  const contentVariants = {
+    hidden: { opacity: 0, y: 10 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.4 } },
+  };
+
+  return (
+    <div className="bg-white dark:bg-gray-900 transition-colors duration-500">
+      <div className="flex justify-center h-screen relative">
+        
+        {/* Back arrow - Ensured rounded-full is present */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.8, duration: 0.5 }}
+          className="absolute top-6 left-6 z-50"
+        >
+          <Link
+            to="/"
+            className="p-3 bg-blue-700/80 hover:bg-blue-700 text-white rounded-full shadow-xl transition duration-300 backdrop-blur-sm flex justify-center items-center"
+            title="Back to Home"
+          >
+            <IoArrowBack size={24} />
+          </Link>
+        </motion.div>
+
+        {/* Left image panel (only shown on large screens) - now uses motion */}
+        <motion.div
           className="relative hidden bg-cover lg:block lg:w-2/3"
           style={{ backgroundImage: `url(${login_bg_img_2})` }}
+          initial="hidden"
+          animate="visible"
+          variants={imagePanelVariants}
         >
-          <div className="absolute inset-0 z-0 bg-white/60 dark:bg-gray-800/60"></div>
+          {/* Darker, professional overlay */}
+          <div className="absolute inset-0 z-0 bg-gray-900/60"></div>
+          
           <div className="flex items-center h-full px-20 relative z-20">
             <div>
-              <h2 className="text-5xl font-semibold text-gray-800 dark:text-white">
-                ProMed Health Plus
+              <h2 className="text-5xl font-extrabold text-white drop-shadow-lg">
+                ProMed Health <span className="text-blue-400">Plus</span>
               </h2>
-              <p className="max-w-xl mt-3 text-gray-600 dark:text-gray-300 text-xl font-light">
+              <p className="max-w-xl mt-3 text-gray-200 text-xl font-light drop-shadow">
                 Improving Patient Outcomes with Proven Wound Care Solutions
               </p>
             </div>
           </div>
-        </div>
+        </motion.div>
 
-        {/* Right login panel */}
-        <div className="flex items-center w-full max-w-md px-6 mx-auto lg:w-2/6 bg-white dark:bg-gray-900 rounded-lg">
+        {/* Right login panel - now uses motion for entrance */}
+        <motion.div
+          className="flex items-center w-full max-w-md px-6 mx-auto lg:w-2/6 bg-white dark:bg-gray-900 rounded-lg"
+          initial="hidden"
+          animate="visible"
+          variants={formPanelVariants}
+        >
           <div className="flex-1">
             <div className="text-center">
-              <p className="mt-3 text-gray-900 dark:text-gray-100 text-xl font-semibold uppercase">
-                Sign in to access your account
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">
+                Welcome Back
+              </h1>
+              <p className="text-gray-600 dark:text-gray-300 text-lg">
+                Sign in to access your dashboard
               </p>
             </div>
 
-            <div className="mt-8">
-              <form onSubmit={handleLogin}>
-                <div>
+            <div className="mt-10">
+              <form onSubmit={handleLogin} className="space-y-6">
+                
+                {/* Email Input */}
+                <motion.div variants={contentVariants}>
                   <label
                     htmlFor="email"
-                    className="block mb-2 text-sm text-gray-800 dark:text-gray-200"
+                    className="block mb-2 text-sm font-medium text-gray-800 dark:text-gray-200"
                   >
                     Email Address
                   </label>
@@ -83,24 +135,25 @@ const Login = () => {
                     name="email"
                     id="email"
                     placeholder="example@example.com"
-                    className="block w-full px-4 py-2 mt-2 text-gray-600 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-md focus:border-blue-500 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
+                    className="block w-full px-4 py-3 mt-1 text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg focus:border-blue-500 focus:ring-blue-500 focus:outline-none focus:ring-1 transition duration-200"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
                   />
-                </div>
+                </motion.div>
 
-                <div className="mt-6">
+                {/* Password Input */}
+                <motion.div className="mt-6" variants={contentVariants}>
                   <div className="flex justify-between mb-2">
                     <label
                       htmlFor="password"
-                      className="text-sm text-gray-800 dark:text-gray-200"
+                      className="text-sm font-medium text-gray-800 dark:text-gray-200"
                     >
                       Password
                     </label>
                     <Link
                       to="/forgot-password"
-                      className="text-sm text-gray-400 dark:text-gray-500 focus:text-blue-500 dark:focus:text-blue-400 hover:text-blue-400 dark:hover:text-blue-300 hover:underline"
+                      className="text-sm text-blue-500 hover:text-blue-400 dark:text-blue-400 dark:hover:text-blue-300 hover:underline transition duration-200"
                     >
                       Forgot password?
                     </Link>
@@ -109,42 +162,56 @@ const Login = () => {
                     type="password"
                     name="password"
                     id="password"
-                    placeholder="Your Password"
-                    className="block w-full px-4 py-2 mt-2 text-gray-600 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-md focus:border-blue-500 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
+                    placeholder="Your secure password"
+                    className="block w-full px-4 py-3 mt-1 text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg focus:border-blue-500 focus:ring-blue-500 focus:outline-none focus:ring-1 transition duration-200"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
                   />
-                </div>
+                </motion.div>
 
-                <div className="mt-6">
+                {/* Login Button */}
+                <motion.div className="mt-8" variants={contentVariants}>
                   <button
+                    type="submit"
                     disabled={isLoading}
-                    className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-blue-500 rounded-md hover:bg-blue-400 focus:outline-none focus:bg-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 uppercase"
+                    className="w-full px-4 py-3 tracking-wide text-white font-bold transition-colors duration-200 transform bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 uppercase shadow-lg"
+                    whileHover={{ scale: 1.01 }}
+                    whileTap={{ scale: 0.99 }}
                   >
                     {isLoading ? "Logging in..." : "Login"}
                   </button>
                   {errorMsg && (
-                    <p className="mt-2 text-sm text-red-600 dark:text-red-400">
+                    <motion.p 
+                      className="mt-4 text-sm text-center text-red-600 dark:text-red-400"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                    >
                       {errorMsg}
-                    </p>
+                    </motion.p>
                   )}
-                </div>
+                </motion.div>
               </form>
 
-              <p className="mt-6 text-sm text-center text-gray-500 dark:text-gray-400">
+              {/* Register Link */}
+              <motion.p 
+                className="mt-10 text-sm text-center text-gray-500 dark:text-gray-400"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.6 }}
+              >
                 Don't have an account yet?{" "}
                 <Link
                   to="/register"
-                  className="text-blue-600 dark:text-blue-400 focus:outline-none focus:underline hover:underline"
+                  className="text-blue-600 dark:text-blue-400 font-semibold focus:outline-none focus:underline hover:underline transition duration-200"
                 >
                   Register
                 </Link>
                 .
-              </p>
+              </motion.p>
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </div>
   );

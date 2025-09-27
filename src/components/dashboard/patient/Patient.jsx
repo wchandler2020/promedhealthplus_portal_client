@@ -331,9 +331,6 @@ const Patients = ({ activationFilter, setActivationFilter }) => {
 
           {/* New Radio Button Group for Activation Filter */}
           <div className="flex items-center gap-2 border border-gray-300 dark:border-gray-600 rounded px-2 py-1 text-xs bg-gray-100 dark:bg-gray-700">
-            {/* <label className="text-gray-700 dark:text-gray-200 font-medium">
-              Active:
-            </label> */}
             <div className="flex items-center gap-2">
               <label htmlFor="active-activated" className="text-gray-700 dark:text-gray-200 text-xs">
                 <input

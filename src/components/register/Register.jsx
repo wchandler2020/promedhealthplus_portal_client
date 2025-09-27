@@ -1,6 +1,8 @@
 import React, { useState, useContext } from "react";
 import { AuthContext } from "../../utils/auth";
 import { useNavigate, Link } from "react-router-dom";
+// 1. Import motion
+import { motion } from "framer-motion"; 
 import register_bg_img_2 from '../../assets/images/register_bg_img.jpg';
 import { IoArrowBack, IoCheckmarkCircleOutline } from "react-icons/io5";
 import { countryCodesList } from "../../utils/data";
@@ -101,44 +103,114 @@ const Register = () => {
     setIsLoading(false);
   };
 
+  // --- Framer Motion Variants ---
+
+  // For the left (image) panel, slides in from the left
+  const imagePanelVariants = {
+    hidden: { x: "-100vw" },
+    visible: {
+      x: 0,
+      transition: { type: "spring", stiffness: 50, delay: 0.1 },
+    },
+  };
+
+  // For the right (registration form) panel, fades and slides in from the right
+  const formPanelVariants = {
+    hidden: { opacity: 0, x: 50 },
+    visible: {
+      opacity: 1,
+      x: 0,
+      transition: { type: "spring", stiffness: 50, delay: 0.3 },
+    },
+  };
+
+  // For the individual form sections (staggered entrance)
+  const formItemVariants = {
+    hidden: { opacity: 0, y: 10 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.3 } },
+  };
+
+  // For the main form container to orchestrate the stagger
+  const formContainerVariants = {
+    hidden: {},
+    visible: {
+      transition: {
+        staggerChildren: 0.05, // Small stagger delay for each input field
+        delayChildren: 0.5,
+      },
+    },
+  };
+
   return (
-    <div className="bg-white dark:bg-gray-900 transition-colors duration-300 min-h-screen">
+    <div className="bg-white dark:bg-gray-900 transition-colors duration-500 min-h-screen">
       <div className="flex justify-center flex-col lg:flex-row relative">
-        <Link
-          to="/"
-          className="absolute top-6 left-6 z-50 p-2 bg-black/60 hover:bg-black/80 text-white rounded-full shadow-lg transition duration-300"
-          title="Back to Home"
+        
+        {/* Back arrow - now uses motion and is styled */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.8, duration: 0.5 }}
+          className="absolute top-6 left-6 z-50"
         >
-          <IoArrowBack size={24} />
-        </Link>
-        <div
+          <Link
+            to="/"
+            className="p-3 bg-indigo-700/80 hover:bg-indigo-700 text-white rounded-full shadow-xl transition duration-300 backdrop-blur-sm flex justify-center items-center"
+            title="Back to Home"
+          >
+            <IoArrowBack size={24} />
+          </Link>
+        </motion.div>
+
+        {/* Left image panel (only shown on large screens) - now uses motion */}
+        <motion.div
           className="relative hidden bg-cover lg:block lg:w-2/3"
           style={{ backgroundImage: `url(${register_bg_img_2})` }}
+          initial="hidden"
+          animate="visible"
+          variants={imagePanelVariants}
         >
-          <div className="absolute inset-0 z-0 bg-white/60 dark:bg-gray-800/60"></div>
+          {/* Darker, professional overlay */}
+          <div className="absolute inset-0 z-0 bg-gray-900/60"></div>
           <div className="flex items-center h-full px-20 relative z-20">
             <div>
-              <h2 className="text-5xl font-semibold text-gray-800 dark:text-white">
-                ProMed Health Plus
+              <h2 className="text-5xl font-extrabold text-white drop-shadow-lg">
+                ProMed Health <span className="text-indigo-400">Plus</span>
               </h2>
-              <p className="max-w-xl mt-3 text-gray-600 dark:text-gray-300 text-xl font-light">
+              <p className="max-w-xl mt-3 text-gray-200 text-xl font-light drop-shadow">
                 Securely manage your patient care and medical supplies with a single, intuitive platform.
               </p>
             </div>
           </div>
-        </div>
-        <div className="flex w-full max-w-md px-6 mx-auto lg:w-2/6 bg-white dark:bg-gray-900 rounded-lg lg:h-screen lg:overflow-y-auto">
+        </motion.div>
+
+        {/* Right registration panel - now uses motion for entrance and styling */}
+        <motion.div
+          className="flex w-full max-w-md px-6 mx-auto lg:w-2/6 bg-white dark:bg-gray-900 rounded-lg lg:h-screen lg:overflow-y-auto"
+          initial="hidden"
+          animate="visible"
+          variants={formPanelVariants}
+        >
           <div className="flex-1 my-auto py-8">
             <div className="text-center">
-              <p className="mt-3 text-gray-900 dark:text-gray-100 text-xl font-semibold uppercase">
-                Create your account
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">
+                Create Your Account
+              </h1>
+              <p className="text-gray-600 dark:text-gray-300 text-lg">
+                Enter your details to register as a provider
               </p>
             </div>
-            <div className="mt-8">
-              <form onSubmit={handleSubmit}>
+            
+            <motion.div 
+                className="mt-8"
+                initial="hidden"
+                animate="visible"
+                variants={formContainerVariants} // Apply container variant for stagger
+            >
+              <form onSubmit={handleSubmit} className="space-y-4">
+                
                 {/* Full Name */}
-                <div>
-                  <label htmlFor="name" className="block mb-2 text-sm text-gray-800 dark:text-gray-200">
+                <motion.div variants={formItemVariants}>
+                  <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-800 dark:text-gray-200">
                     Full Name
                   </label>
                   <input
@@ -147,13 +219,14 @@ const Register = () => {
                     placeholder="John Doe"
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
-                    className="block w-full px-4 py-2 mt-2 text-gray-700 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-md focus:border-blue-400 focus:ring focus:ring-blue-400 focus:outline-none focus:ring-opacity-40"
+                    className="block w-full px-4 py-3 mt-1 text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg focus:border-indigo-500 focus:ring-indigo-500 focus:outline-none focus:ring-1 transition duration-200"
                     required
                   />
-                </div>
+                </motion.div>
+                
                 {/* Email */}
-                <div className="mt-4">
-                  <label htmlFor="email" className="block mb-2 text-sm text-gray-800 dark:text-gray-200">
+                <motion.div variants={formItemVariants}>
+                  <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-800 dark:text-gray-200">
                     Email Address
                   </label>
                   <input
@@ -162,20 +235,21 @@ const Register = () => {
                     placeholder="example@example.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="block w-full px-4 py-2 mt-2 text-gray-700 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-md focus:border-blue-400 focus:ring focus:ring-blue-400 focus:outline-none focus:ring-opacity-40"
+                    className="block w-full px-4 py-3 mt-1 text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg focus:border-indigo-500 focus:ring-indigo-500 focus:outline-none focus:ring-1 transition duration-200"
                     required
                   />
-                </div>
+                </motion.div>
+                
                 {/* Phone Number */}
-                <div className="mt-4">
-                  <label htmlFor="phoneNumber" className="block mb-2 text-sm text-gray-800 dark:text-gray-200">
-                    Phone Number
+                <motion.div variants={formItemVariants}>
+                  <label htmlFor="phoneNumber" className="block mb-2 text-sm font-medium text-gray-800 dark:text-gray-200">
+                    Personal Phone Number
                   </label>
                   <div className="flex">
                     <select
                       value={countryCode}
                       onChange={(e) => setCountryCode(e.target.value)}
-                      className="w-1/3 px-3 py-2 border border-gray-200 dark:border-gray-600 rounded-l-md bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 focus:border-blue-400 focus:ring focus:ring-blue-400 focus:outline-none focus:ring-opacity-40"
+                      className="w-1/3 px-3 py-3 border border-gray-300 dark:border-gray-700 rounded-l-lg bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 focus:border-indigo-500 focus:ring-indigo-500 focus:outline-none focus:ring-1 transition duration-200"
                     >
                       {countryCodesList.map((country) => (
                         <option key={`${country.code}-${country.name}`} value={country.code}>
@@ -189,14 +263,14 @@ const Register = () => {
                       placeholder="555-555-5555"
                       value={phoneNumber}
                       onChange={(e) => setPhoneNumber(e.target.value)}
-                      className="w-2/3 px-4 py-2 border border-l-0 border-gray-200 dark:border-gray-600 rounded-r-md text-gray-700 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-700 focus:border-blue-400 focus:ring focus:ring-blue-400 focus:outline-none focus:ring-opacity-40"
+                      className="w-2/3 px-4 py-3 border border-l-0 border-gray-300 dark:border-gray-700 rounded-r-lg text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-800 focus:border-indigo-500 focus:ring-indigo-500 focus:outline-none focus:ring-1 transition duration-200"
                     />
                   </div>
-                </div>
+                </motion.div>
 
                 {/* Facility Name */}
-                <div className="mt-4">
-                  <label htmlFor="facility" className="block mb-2 text-sm text-gray-800 dark:text-gray-200">
+                <motion.div variants={formItemVariants}>
+                  <label htmlFor="facility" className="block mb-2 text-sm font-medium text-gray-800 dark:text-gray-200">
                     Facility Name
                   </label>
                   <input
@@ -205,14 +279,14 @@ const Register = () => {
                     placeholder="Your Clinic or Hospital Name"
                     value={facility}
                     onChange={(e) => setFacility(e.target.value)}
-                    className="block w-full px-4 py-2 mt-2 text-gray-700 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-md focus:border-blue-400 focus:ring focus:ring-blue-400 focus:outline-none focus:ring-opacity-40"
+                    className="block w-full px-4 py-3 mt-1 text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg focus:border-indigo-500 focus:ring-indigo-500 focus:outline-none focus:ring-1 transition duration-200"
                     required
                   />
-                </div>
+                </motion.div>
 
                 {/* Facility Phone Number */}
-                <div className="mt-4">
-                  <label htmlFor="facilityPhoneNumber" className="block mb-2 text-sm text-gray-800 dark:text-gray-200">
+                <motion.div variants={formItemVariants}>
+                  <label htmlFor="facilityPhoneNumber" className="block mb-2 text-sm font-medium text-gray-800 dark:text-gray-200">
                     Facility Phone Number
                   </label>
                   <input
@@ -221,14 +295,14 @@ const Register = () => {
                     placeholder="555-555-5555"
                     value={facilityPhoneNumber}
                     onChange={(e) => setFacilityPhoneNumber(e.target.value)}
-                    className="block w-full px-4 py-2 mt-2 text-gray-700 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-md focus:border-blue-400 focus:ring focus:ring-blue-400 focus:outline-none focus:ring-opacity-40"
+                    className="block w-full px-4 py-3 mt-1 text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg focus:border-indigo-500 focus:ring-indigo-500 focus:outline-none focus:ring-1 transition duration-200"
                     required
                   />
-                </div>
+                </motion.div>
                 
                 {/* City */}
-                <div className="mt-4">
-                  <label htmlFor="city" className="block mb-2 text-sm text-gray-800 dark:text-gray-200">
+                <motion.div variants={formItemVariants}>
+                  <label htmlFor="city" className="block mb-2 text-sm font-medium text-gray-800 dark:text-gray-200">
                     City
                   </label>
                   <input
@@ -237,14 +311,14 @@ const Register = () => {
                     placeholder="e.g., Chicago"
                     value={city}
                     onChange={(e) => setCity(e.target.value)}
-                    className="block w-full px-4 py-2 mt-2 text-gray-700 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-md focus:border-blue-400 focus:ring focus:ring-blue-400 focus:outline-none focus:ring-opacity-40"
+                    className="block w-full px-4 py-3 mt-1 text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg focus:border-indigo-500 focus:ring-indigo-500 focus:outline-none focus:ring-1 transition duration-200"
                     required
                   />
-                </div>
+                </motion.div>
 
                 {/* State */}
-                <div className="mt-4">
-                  <label htmlFor="state" className="block mb-2 text-sm text-gray-800 dark:text-gray-200">
+                <motion.div variants={formItemVariants}>
+                  <label htmlFor="state" className="block mb-2 text-sm font-medium text-gray-800 dark:text-gray-200">
                     State
                   </label>
                   <input
@@ -253,14 +327,14 @@ const Register = () => {
                     placeholder="e.g., IL"
                     value={state}
                     onChange={(e) => setState(e.target.value)}
-                    className="block w-full px-4 py-2 mt-2 text-gray-700 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-md focus:border-blue-400 focus:ring focus:ring-blue-400 focus:outline-none focus:ring-opacity-40"
+                    className="block w-full px-4 py-3 mt-1 text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg focus:border-indigo-500 focus:ring-indigo-500 focus:outline-none focus:ring-1 transition duration-200"
                     required
                   />
-                </div>
+                </motion.div>
 
                 {/* Country */}
-                <div className="mt-4">
-                  <label htmlFor="country" className="block mb-2 text-sm text-gray-800 dark:text-gray-200">
+                <motion.div variants={formItemVariants}>
+                  <label htmlFor="country" className="block mb-2 text-sm font-medium text-gray-800 dark:text-gray-200">
                     Country
                   </label>
                   <input
@@ -269,14 +343,14 @@ const Register = () => {
                     placeholder="e.g., United States"
                     value={country}
                     onChange={(e) => setCountry(e.target.value)}
-                    className="block w-full px-4 py-2 mt-2 text-gray-700 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-md focus:border-blue-400 focus:ring focus:ring-blue-400 focus:outline-none focus:ring-opacity-40"
+                    className="block w-full px-4 py-3 mt-1 text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg focus:border-indigo-500 focus:ring-indigo-500 focus:outline-none focus:ring-1 transition duration-200"
                     required
                   />
-                </div>
+                </motion.div>
 
                 {/* NPI Number */}
-                <div className="mt-4">
-                  <label htmlFor="npiNumber" className="block mb-2 text-sm text-gray-800 dark:text-gray-200">
+                <motion.div variants={formItemVariants}>
+                  <label htmlFor="npiNumber" className="block mb-2 text-sm font-medium text-gray-800 dark:text-gray-200">
                     NPI Number
                   </label>
                   <input
@@ -286,14 +360,14 @@ const Register = () => {
                     value={npiNumber}
                     onChange={(e) => setNpiNumber(e.target.value)}
                     maxLength="10"
-                    className="block w-full px-4 py-2 mt-2 text-gray-700 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-md focus:border-blue-400 focus:ring focus:ring-blue-400 focus:outline-none focus:ring-opacity-40"
+                    className="block w-full px-4 py-3 mt-1 text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg focus:border-indigo-500 focus:ring-indigo-500 focus:outline-none focus:ring-1 transition duration-200"
                     required
                   />
-                </div>
+                </motion.div>
 
                 {/* Password */}
-                <div className="mt-4">
-                  <label htmlFor="password" className="block mb-2 text-sm text-gray-800 dark:text-gray-200">
+                <motion.div variants={formItemVariants}>
+                  <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-800 dark:text-gray-200">
                     Password
                   </label>
                   <input
@@ -302,11 +376,11 @@ const Register = () => {
                     placeholder="Create a password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="block w-full px-4 py-2 mt-2 text-gray-700 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-md focus:border-blue-400 focus:ring focus:ring-blue-400 focus:outline-none focus:ring-opacity-40"
+                    className="block w-full px-4 py-3 mt-1 text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg focus:border-indigo-500 focus:ring-indigo-500 focus:outline-none focus:ring-1 transition duration-200"
                     required
                   />
                   <div className="mt-2 text-sm">
-                    <ul className="list-disc list-inside text-gray-500 dark:text-gray-400">
+                    <ul className="list-none text-gray-500 dark:text-gray-400 space-y-1">
                       {[
                         { valid: hasMinLength, text: "Minimum 12 characters" },
                         { valid: hasUppercase, text: "At least two uppercase letters" },
@@ -316,20 +390,21 @@ const Register = () => {
                       ].map(({ valid, text }, idx) => (
                         <li
                           key={idx}
-                          className={`${valid ? "text-blue-600 dark:text-blue-400" : ""} flex items-center`}
+                          className={`${valid ? "text-indigo-600 dark:text-indigo-400" : ""} flex items-center`}
                         >
-                          {valid && (
-                            <IoCheckmarkCircleOutline className="mr-1 text-blue-600 dark:text-blue-400" />
-                          )}
+                          <IoCheckmarkCircleOutline 
+                            className={`mr-2 ${valid ? "text-indigo-600 dark:text-indigo-400" : "text-gray-400 dark:text-gray-600"}`} 
+                          />
                           {text}
                         </li>
                       ))}
                     </ul>
                   </div>
-                </div>
+                </motion.div>
+                
                 {/* Confirm Password */}
-                <div className="mt-4">
-                  <label htmlFor="confirmPassword" className="block mb-2 text-sm text-gray-800 dark:text-gray-200">
+                <motion.div variants={formItemVariants}>
+                  <label htmlFor="confirmPassword" className="block mb-2 text-sm font-medium text-gray-800 dark:text-gray-200">
                     Confirm Password
                   </label>
                   <input
@@ -338,50 +413,65 @@ const Register = () => {
                     placeholder="Repeat your password"
                     value={password2}
                     onChange={(e) => setPassword2(e.target.value)}
-                    className="block w-full px-4 py-2 mt-2 text-gray-700 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-md focus:border-blue-400 focus:ring focus:ring-blue-400 focus:outline-none focus:ring-opacity-40"
+                    className="block w-full px-4 py-3 mt-1 text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg focus:border-indigo-500 focus:ring-indigo-500 focus:outline-none focus:ring-1 transition duration-200"
                     required
                   />
-                </div>
+                </motion.div>
+                
                 {/* Show Password */}
-                <div className="mt-4">
+                <motion.div variants={formItemVariants}>
                   <label className="inline-flex items-center">
                     <input
                       type="checkbox"
-                      className="form-checkbox"
+                      className="form-checkbox text-indigo-600 border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 rounded focus:ring-indigo-500 transition duration-200"
                       checked={showPassword}
                       onChange={() => setShowPassword(!showPassword)}
                     />
                     <span className="ml-2 text-sm text-gray-600 dark:text-gray-400">Show Password</span>
                   </label>
-                </div>
+                </motion.div>
+                
                 {/* Submit Button */}
-                <div className="mt-6">
+                <motion.div className="pt-4" variants={formItemVariants}>
                   <button
                     type="submit"
                     disabled={isLoading}
-                    className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-blue-500 rounded-md hover:bg-blue-400 focus:outline-none focus:bg-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 uppercase"
+                    className="w-full px-4 py-3 tracking-wide text-white font-bold transition-colors duration-200 transform bg-indigo-600 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50 uppercase shadow-lg"
+                    whileHover={{ scale: 1.01 }}
+                    whileTap={{ scale: 0.99 }}
                   >
                     {isLoading ? "Registering..." : "Register"}
                   </button>
                   {errorMsg && (
-                    <p className="mt-2 text-sm text-red-500 dark:text-red-400">
+                    <motion.p 
+                      className="mt-4 text-sm text-center text-red-600 dark:text-red-400"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                    >
                       {errorMsg}
-                    </p>
+                    </motion.p>
                   )}
-                </div>
+                </motion.div>
               </form>
-              <p className="mt-6 text-sm text-center text-gray-400 dark:text-gray-500">
+
+              {/* Login Link */}
+              <motion.p 
+                className="mt-6 text-sm text-center text-gray-500 dark:text-gray-400"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1.5 }}
+              >
                 Already have an account?{" "}
                 <Link
                   to="/login"
-                  className="text-blue-500 dark:text-blue-400 focus:outline-none focus:underline hover:underline"
+                  className="text-indigo-600 dark:text-indigo-400 font-semibold focus:outline-none focus:underline hover:underline transition duration-200"
                 >
                   Log in
                 </Link>.
-              </p>
-            </div>
+              </motion.p>
+            </motion.div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </div>
   );
