@@ -405,14 +405,23 @@ const Navbar = ({ isDarkMode, setIsDarkMode }) => {
       {/* Mobile Menu */}
       <div
         className={`navbar-menu relative z-50 ${
-          isMobileMenuOpen ? "" : "hidden"
+          isMobileMenuOpen ? "" : "pointer-events-none" // Use pointer-events-none instead of hidden to allow transitions
         }`}
       >
+        {/* Backdrop (Opacity Transition) */}
         <div
-          className="navbar-backdrop fixed inset-0 bg-gray-800 opacity-25"
+          className={`navbar-backdrop fixed inset-0 bg-gray-800 transition-opacity duration-300 ${
+            isMobileMenuOpen ? "opacity-25" : "opacity-0"
+          }`}
           onClick={closeMobileMenu}
         ></div>
-        <nav className="fixed top-0 left-0 bottom-0 flex flex-col w-5/6 max-w-sm py-6 px-6 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 overflow-y-auto">
+        
+        {/* Menu Panel (Slide Transition) */}
+        <nav
+          className={`fixed top-0 left-0 bottom-0 flex flex-col w-5/6 max-w-sm py-6 px-6 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 overflow-y-auto transform transition-transform duration-300 ease-out z-50 ${
+            isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
+          }`}
+        >
           <div className="flex items-center mb-8 justify-between">
             <Link
               className="mr-auto text-2xl font-semibold leading-none pl-3 text-gray-900 dark:text-gray-100"
