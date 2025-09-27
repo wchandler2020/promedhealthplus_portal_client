@@ -68,7 +68,7 @@ const ResetPassword = () => {
           {/* Back arrow */}
           <Link
             to="/forgot-password"
-            className="absolute top-6 left-6 z-20 text-white hover:text-blue-300 transition duration-200 z-50"
+            className="absolute top-6 left-6 z-20 text-white hover:text-indigo-300 transition duration-200 z-50"
             title="Back to Forgot Password"
           >
             <IoArrowBack size={28} />
@@ -115,7 +115,7 @@ const ResetPassword = () => {
                       placeholder="Create a new password"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      className="block w-full px-4 py-2 mt-2 text-gray-600 dark:text-gray-200 placeholder-gray-500 dark:placeholder-gray-400 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-md focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
+                      className="block w-full px-4 py-2 mt-2 text-gray-600 dark:text-gray-200 placeholder-gray-500 dark:placeholder-gray-400 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-md focus:border-indigo-400 focus:ring-indigo-400 focus:outline-none focus:ring focus:ring-opacity-40"
                       required
                     />
 
@@ -198,7 +198,7 @@ const ResetPassword = () => {
                       placeholder="Repeat your password"
                       value={password2}
                       onChange={(e) => setPassword2(e.target.value)}
-                      className="block w-full px-4 py-2 mt-2 text-gray-600 dark:text-gray-200 placeholder-gray-500 dark:placeholder-gray-400 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-md focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
+                      className="block w-full px-4 py-2 mt-2 text-gray-600 dark:text-gray-200 placeholder-gray-500 dark:placeholder-gray-400 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-md focus:border-indigo-400 focus:ring-indigo-400 focus:outline-none focus:ring focus:ring-opacity-40"
                       required
                     />
                   </div>
@@ -218,7 +218,7 @@ const ResetPassword = () => {
                   <div className="mt-6">
                     <button
                       disabled={!allValid || isLoading}
-                      className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-blue-500 rounded-md hover:bg-blue-400 focus:outline-none focus:bg-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 uppercase"
+                      className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-indigo-500 rounded-md hover:bg-indigo-400 focus:outline-none focus:bg-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50 uppercase"
                       type="submit"
                     >
                       {isLoading ? "Resetting..." : "Reset Password"}

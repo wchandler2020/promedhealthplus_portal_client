@@ -86,7 +86,7 @@ const HeroSection = () => {
             {/* CTA Button */}
             <motion.button
               onClick={handleOpen}
-              className="px-10 py-4 bg-indigo-600 text-white rounded-lg inline-block mt-8 font-semibold text-lg uppercase tracking-wider hover:bg-indigo-700 transition-colors duration-300 shadow-xl"
+              className="px-10 py-4 bg-indigo-600 text-white rounded-lg inline-block mt-8 font-semibold text-lg uppercase tracking-wider hover:bg-indigo-700 transition-colors duration-300 shadow-xl opacity-40"
               variants={itemVariants}
               whileHover={{ scale: 1.05, boxShadow: "0 15px 25px rgba(0, 0, 0, 0.4)" }}
               whileTap={{ scale: 0.95 }}

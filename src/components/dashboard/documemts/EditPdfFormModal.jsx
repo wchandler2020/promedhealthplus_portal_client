@@ -72,7 +72,7 @@ const EditPdfFormModal = ({ formData, patientId, onClose, onSuccess }) => {
           <button
             onClick={handleSubmit}
             disabled={submitting}
-            className="px-4 py-2 bg-blue-600 text-white rounded"
+            className="px-4 py-2 bg-indigo-600 text-white rounded"
           >
             {submitting ? "Saving..." : "Save Changes"}
           </button>

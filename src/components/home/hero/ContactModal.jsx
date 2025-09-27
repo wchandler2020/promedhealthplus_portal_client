@@ -119,7 +119,7 @@ const ContactModal = ({ open, handleClose }) => {
                 onChange={handleChange}
                 required
                 placeholder="e.g., Dr. John Smith"
-                className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200"
+                className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200"
               />
             </div>
             <div>
@@ -133,7 +133,7 @@ const ContactModal = ({ open, handleClose }) => {
                 onChange={handleChange}
                 required
                 placeholder="e.g., Your clinic, hospital, or practice name"
-                className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200"
+                className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200"
               />
             </div>
 
@@ -148,7 +148,7 @@ const ContactModal = ({ open, handleClose }) => {
                   value={formData.city}
                   onChange={handleChange}
                   required
-                  className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200"
+                  className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200"
                 />
               </div>
 
@@ -162,7 +162,7 @@ const ContactModal = ({ open, handleClose }) => {
                     value={formData.state}
                     onChange={handleChange}
                     required
-                    className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
                   >
                     <option value="">Select</option>
                     {states.map((state) => (
@@ -182,7 +182,7 @@ const ContactModal = ({ open, handleClose }) => {
                     value={formData.zip}
                     onChange={handleChange}
                     required
-                    className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200"
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200"
                   />
                 </div>
               </div>
@@ -199,7 +199,7 @@ const ContactModal = ({ open, handleClose }) => {
                 onChange={handleChange}
                 required
                 placeholder="(123) 456-7890"
-                className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200"
+                className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200"
               />
             </div>
 
@@ -214,7 +214,7 @@ const ContactModal = ({ open, handleClose }) => {
                 onChange={handleChange}
                 required
                 placeholder="you@example.com"
-                className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200"
+                className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200"
               />
             </div>
 
@@ -229,13 +229,13 @@ const ContactModal = ({ open, handleClose }) => {
                 required
                 rows={4}
                 placeholder="Type your message..."
-                className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm resize-none focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200"
+                className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm resize-none focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200"
               ></textarea>
             </div>
 
             <button
               type="submit"
-              className="w-full bg-blue-600 dark:bg-blue-700 hover:bg-blue-700 dark:hover:bg-blue-800 text-white font-semibold py-3 px-6 rounded-lg shadow-lg transition duration-300"
+              className="w-full bg-indigo-600 dark:bg-indigo-700 hover:bg-indigo-700 dark:hover:bg-indigo-800 text-white font-semibold py-3 px-6 rounded-lg shadow-lg transition duration-300"
             >
               Send Message
             </button>

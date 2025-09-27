@@ -10,7 +10,7 @@ import { states } from "../../../utils/data";
 
 const ivrStatusBadge = ({ status }) => {
   const colors = {
-    Approved: "bg-blue-100 dark:bg-blue-800 text-blue-700 dark:text-blue-200",
+    Approved: "bg-indigo-100 dark:bg-indigo-800 text-indigo-700 dark:text-indigo-200",
     Pending: "bg-yellow-100 dark:bg-yellow-800 text-yellow-700 dark:text-yellow-200",
     Denied: "bg-red-100 dark:bg-red-800 text-red-700 dark:text-red-200",
   };
@@ -286,7 +286,7 @@ const Patients = ({ activationFilter, setActivationFilter }) => {
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-100">Patient Applications</h2>
         <button
-          className="border border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white dark:hover:text-white dark:text-blue-400 dark:border-blue-400 dark:hover:bg-blue-500 px-4 py-2 rounded-md transition-all text-xs"
+          className="border border-indigo-500 text-indigo-500 hover:bg-indigo-500 hover:text-white dark:hover:text-white dark:text-indigo-400 dark:border-indigo-400 dark:hover:bg-indigo-500 px-4 py-2 rounded-md transition-all text-xs"
           onClick={() => {
             setEditingPatient(null);
             setOpen(true);
@@ -299,11 +299,11 @@ const Patients = ({ activationFilter, setActivationFilter }) => {
         <input
           type="text"
           placeholder="Search Patients by Name or Med Record No."
-          className="w-full px-2 py-1 pl-10 text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 text-sm"
+          className="w-full px-2 py-1 pl-10 text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-300 text-sm"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
-        <div className="absolute inset-y-0 left-0 flex items-center justify-center w-8 h-8 bg-blue-500 rounded-full">
+        <div className="absolute inset-y-0 left-0 flex items-center justify-center w-8 h-8 bg-indigo-500 rounded-full">
           <FaSearch className="text-white text-sm" />
         </div>
       </div>
@@ -321,7 +321,7 @@ const Patients = ({ activationFilter, setActivationFilter }) => {
             onChange={(e) => setIvrFilter(e.target.value)}
             className="bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 border border-gray-300 dark:border-gray-600 rounded px-2 py-1 text-xs 
             focus:bg-gray-200 dark:focus:bg-gray-600 focus:outline-none focus:ring-2 
-            focus:ring-blue-500 focus:border-blue-300 transition"
+            focus:ring-indigo-500 focus:border-indigo-300 transition"
           >
             <option value="">All</option>
             <option value="Approved">Approved</option>
@@ -340,7 +340,7 @@ const Patients = ({ activationFilter, setActivationFilter }) => {
                   value="Activated"
                   checked={activationFilter === "Activated"}
                   onChange={e => setActivationFilter(e.target.value)}
-                  className="mr-1 text-blue-500 focus:ring-blue-500 dark:focus:ring-blue-400 "
+                  className="mr-1 text-indigo-500 focus:ring-indigo-500 dark:focus:ring-indigo-400 "
                 />
                 Activated
               </label>
@@ -352,7 +352,7 @@ const Patients = ({ activationFilter, setActivationFilter }) => {
                   value="Deactivated"
                   checked={activationFilter === "Deactivated"}
                   onChange={e => setActivationFilter(e.target.value)}
-                  className="mr-1 text-blue-500 focus:ring-blue-500 dark:focus:ring-blue-400"
+                  className="mr-1 text-indigo-500 focus:ring-indigo-500 dark:focus:ring-indigo-400"
                 />
                 Deactivated
               </label>
@@ -377,7 +377,7 @@ const Patients = ({ activationFilter, setActivationFilter }) => {
             }}
             className="bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 border border-gray-300 dark:border-gray-600 rounded px-2 py-1 text-xs 
             focus:bg-gray-200 dark:focus:bg-gray-600 focus:outline-none focus:ring-2 
-            focus:ring-blue-500 focus:border-blue-300 transition"
+            focus:ring-indigo-500 focus:border-indigo-300 transition"
           >
             {[5, 10, 15, 25].map((num) => (
               <option key={num} value={num}>
@@ -498,7 +498,7 @@ const Patients = ({ activationFilter, setActivationFilter }) => {
                     value={formData.first_name}
                     onChange={handleInputChange}
                     required
-                    className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
                   />
                   {errors.first_name && (
                     <p className="text-red-500 text-sm">{errors.first_name}</p>
@@ -514,7 +514,7 @@ const Patients = ({ activationFilter, setActivationFilter }) => {
                     value={formData.last_name}
                     onChange={handleInputChange}
                     required
-                    className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
                   />
                   {errors.last_name && (
                     <p className="text-red-500 text-sm">{errors.last_name}</p>
@@ -531,7 +531,7 @@ const Patients = ({ activationFilter, setActivationFilter }) => {
                     name="middle_initial"
                     value={formData.middle_initial}
                     onChange={handleInputChange}
-                    className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
                   />
                 </div>
                 <div className="col-span-2">
@@ -544,7 +544,7 @@ const Patients = ({ activationFilter, setActivationFilter }) => {
                     value={formData.date_of_birth}
                     onChange={handleInputChange}
                     required
-                    className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
                   />
                   {errors.date_of_birth && (
                     <p className="text-red-500 text-sm">
@@ -564,7 +564,7 @@ const Patients = ({ activationFilter, setActivationFilter }) => {
                     value={formData.address}
                     onChange={handleInputChange}
                     required
-                    className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
                   />
                 </div>
                 <div>
@@ -577,7 +577,7 @@ const Patients = ({ activationFilter, setActivationFilter }) => {
                     value={formData.city}
                     onChange={handleInputChange}
                     required
-                    className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
                   />
                 </div>
               </div>
@@ -591,7 +591,7 @@ const Patients = ({ activationFilter, setActivationFilter }) => {
                     value={formData.state}
                     onChange={handleInputChange}
                     required
-                    className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
                   >
                     <option value="" disabled>
                       Select a state
@@ -613,7 +613,7 @@ const Patients = ({ activationFilter, setActivationFilter }) => {
                     value={formData.zip_code}
                     onChange={handleInputChange}
                     required
-                    className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
                   />
                 </div>
               </div>
@@ -634,7 +634,7 @@ const Patients = ({ activationFilter, setActivationFilter }) => {
                       phone_number: cleaned,
                     }));
                   }}
-                  className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
+                  className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
                 />
                 <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                   Format: (212) 555-1212 or 212-555-1212 — US numbers only
@@ -652,7 +652,7 @@ const Patients = ({ activationFilter, setActivationFilter }) => {
                   name="email"
                   value={formData.email}
                   onChange={handleInputChange}
-                  className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
+                  className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
                 />
               </div>
               <div>
@@ -664,7 +664,7 @@ const Patients = ({ activationFilter, setActivationFilter }) => {
                   name="medical_record_number"
                   value={formData.medical_record_number}
                   onChange={handleInputChange}
-                  className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
+                  className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
                 />
               </div>
               <h3 className="text-xl font-bold text-center text-gray-800 dark:text-gray-100 mb-2">
@@ -680,7 +680,7 @@ const Patients = ({ activationFilter, setActivationFilter }) => {
                     name="primary_insurance"
                     value={formData.primary_insurance}
                     onChange={handleInputChange}
-                    className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
                   />
                 </div>
                 <div>
@@ -692,7 +692,7 @@ const Patients = ({ activationFilter, setActivationFilter }) => {
                     name="primary_insurance_number"
                     value={formData.primary_insurance_number}
                     onChange={handleInputChange}
-                    className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
                   />
                 </div>
               </div>
@@ -706,7 +706,7 @@ const Patients = ({ activationFilter, setActivationFilter }) => {
                     name="secondary_insurance"
                     value={formData.secondary_insurance}
                     onChange={handleInputChange}
-                    className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
                   />
                 </div>
                 <div>
@@ -718,7 +718,7 @@ const Patients = ({ activationFilter, setActivationFilter }) => {
                     name="secondary_insurance_number"
                     value={formData.secondary_insurance_number}
                     onChange={handleInputChange}
-                    className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
                   />
                 </div>
               </div>
@@ -732,7 +732,7 @@ const Patients = ({ activationFilter, setActivationFilter }) => {
                     name="tertiary_insurance"
                     value={formData.tertiary_insurance}
                     onChange={handleInputChange}
-                    className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
                   />
                 </div>
                 <div>
@@ -744,7 +744,7 @@ const Patients = ({ activationFilter, setActivationFilter }) => {
                     name="tertiary_insurance_number"
                     value={formData.tertiary_insurance_number}
                     onChange={handleInputChange}
-                    className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
                   />
                 </div>
               </div>
@@ -762,7 +762,7 @@ const Patients = ({ activationFilter, setActivationFilter }) => {
                     value={formData.wound_size_length}
                     onChange={handleInputChange}
                     required
-                    className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
                   />
                 </div>
                 <div>
@@ -775,7 +775,7 @@ const Patients = ({ activationFilter, setActivationFilter }) => {
                     value={formData.wound_size_width}
                     onChange={handleInputChange}
                     required
-                    className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
                   />
                 </div>
               </div>
@@ -789,7 +789,7 @@ const Patients = ({ activationFilter, setActivationFilter }) => {
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2 bg-blue-600 rounded-md text-white font-semibold hover:bg-blue-700 transition"
+                  className="px-6 py-2 bg-indigo-600 rounded-md text-white font-semibold hover:bg-indigo-700 transition"
                 >
                   Save Patient
                 </button>

@@ -83,7 +83,7 @@ const OrderItem = ({ item, selectedVariants = [], onVariantChange }) => {
           <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100">{item.name}</h3>
           <span
             className={`text-sm font-medium ${
-              item.is_available ? "text-blue-600" : "text-red-500"
+              item.is_available ? "text-indigo-600" : "text-red-500"
             }`}
           >
             {item.is_available ? "Available" : "Unavailable"}
@@ -152,7 +152,7 @@ const OrderItem = ({ item, selectedVariants = [], onVariantChange }) => {
 
       <button
         onClick={addVariantRow}
-        className={`text-sm mt-2 ${canAddMore ? "text-blue-500 dark:text-blue-400" : "text-gray-400 cursor-not-allowed"}`}
+        className={`text-sm mt-2 ${canAddMore ? "text-indigo-500 dark:text-indigo-400" : "text-gray-400 cursor-not-allowed"}`}
         disabled={!canAddMore}
       >
         + Add Another Selection

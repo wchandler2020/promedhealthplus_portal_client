@@ -72,7 +72,7 @@ const Login = () => {
         >
           <Link
             to="/"
-            className="p-3 bg-blue-700/80 hover:bg-blue-700 text-white rounded-full shadow-xl transition duration-300 backdrop-blur-sm flex justify-center items-center"
+            className="p-3 bg-indigo-700/80 hover:bg-indigo-700 text-white rounded-full shadow-xl transition duration-300 backdrop-blur-sm flex justify-center items-center"
             title="Back to Home"
           >
             <IoArrowBack size={24} />
@@ -93,7 +93,7 @@ const Login = () => {
           <div className="flex items-center h-full px-20 relative z-20">
             <div>
               <h2 className="text-5xl font-extrabold text-white drop-shadow-lg">
-                ProMed Health <span className="text-blue-400">Plus</span>
+                ProMed Health <span className="text-indigo-400">Plus</span>
               </h2>
               <p className="max-w-xl mt-3 text-gray-200 text-xl font-light drop-shadow">
                 Improving Patient Outcomes with Proven Wound Care Solutions
@@ -135,7 +135,7 @@ const Login = () => {
                     name="email"
                     id="email"
                     placeholder="example@example.com"
-                    className="block w-full px-4 py-3 mt-1 text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg focus:border-blue-500 focus:ring-blue-500 focus:outline-none focus:ring-1 transition duration-200"
+                    className="block w-full px-4 py-3 mt-1 text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg focus:border-indigo-500 focus:ring-indigo-500 focus:outline-none focus:ring-1 transition duration-200"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
@@ -153,7 +153,7 @@ const Login = () => {
                     </label>
                     <Link
                       to="/forgot-password"
-                      className="text-sm text-blue-500 hover:text-blue-400 dark:text-blue-400 dark:hover:text-blue-300 hover:underline transition duration-200"
+                      className="text-sm text-indigo-500 hover:text-indigo-400 dark:text-indigo-400 dark:hover:text-indigo-300 hover:underline transition duration-200"
                     >
                       Forgot password?
                     </Link>
@@ -163,7 +163,7 @@ const Login = () => {
                     name="password"
                     id="password"
                     placeholder="Your secure password"
-                    className="block w-full px-4 py-3 mt-1 text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg focus:border-blue-500 focus:ring-blue-500 focus:outline-none focus:ring-1 transition duration-200"
+                    className="block w-full px-4 py-3 mt-1 text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg focus:border-indigo-500 focus:ring-indigo-500 focus:outline-none focus:ring-1 transition duration-200"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
@@ -175,7 +175,7 @@ const Login = () => {
                   <button
                     type="submit"
                     disabled={isLoading}
-                    className="w-full px-4 py-3 tracking-wide text-white font-bold transition-colors duration-200 transform bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 uppercase shadow-lg"
+                    className="w-full px-4 py-3 tracking-wide text-white font-bold transition-colors duration-200 transform bg-indigo-600 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50 uppercase shadow-lg"
                     whileHover={{ scale: 1.01 }}
                     whileTap={{ scale: 0.99 }}
                   >
@@ -203,7 +203,7 @@ const Login = () => {
                 Don't have an account yet?{" "}
                 <Link
                   to="/register"
-                  className="text-blue-600 dark:text-blue-400 font-semibold focus:outline-none focus:underline hover:underline transition duration-200"
+                  className="text-indigo-600 dark:text-indigo-400 font-semibold focus:outline-none focus:underline hover:underline transition duration-200"
                 >
                   Register
                 </Link>

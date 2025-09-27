@@ -19,7 +19,7 @@ const FileIcon = ({ filename }) => {
       return <FaFilePdf className="text-red-500" />;
     case "doc":
     case "docx":
-      return <FaFileWord className="text-blue-500" />;
+      return <FaFileWord className="text-indigo-500" />;
     case "jpg":
     case "jpeg":
     case "png":
@@ -136,7 +136,7 @@ const Documents = () => {
           <button
             onClick={handleOpenJotform}
             disabled={jotformStatus === "completed"}
-            className={`text-blue-400 dark:text-blue-500 font-medium hover:underline text-base flex items-center gap-2 cursor-pointer ${jotformStatus === "completed" ? "text-green-500 cursor-not-allowed" : ""}`}
+            className={`text-indigo-400 dark:text-indigo-500 font-medium hover:underline text-base flex items-center gap-2 cursor-pointer ${jotformStatus === "completed" ? "text-green-500 cursor-not-allowed" : ""}`}
             aria-haspopup="dialog"
             aria-expanded={showModal}
           >
@@ -177,7 +177,7 @@ const Documents = () => {
           <div className="mb-4">
             <label
               htmlFor="file-upload"
-              className="w-full min-h-[120px] border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg flex flex-col items-center justify-center p-6 text-center text-gray-500 dark:text-gray-400 cursor-pointer group hover:border-blue-500"
+              className="w-full min-h-[120px] border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg flex flex-col items-center justify-center p-6 text-center text-gray-500 dark:text-gray-400 cursor-pointer group hover:border-indigo-500"
             >
               <input
                 id="file-upload"
@@ -188,9 +188,9 @@ const Documents = () => {
                 multiple
               />
               <div className="flex flex-col items-center justify-center space-y-2">
-                <FaUpload className="text-2xl text-gray-400 group-hover:text-blue-500" />
+                <FaUpload className="text-2xl text-gray-400 group-hover:text-indigo-500" />
                 {selectedFiles.length > 0 ? (
-                  <div className="flex items-center space-x-2 text-blue-700 dark:text-blue-400">
+                  <div className="flex items-center space-x-2 text-indigo-700 dark:text-indigo-400">
                     <span className="text-sm font-medium text-gray-600 dark:text-gray-300">
                       {selectedFiles.length} file(s) selected
                     </span>
@@ -222,7 +222,7 @@ const Documents = () => {
             className={`w-full py-2 px-4 rounded-md font-semibold transition duration-200 ${
               selectedFiles.length === 0 || isUploading
                 ? "bg-gray-300 dark:bg-gray-700 text-gray-600 dark:text-gray-400 cursor-not-allowed"
-                : "bg-blue-600 dark:bg-blue-700 text-white hover:bg-blue-700 dark:hover:bg-blue-600"
+                : "bg-indigo-600 dark:bg-indigo-700 text-white hover:bg-indigo-700 dark:hover:bg-indigo-600"
             }`}
           >
             {isUploading ? "Uploading..." : "Upload Document(s)"}

@@ -136,7 +136,7 @@ const OrderHistory = ({ activationFilter }) => {
                   <div className="mt-2">
                     <button
                       onClick={() => downloadInvoice(order.id)}
-                      className="text-xs text-blue-400 dark:text-blue-300 hover:underline cursor-pointer bg-transparent border-none p-0"
+                      className="text-xs text-indigo-400 dark:text-indigo-300 hover:underline cursor-pointer bg-transparent border-none p-0"
                     >
                       View Invoice PDF
                     </button>
@@ -149,7 +149,7 @@ const OrderHistory = ({ activationFilter }) => {
             <div className="mt-3 text-right">
               <button
                 onClick={() => handleToggle(patient.id)}
-                className="text-blue-600 dark:text-blue-400 hover:underline text-xs"
+                className="text-indigo-600 dark:text-indigo-400 hover:underline text-xs"
               >
                 {expandedPatients[patient.id] ? "Show Less" : "Show All Orders"}
               </button>
