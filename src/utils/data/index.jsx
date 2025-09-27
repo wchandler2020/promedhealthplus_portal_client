@@ -85,20 +85,29 @@ export const about_team = [
     name: 'Dr. Eric Vasquez',
     title: 'CEO',
     image: 'https://plus.unsplash.com/premium_photo-1661293876679-5cee3ee9e8c8?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    bio: 'Cognitive computing pioneer with a PhD in Computational Neuroscience from Stanford.'
+    bio: 'Cognitive computing pioneer with a PhD in Computational Neuroscience from Stanford.',
+    email: "jane@promed.com", // 🎯 Required for overlay
+    phone: "+1 (555) 123-4567" // 🎯 Required for overlay
+
   },
   { 
     id: 2,
     name: 'Rachel Patel',
     title: 'Chief Technology Officer',
     image: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=1287&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    bio: 'Cognitive computing pioneer with a PhD in Computational Neuroscience from Stanford.'
+    bio: 'Cognitive computing pioneer with a PhD in Computational Neuroscience from Stanford.',
+    email: "jane@promed.com", // 🎯 Required for overlay
+    phone: "+1 (555) 123-4567" // 🎯 Required for overlay
+
   },
   { 
     id: 3,
     name: 'Dr. Kristen Nkosi',
     title: 'Chief Ethics Officer',
     image: 'https://images.unsplash.com/photo-1581065178047-8ee15951ede6?q=80&w=1315&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    bio: 'Author of "The Moral Algorithm" and AI policy advisor to the EU Parliament.'
+    bio: 'Author of "The Moral Algorithm" and AI policy advisor to the EU Parliament.',
+    email: "jane@promed.com", // 🎯 Required for overlay
+    phone: "+1 (555) 123-4567" // 🎯 Required for overlay
+
   },
 ]

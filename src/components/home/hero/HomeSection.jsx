@@ -69,15 +69,15 @@ const HeroSection = () => {
           <div className="bg-white/10 p-6 rounded-xl backdrop-blur-sm shadow-2xl"> 
             {/* Title - Updated classes for one line on mobile */}
             <motion.h1 
-              className="text-white text-3xl sm:text-4xl md:text-5xl xl:text-6xl font-extrabold leading-tight drop-shadow-lg whitespace-nowrap"
+              className="text-white text-3xl sm:text-4xl md:text-5xl xl:text-6xl font-semibold leading-tight drop-shadow-lg whitespace-nowrap"
               variants={itemVariants}
             >
-              Promed Health&nbsp;<span className="text-blue-400">Plus</span>
+              Promed Health&nbsp;<span className="text-indigo-400">Plus</span>
             </motion.h1>
             
             {/* Subtitle */}
             <motion.p 
-              className="text-gray-200 text-xl md:text-2xl leading-snug mt-4 max-w-lg drop-shadow-md"
+              className="text-gray-200 text-lg md:text-1xl leading-snug mt-4 max-w-lg drop-shadow-md"
               variants={itemVariants}
             >
               Empowering Providers with Comprehensive Wound Care Solutions
@@ -86,7 +86,7 @@ const HeroSection = () => {
             {/* CTA Button */}
             <motion.button
               onClick={handleOpen}
-              className="px-10 py-4 bg-blue-600 text-white rounded-lg inline-block mt-8 font-bold text-lg uppercase tracking-wider hover:bg-blue-700 transition-colors duration-300 shadow-xl"
+              className="px-10 py-4 bg-indigo-600 text-white rounded-lg inline-block mt-8 font-semibold text-lg uppercase tracking-wider hover:bg-indigo-700 transition-colors duration-300 shadow-xl"
               variants={itemVariants}
               whileHover={{ scale: 1.05, boxShadow: "0 15px 25px rgba(0, 0, 0, 0.4)" }}
               whileTap={{ scale: 0.95 }}
