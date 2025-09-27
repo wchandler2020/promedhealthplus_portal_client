@@ -118,7 +118,7 @@ const ProviderProfileCard = () => {
           </p>
           <button
             onClick={handleEdit}
-            className="mt-6 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-5 py-2 rounded-lg flex items-center gap-2 shadow-md hover:shadow-lg transition-all"
+            className="mt-6 bg-teal-600 hover:bg-teal-700 text-white font-semibold px-5 py-2 rounded-lg flex items-center gap-2 shadow-md hover:shadow-lg transition-all"
           >
             <FaRegEdit />
             Edit Profile

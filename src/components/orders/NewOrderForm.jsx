@@ -534,7 +534,7 @@ const NewOrderForm = ({ open, onClose, patient }) => {
             {step < totalSteps ? (
               <button
                 onClick={() => setStep((prev) => prev + 1)}
-                className="px-3 py-2 rounded bg-indigo-600 text-white"
+                className="px-3 py-2 rounded bg-teal-600 text-white"
               >
                 Next
               </button>
@@ -542,7 +542,7 @@ const NewOrderForm = ({ open, onClose, patient }) => {
               <Button
                 onClick={handleOrderNow}
                 variant="contained"
-                className="bg-indigo-600 text-white font-bold"
+                className="bg-teal-600 text-white font-bold"
                 disabled={!hasSelectedItems}
                 sx={{
                   '&.Mui-disabled': {

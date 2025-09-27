@@ -1,10 +1,32 @@
 // src/components/ContactModal.jsx
 
 import React, { useState } from "react";
-import { Modal, Box, Typography } from "@mui/material";
+import { Modal, Box } from "@mui/material";
+// 💥 Import motion from framer-motion
+import { motion } from "framer-motion"; 
 import toast from 'react-hot-toast';
 import axios from "axios";
 import { states } from "../../../utils/data";
+
+// 💥 NEW: Modal Animation Variants
+const modalVariants = {
+    hidden: { opacity: 0, scale: 0.95 },
+    visible: {
+        opacity: 1,
+        scale: 1,
+        transition: {
+            duration: 0.3, // Open speed
+            ease: "easeOut",
+        },
+    },
+    exit: { // Close speed
+        opacity: 0,
+        scale: 0.9,
+        transition: {
+            duration: 0.25,
+        },
+    },
+};
 
 const modalStyle = {
   position: "absolute",
@@ -75,9 +97,23 @@ const ContactModal = ({ open, handleClose }) => {
   };
 
   return (
-    <Modal open={open} onClose={handleClose}>
+    <Modal 
+        open={open} 
+        onClose={handleClose}
+        // 💥 Tell MUI to disable its default transition to use Framer Motion
+        disablePortal
+        keepMounted
+        hideBackdrop={false}
+    >
       <Box sx={modalStyle}>
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-8 mx-4 border border-gray-100 dark:border-gray-700 relative h-full transition-colors duration-300">
+        {/* 💥 FIX: Wrap the modal content in motion.div and apply variants */}
+        <motion.div 
+            className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-8 mx-4 border border-gray-100 dark:border-gray-700 relative h-full transition-colors duration-300"
+            initial="hidden"
+            animate="visible"
+            exit="exit" // Uses the exit variant when 'open' becomes false
+            variants={modalVariants}
+        >
           <button
             onClick={handleClose}
             className="absolute top-4 right-4 text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-100 transition"
@@ -119,7 +155,7 @@ const ContactModal = ({ open, handleClose }) => {
                 onChange={handleChange}
                 required
                 placeholder="e.g., Dr. John Smith"
-                className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200"
+                className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-2 focus:ring-teal-500 focus:outline-none bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200"
               />
             </div>
             <div>
@@ -133,7 +169,7 @@ const ContactModal = ({ open, handleClose }) => {
                 onChange={handleChange}
                 required
                 placeholder="e.g., Your clinic, hospital, or practice name"
-                className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200"
+                className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-2 focus:ring-teal-500 focus:outline-none bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200"
               />
             </div>
 
@@ -148,7 +184,7 @@ const ContactModal = ({ open, handleClose }) => {
                   value={formData.city}
                   onChange={handleChange}
                   required
-                  className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200"
+                  className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-2 focus:ring-teal-500 focus:outline-none bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200"
                 />
               </div>
 
@@ -162,7 +198,7 @@ const ContactModal = ({ open, handleClose }) => {
                     value={formData.state}
                     onChange={handleChange}
                     required
-                    className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-teal-500 focus:outline-none"
                   >
                     <option value="">Select</option>
                     {states.map((state) => (
@@ -182,7 +218,7 @@ const ContactModal = ({ open, handleClose }) => {
                     value={formData.zip}
                     onChange={handleChange}
                     required
-                    className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200"
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-2 focus:ring-teal-500 focus:outline-none bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200"
                   />
                 </div>
               </div>
@@ -199,7 +235,7 @@ const ContactModal = ({ open, handleClose }) => {
                 onChange={handleChange}
                 required
                 placeholder="(123) 456-7890"
-                className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200"
+                className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-2 focus:ring-teal-500 focus:outline-none bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200"
               />
             </div>
 
@@ -214,7 +250,7 @@ const ContactModal = ({ open, handleClose }) => {
                 onChange={handleChange}
                 required
                 placeholder="you@example.com"
-                className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200"
+                className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-2 focus:ring-teal-500 focus:outline-none bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200"
               />
             </div>
 
@@ -229,18 +265,18 @@ const ContactModal = ({ open, handleClose }) => {
                 required
                 rows={4}
                 placeholder="Type your message..."
-                className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm resize-none focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200"
+                className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm resize-none focus:ring-2 focus:ring-teal-500 focus:outline-none bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200"
               ></textarea>
             </div>
 
             <button
               type="submit"
-              className="w-full bg-indigo-600 dark:bg-indigo-700 hover:bg-indigo-700 dark:hover:bg-indigo-800 text-white font-semibold py-3 px-6 rounded-lg shadow-lg transition duration-300"
+              className="w-full bg-teal-600 dark:bg-teal-700 hover:bg-teal-700 dark:hover:bg-teal-800 text-white font-semibold py-3 px-6 rounded-lg shadow-lg transition duration-300"
             >
               Send Message
             </button>
           </form>
-        </div>
+        </motion.div>
       </Box>
     </Modal>
   );

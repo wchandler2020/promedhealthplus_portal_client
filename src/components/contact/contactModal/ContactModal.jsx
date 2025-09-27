@@ -117,7 +117,7 @@ const ContactRepModal = ({ open, onClose }) => {
                 value={formData.name}
                 onChange={handleChange}
                 required
-                className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
+                className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-2 focus:ring-teal-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
               />
             </div>
 
@@ -131,7 +131,7 @@ const ContactRepModal = ({ open, onClose }) => {
                 value={formData.phone}
                 onChange={handleChange}
                 required
-                className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
+                className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-2 focus:ring-teal-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
               />
             </div>
 
@@ -145,7 +145,7 @@ const ContactRepModal = ({ open, onClose }) => {
                 value={formData.email}
                 onChange={handleChange}
                 required
-                className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
+                className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-2 focus:ring-teal-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
               />
             </div>
 
@@ -159,13 +159,13 @@ const ContactRepModal = ({ open, onClose }) => {
                 onChange={handleChange}
                 required
                 rows={4}
-                className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm resize-none focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
+                className="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm resize-none focus:ring-2 focus:ring-teal-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
               ></textarea>
             </div>
 
             <button
               type="submit"
-              className="w-full bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-600 dark:hover:bg-indigo-700 text-white font-semibold py-3 px-6 rounded-lg shadow-lg transition duration-300"
+              className="w-full bg-teal-600 hover:bg-teal-700 dark:bg-teal-600 dark:hover:bg-teal-700 text-white font-semibold py-3 px-6 rounded-lg shadow-lg transition duration-300"
             >
               Send Message
             </button>

@@ -12,7 +12,7 @@ import logo from "../../assets/images/logo.png";
 
 const MobileMenuIconSVG = () => (
   <svg
-    className="block h-4 w-4 fill-current text-indigo-400"
+    className="block h-4 w-4 fill-current text-teal-400"
     viewBox="0 0 20 20"
     xmlns="http://www.w3.org/2000/svg"
   >
@@ -216,7 +216,7 @@ const Navbar = ({ isDarkMode, setIsDarkMode }) => {
 
         <div className="lg:hidden">
           <button
-            className="navbar-burger flex items-center text-indigo-600 p-3"
+            className="navbar-burger flex items-center text-teal-600 p-3"
             onClick={toggleMobileMenu}
           >
             <MobileMenuIconSVG />
@@ -226,7 +226,7 @@ const Navbar = ({ isDarkMode, setIsDarkMode }) => {
         <ul className="hidden absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 lg:flex lg:mx-auto lg:items-center lg:space-x-6">
           <li>
             <Link
-              className="text-base text-gray-800 dark:text-gray-200 hover:text-indigo-400 font-semibold"
+              className="text-base text-gray-800 dark:text-gray-200 hover:text-teal-400 font-semibold"
               to="/"
             >
               Home
@@ -235,7 +235,7 @@ const Navbar = ({ isDarkMode, setIsDarkMode }) => {
           {isAuthenticated && (
             <li>
               <Link
-                className="text-base text-gray-800 dark:text-gray-200 hover:text-indigo-400 font-semibold"
+                className="text-base text-gray-800 dark:text-gray-200 hover:text-teal-400 font-semibold"
                 to="/dashboard/"
               >
                 Dashboard
@@ -244,7 +244,7 @@ const Navbar = ({ isDarkMode, setIsDarkMode }) => {
           )}
           <li>
             <Link
-              className="text-base text-gray-800 dark:text-gray-200 hover:text-indigo-400 font-semibold"
+              className="text-base text-gray-800 dark:text-gray-200 hover:text-teal-400 font-semibold"
               to="/about/"
             >
               About Us
@@ -252,7 +252,7 @@ const Navbar = ({ isDarkMode, setIsDarkMode }) => {
           </li>
           <li>
             <Link
-              className="text-base text-gray-800 dark:text-gray-200 hover:text-indigo-400 font-semibold"
+              className="text-base text-gray-800 dark:text-gray-200 hover:text-teal-400 font-semibold"
               to="/services/"
             >
               Services
@@ -260,7 +260,7 @@ const Navbar = ({ isDarkMode, setIsDarkMode }) => {
           </li>
           <li>
             <Link
-              className="text-base text-gray-800 dark:text-gray-200 hover:text-indigo-400 font-semibold"
+              className="text-base text-gray-800 dark:text-gray-200 hover:text-teal-400 font-semibold"
               to="/contact/"
             >
               Contact
@@ -279,7 +279,7 @@ const Navbar = ({ isDarkMode, setIsDarkMode }) => {
               {isDarkMode ? (
                 <MdLightMode size={20} className="text-yellow-500" />
               ) : (
-                <MdDarkMode size={20} className="text-indigo-500" />
+                <MdDarkMode size={20} className="text-teal-500" />
               )}
             </button>
             <div
@@ -385,16 +385,16 @@ const Navbar = ({ isDarkMode, setIsDarkMode }) => {
               {isDarkMode ? (
                 <MdLightMode size={20} className="text-yellow-500" />
               ) : (
-                <MdDarkMode size={20} className="text-indigo-500" />
+                <MdDarkMode size={20} className="text-teal-500" />
               )}
             </button>
             <Link to="/login">
-              <button className="px-4 py-2 text-sm tracking-wide text-white transition-colors duration-200 transform bg-indigo-500 rounded-md hover:bg-indigo-400 focus:outline-none focus:bg-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50 uppercase">
+              <button className="px-4 py-2 text-sm tracking-wide text-white transition-colors duration-200 transform bg-teal-500 rounded-md hover:bg-teal-400 focus:outline-none focus:bg-teal-500 focus:ring focus:ring-teal-500 focus:ring-opacity-50 uppercase">
                 Dashboard Login
               </button>
             </Link>
             <Link to="/register">
-              <button className="px-4 py-2 text-sm tracking-wide text-indigo-500 border border-indigo-500 rounded-md transition-colors duration-200 hover:bg-indigo-100 focus:outline-none focus:ring focus:ring-indigo-500 focus:ring-opacity-50 uppercase">
+              <button className="px-4 py-2 text-sm tracking-wide text-teal-500 border border-teal-500 rounded-md transition-colors duration-200 hover:bg-teal-100 focus:outline-none focus:ring focus:ring-teal-500 focus:ring-opacity-50 uppercase">
                 Provider Registration
               </button>
             </Link>
@@ -437,7 +437,7 @@ const Navbar = ({ isDarkMode, setIsDarkMode }) => {
           <ul>
             <li className="mb-1">
               <Link
-                className="block p-4 text-sm text-gray-800 dark:text-gray-200 hover:bg-indigo-50 dark:hover:bg-indigo-800 hover:text-indigo-500 rounded"
+                className="block p-4 text-sm text-gray-800 dark:text-gray-200 hover:bg-teal-50 dark:hover:bg-teal-800 hover:text-teal-500 rounded"
                 to="/"
                 onClick={closeMobileMenu}
               >
@@ -448,7 +448,7 @@ const Navbar = ({ isDarkMode, setIsDarkMode }) => {
               <>
                 <li className="mb-1">
                   <Link
-                    className="block p-4 text-sm text-gray-800 dark:text-gray-200 hover:bg-indigo-50 dark:hover:bg-indigo-800 hover:text-indigo-500 rounded"
+                    className="block p-4 text-sm text-gray-800 dark:text-gray-200 hover:bg-teal-50 dark:hover:bg-teal-800 hover:text-teal-500 rounded"
                     to="/dashboard/"
                     onClick={closeMobileMenu}
                   >
@@ -457,7 +457,7 @@ const Navbar = ({ isDarkMode, setIsDarkMode }) => {
                 </li>
                 <li className="mb-1">
                   <Link
-                    className="block p-4 text-sm text-gray-800 dark:text-gray-200 hover:bg-indigo-50 dark:hover:bg-indigo-800 hover:text-indigo-500 rounded"
+                    className="block p-4 text-sm text-gray-800 dark:text-gray-200 hover:bg-teal-50 dark:hover:bg-teal-800 hover:text-teal-500 rounded"
                     to="/profile"
                     onClick={closeMobileMenu}
                   >
@@ -468,7 +468,7 @@ const Navbar = ({ isDarkMode, setIsDarkMode }) => {
             )}
             <li className="mb-1">
               <Link
-                className="block p-4 text-sm text-gray-800 dark:text-gray-200 hover:bg-indigo-50 dark:hover:bg-indigo-800 hover:text-indigo-500 rounded"
+                className="block p-4 text-sm text-gray-800 dark:text-gray-200 hover:bg-teal-50 dark:hover:bg-teal-800 hover:text-teal-500 rounded"
                 to="/about/"
                 onClick={closeMobileMenu}
               >
@@ -477,7 +477,7 @@ const Navbar = ({ isDarkMode, setIsDarkMode }) => {
             </li>
             <li className="mb-1">
               <Link
-                className="block p-4 text-sm text-gray-800 dark:text-gray-200 hover:bg-indigo-50 dark:hover:bg-indigo-800 hover:text-indigo-500 rounded"
+                className="block p-4 text-sm text-gray-800 dark:text-gray-200 hover:bg-teal-50 dark:hover:bg-teal-800 hover:text-teal-500 rounded"
                 to="/services/"
                 onClick={closeMobileMenu}
               >
@@ -486,7 +486,7 @@ const Navbar = ({ isDarkMode, setIsDarkMode }) => {
             </li>
             <li className="mb-1">
               <Link
-                className="block p-4 text-sm text-gray-800 dark:text-gray-200 hover:bg-indigo-50 dark:hover:bg-indigo-800 hover:text-indigo-500 rounded"
+                className="block p-4 text-sm text-gray-800 dark:text-gray-200 hover:bg-teal-50 dark:hover:bg-teal-800 hover:text-teal-500 rounded"
                 to="/contact/"
                 onClick={closeMobileMenu}
               >
@@ -575,7 +575,7 @@ const Navbar = ({ isDarkMode, setIsDarkMode }) => {
                   className="w-full px-4 py-2 text-sm tracking-wide text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-700 rounded-md transition-colors duration-200 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-50 flex items-center justify-center"
                 >
                   {isDarkMode ? (
-                    <MdLightMode size={20} className="text-indigo-500 mr-2" />
+                    <MdLightMode size={20} className="text-teal-500 mr-2" />
                   ) : (
                     <MdDarkMode size={20} className="text-yellow-500 mr-2" />
                   )}
@@ -600,19 +600,19 @@ const Navbar = ({ isDarkMode, setIsDarkMode }) => {
                   className="w-full px-4 py-2 text-sm tracking-wide text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-700 rounded-md transition-colors duration-200 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-50 flex items-center justify-center"
                 >
                   {isDarkMode ? (
-                    <MdLightMode size={20} className="text-indigo-500 mr-2" />
+                    <MdLightMode size={20} className="text-teal-500 mr-2" />
                   ) : (
                     <MdDarkMode size={20} className="text-yellow-500 mr-2" />
                   )}
                   Toggle Dark Mode
                 </button>
                 <Link to="/login" onClick={closeMobileMenu}>
-                  <button className="w-full px-4 py-2 text-sm tracking-wide text-white transition-colors duration-200 transform bg-indigo-500 rounded-md hover:bg-indigo-400 focus:outline-none focus:bg-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50 uppercase">
+                  <button className="w-full px-4 py-2 text-sm tracking-wide text-white transition-colors duration-200 transform bg-teal-500 rounded-md hover:bg-teal-400 focus:outline-none focus:bg-teal-500 focus:ring focus:ring-teal-500 focus:ring-opacity-50 uppercase">
                     Dashboard Login
                   </button>
                 </Link>
                 <Link to="/register" onClick={closeMobileMenu}>
-                  <button className="w-full px-4 py-2 text-sm tracking-wide text-indigo-500 border border-indigo-500 rounded-md transition-colors duration-200 hover:bg-indigo-100 focus:outline-none focus:ring focus:ring-indigo-500 focus:ring-opacity-50 uppercase">
+                  <button className="w-full px-4 py-2 text-sm tracking-wide text-teal-500 border border-teal-500 rounded-md transition-colors duration-200 hover:bg-teal-100 focus:outline-none focus:ring focus:ring-teal-500 focus:ring-opacity-50 uppercase">
                     Provider Registration
                   </button>
                 </Link>

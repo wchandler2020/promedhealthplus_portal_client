@@ -72,7 +72,7 @@ const Contact = () => {
             variants={itemVariants}
             className="text-4xl sm:text-5xl md:text-6xl font-semibold text-gray-900 dark:text-white mb-4 leading-tight"
           >
-            Promed Health <span className="text-blue-500">Plus</span>
+            Promed Health <span className="text-teal-500">Plus</span>
           </motion.h1>
           <motion.p
             variants={itemVariants}
@@ -111,7 +111,7 @@ const Contact = () => {
                   onChange={handleChange}
                   required
                   placeholder="Your Name / Practice Name"
-                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-300"
+                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition duration-300"
                 />
               </div>
 
@@ -129,7 +129,7 @@ const Contact = () => {
                     onChange={handleChange}
                     required
                     placeholder="e.g. Philadelphia"
-                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-300"
+                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition duration-300"
                   />
                 </div>
                 <div>
@@ -142,7 +142,7 @@ const Contact = () => {
                     value={formData.state}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-300 appearance-none"
+                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition duration-300 appearance-none"
                   >
                     <option value="">Select State</option>
                     {states.map((st) => (
@@ -164,7 +164,7 @@ const Contact = () => {
                     onChange={handleChange}
                     required
                     placeholder="e.g. 19103"
-                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-300"
+                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition duration-300"
                   />
                 </div>
               </div>
@@ -183,7 +183,7 @@ const Contact = () => {
                     onChange={handleChange}
                     required
                     placeholder="(555) 123-4567"
-                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-300"
+                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition duration-300"
                   />
                 </div>
                 <div>
@@ -198,7 +198,7 @@ const Contact = () => {
                     onChange={handleChange}
                     required
                     placeholder="you@example.com"
-                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-300"
+                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition duration-300"
                   />
                 </div>
               </div>
@@ -216,15 +216,15 @@ const Contact = () => {
                   required
                   rows={4}
                   placeholder="How can we help your practice?"
-                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-300 resize-none"
+                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition duration-300 resize-none"
                 />
               </div>
 
               <motion.button
                 type="submit"
                 disabled={isSubmitting}
-                className={`w-full flex justify-center items-center bg-blue-600 text-white font-semibold py-3 px-6 rounded-xl text-base sm:text-lg transition duration-300 shadow-lg mt-4 ${
-                  isSubmitting ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-400"
+                className={`w-full flex justify-center items-center bg-teal-600 text-white font-semibold py-3 px-6 rounded-xl text-base sm:text-lg transition duration-300 shadow-lg mt-4 ${
+                  isSubmitting ? "opacity-50 cursor-not-allowed" : "hover:bg-teal-700 dark:bg-teal-500 dark:hover:bg-teal-400"
                 }`}
                 whileHover={!isSubmitting ? { scale: 1.02 } : {}}
                 whileTap={!isSubmitting ? { scale: 0.98 } : {}}
@@ -240,12 +240,12 @@ const Contact = () => {
               variants={itemVariants}
               className="bg-white dark:bg-gray-800 p-6 sm:p-8 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 transition-colors duration-300"
             >
-              <h3 className="text-2xl font-bold text-gray-800 dark:text-white border-b pb-3 border-blue-200 dark:border-blue-700 mb-6">
+              <h3 className="text-2xl font-bold text-gray-800 dark:text-white border-b pb-3 border-teal-200 dark:border-teal-700 mb-6">
                 Information
               </h3>
 
               <div className="flex items-start space-x-4 mb-4">
-                <IoLocationOutline className="text-blue-600 dark:text-blue-400 text-2xl flex-shrink-0 mt-1" />
+                <IoLocationOutline className="text-teal-600 dark:text-teal-400 text-2xl flex-shrink-0 mt-1" />
                 <div>
                   <p className="font-semibold text-gray-800 dark:text-white">Our Main Office</p>
                   <p className="text-gray-600 dark:text-gray-400 text-sm">
@@ -256,20 +256,20 @@ const Contact = () => {
               </div>
 
               <div className="flex items-start space-x-4 mb-4">
-                <IoCallOutline className="text-blue-600 dark:text-blue-400 text-2xl flex-shrink-0 mt-1" />
+                <IoCallOutline className="text-teal-600 dark:text-teal-400 text-2xl flex-shrink-0 mt-1" />
                 <div>
                   <p className="font-semibold text-gray-800 dark:text-white">Call Us</p>
-                  <a href="tel:+12675551212" className="text-blue-600 dark:text-blue-400 text-sm hover:underline">
+                  <a href="tel:+12675551212" className="text-teal-600 dark:text-teal-400 text-sm hover:underline">
                     (267) 555-1212
                   </a>
                 </div>
               </div>
 
               <div className="flex items-start space-x-4">
-                <IoMailOutline className="text-blue-600 dark:text-blue-400 text-2xl flex-shrink-0 mt-1" />
+                <IoMailOutline className="text-teal-600 dark:text-teal-400 text-2xl flex-shrink-0 mt-1" />
                 <div>
                   <p className="font-semibold text-gray-800 dark:text-white">General Inquiry</p>
-                  <a href="mailto:info@promedhealth.com" className="text-blue-600 dark:text-blue-400 text-sm hover:underline">
+                  <a href="mailto:info@promedhealth.com" className="text-teal-600 dark:text-teal-400 text-sm hover:underline">
                     admin@promedhealthplus.com
                   </a>
                 </div>
@@ -322,7 +322,7 @@ const Contact = () => {
             ].map((faq, idx) => (
               <motion.div key={idx} variants={itemVariants} className="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 hover:shadow-xl transition duration-300">
                 <h4 className="font-semibold text-gray-900 dark:text-white flex items-center mb-2">
-                  <IoHelpCircleOutline className="text-blue-600 dark:text-blue-400 text-xl mr-2" />
+                  <IoHelpCircleOutline className="text-teal-600 dark:text-teal-400 text-xl mr-2" />
                   {faq.question}
                 </h4>
                 <p className="text-gray-600 dark:text-gray-400 text-sm">{faq.answer}</p>
@@ -332,7 +332,7 @@ const Contact = () => {
           <motion.div variants={itemVariants} className="text-center pt-8">
             <p className="text-lg text-gray-700 dark:text-gray-300">
               For immediate answers, visit our{" "}
-              <a href="/help-center" className="text-blue-600 dark:text-blue-400 font-bold hover:underline transition">
+              <a href="/help-center" className="text-teal-600 dark:text-teal-400 font-bold hover:underline transition">
                 Help Center
               </a>.
             </p>

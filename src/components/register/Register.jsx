@@ -154,7 +154,7 @@ const Register = () => {
         >
           <Link
             to="/"
-            className="p-3 bg-indigo-700/80 hover:bg-indigo-700 text-white rounded-full shadow-xl transition duration-300 backdrop-blur-sm flex justify-center items-center"
+            className="p-3 bg-teal-700/80 hover:bg-teal-700 text-white rounded-full shadow-xl transition duration-300 backdrop-blur-sm flex justify-center items-center"
             title="Back to Home"
           >
             <IoArrowBack size={24} />
@@ -173,8 +173,8 @@ const Register = () => {
           <div className="absolute inset-0 z-0 bg-gray-900/60"></div>
           <div className="flex items-center h-full px-20 relative z-20">
             <div>
-              <h2 className="text-5xl font-extrabold text-white drop-shadow-lg">
-                ProMed Health <span className="text-indigo-400">Plus</span>
+              <h2 className="text-5xl font-semibold text-white drop-shadow-lg">
+                ProMed Health <span className="text-teal-400">Plus</span>
               </h2>
               <p className="max-w-xl mt-3 text-gray-200 text-xl font-light drop-shadow">
                 Securely manage your patient care and medical supplies with a single, intuitive platform.
@@ -219,7 +219,7 @@ const Register = () => {
                     placeholder="John Doe"
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
-                    className="block w-full px-4 py-3 mt-1 text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg focus:border-indigo-500 focus:ring-indigo-500 focus:outline-none focus:ring-1 transition duration-200"
+                    className="block w-full px-4 py-3 mt-1 text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg focus:border-teal-500 focus:ring-teal-500 focus:outline-none focus:ring-1 transition duration-200"
                     required
                   />
                 </motion.div>
@@ -235,7 +235,7 @@ const Register = () => {
                     placeholder="example@example.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="block w-full px-4 py-3 mt-1 text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg focus:border-indigo-500 focus:ring-indigo-500 focus:outline-none focus:ring-1 transition duration-200"
+                    className="block w-full px-4 py-3 mt-1 text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg focus:border-teal-500 focus:ring-teal-500 focus:outline-none focus:ring-1 transition duration-200"
                     required
                   />
                 </motion.div>
@@ -249,7 +249,7 @@ const Register = () => {
                     <select
                       value={countryCode}
                       onChange={(e) => setCountryCode(e.target.value)}
-                      className="w-1/3 px-3 py-3 border border-gray-300 dark:border-gray-700 rounded-l-lg bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 focus:border-indigo-500 focus:ring-indigo-500 focus:outline-none focus:ring-1 transition duration-200"
+                      className="w-1/3 px-3 py-3 border border-gray-300 dark:border-gray-700 rounded-l-lg bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 focus:border-teal-500 focus:ring-teal-500 focus:outline-none focus:ring-1 transition duration-200"
                     >
                       {countryCodesList.map((country) => (
                         <option key={`${country.code}-${country.name}`} value={country.code}>
@@ -263,7 +263,7 @@ const Register = () => {
                       placeholder="555-555-5555"
                       value={phoneNumber}
                       onChange={(e) => setPhoneNumber(e.target.value)}
-                      className="w-2/3 px-4 py-3 border border-l-0 border-gray-300 dark:border-gray-700 rounded-r-lg text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-800 focus:border-indigo-500 focus:ring-indigo-500 focus:outline-none focus:ring-1 transition duration-200"
+                      className="w-2/3 px-4 py-3 border border-l-0 border-gray-300 dark:border-gray-700 rounded-r-lg text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-800 focus:border-teal-500 focus:ring-teal-500 focus:outline-none focus:ring-1 transition duration-200"
                     />
                   </div>
                 </motion.div>
@@ -279,7 +279,7 @@ const Register = () => {
                     placeholder="Your Clinic or Hospital Name"
                     value={facility}
                     onChange={(e) => setFacility(e.target.value)}
-                    className="block w-full px-4 py-3 mt-1 text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg focus:border-indigo-500 focus:ring-indigo-500 focus:outline-none focus:ring-1 transition duration-200"
+                    className="block w-full px-4 py-3 mt-1 text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg focus:border-teal-500 focus:ring-teal-500 focus:outline-none focus:ring-1 transition duration-200"
                     required
                   />
                 </motion.div>
@@ -295,7 +295,7 @@ const Register = () => {
                     placeholder="555-555-5555"
                     value={facilityPhoneNumber}
                     onChange={(e) => setFacilityPhoneNumber(e.target.value)}
-                    className="block w-full px-4 py-3 mt-1 text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg focus:border-indigo-500 focus:ring-indigo-500 focus:outline-none focus:ring-1 transition duration-200"
+                    className="block w-full px-4 py-3 mt-1 text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg focus:border-teal-500 focus:ring-teal-500 focus:outline-none focus:ring-1 transition duration-200"
                     required
                   />
                 </motion.div>
@@ -311,7 +311,7 @@ const Register = () => {
                     placeholder="e.g., Chicago"
                     value={city}
                     onChange={(e) => setCity(e.target.value)}
-                    className="block w-full px-4 py-3 mt-1 text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg focus:border-indigo-500 focus:ring-indigo-500 focus:outline-none focus:ring-1 transition duration-200"
+                    className="block w-full px-4 py-3 mt-1 text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg focus:border-teal-500 focus:ring-teal-500 focus:outline-none focus:ring-1 transition duration-200"
                     required
                   />
                 </motion.div>
@@ -327,7 +327,7 @@ const Register = () => {
                     placeholder="e.g., IL"
                     value={state}
                     onChange={(e) => setState(e.target.value)}
-                    className="block w-full px-4 py-3 mt-1 text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg focus:border-indigo-500 focus:ring-indigo-500 focus:outline-none focus:ring-1 transition duration-200"
+                    className="block w-full px-4 py-3 mt-1 text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg focus:border-teal-500 focus:ring-teal-500 focus:outline-none focus:ring-1 transition duration-200"
                     required
                   />
                 </motion.div>
@@ -343,7 +343,7 @@ const Register = () => {
                     placeholder="e.g., United States"
                     value={country}
                     onChange={(e) => setCountry(e.target.value)}
-                    className="block w-full px-4 py-3 mt-1 text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg focus:border-indigo-500 focus:ring-indigo-500 focus:outline-none focus:ring-1 transition duration-200"
+                    className="block w-full px-4 py-3 mt-1 text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg focus:border-teal-500 focus:ring-teal-500 focus:outline-none focus:ring-1 transition duration-200"
                     required
                   />
                 </motion.div>
@@ -360,7 +360,7 @@ const Register = () => {
                     value={npiNumber}
                     onChange={(e) => setNpiNumber(e.target.value)}
                     maxLength="10"
-                    className="block w-full px-4 py-3 mt-1 text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg focus:border-indigo-500 focus:ring-indigo-500 focus:outline-none focus:ring-1 transition duration-200"
+                    className="block w-full px-4 py-3 mt-1 text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg focus:border-teal-500 focus:ring-teal-500 focus:outline-none focus:ring-1 transition duration-200"
                     required
                   />
                 </motion.div>
@@ -376,7 +376,7 @@ const Register = () => {
                     placeholder="Create a password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="block w-full px-4 py-3 mt-1 text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg focus:border-indigo-500 focus:ring-indigo-500 focus:outline-none focus:ring-1 transition duration-200"
+                    className="block w-full px-4 py-3 mt-1 text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg focus:border-teal-500 focus:ring-teal-500 focus:outline-none focus:ring-1 transition duration-200"
                     required
                   />
                   <div className="mt-2 text-sm">
@@ -390,10 +390,10 @@ const Register = () => {
                       ].map(({ valid, text }, idx) => (
                         <li
                           key={idx}
-                          className={`${valid ? "text-indigo-600 dark:text-indigo-400" : ""} flex items-center`}
+                          className={`${valid ? "text-teal-600 dark:text-teal-400" : ""} flex items-center`}
                         >
                           <IoCheckmarkCircleOutline 
-                            className={`mr-2 ${valid ? "text-indigo-600 dark:text-indigo-400" : "text-gray-400 dark:text-gray-600"}`} 
+                            className={`mr-2 ${valid ? "text-teal-600 dark:text-teal-400" : "text-gray-400 dark:text-gray-600"}`} 
                           />
                           {text}
                         </li>
@@ -413,7 +413,7 @@ const Register = () => {
                     placeholder="Repeat your password"
                     value={password2}
                     onChange={(e) => setPassword2(e.target.value)}
-                    className="block w-full px-4 py-3 mt-1 text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg focus:border-indigo-500 focus:ring-indigo-500 focus:outline-none focus:ring-1 transition duration-200"
+                    className="block w-full px-4 py-3 mt-1 text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg focus:border-teal-500 focus:ring-teal-500 focus:outline-none focus:ring-1 transition duration-200"
                     required
                   />
                 </motion.div>
@@ -423,7 +423,7 @@ const Register = () => {
                   <label className="inline-flex items-center">
                     <input
                       type="checkbox"
-                      className="form-checkbox text-indigo-600 border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 rounded focus:ring-indigo-500 transition duration-200"
+                      className="form-checkbox text-teal-600 border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 rounded focus:ring-teal-500 transition duration-200"
                       checked={showPassword}
                       onChange={() => setShowPassword(!showPassword)}
                     />
@@ -436,7 +436,7 @@ const Register = () => {
                   <button
                     type="submit"
                     disabled={isLoading}
-                    className="w-full px-4 py-3 tracking-wide text-white font-bold transition-colors duration-200 transform bg-indigo-600 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50 uppercase shadow-lg"
+                    className="w-full px-4 py-3 tracking-wide text-white font-bold transition-colors duration-200 transform bg-teal-600 rounded-lg hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 disabled:opacity-50 uppercase shadow-lg"
                     whileHover={{ scale: 1.01 }}
                     whileTap={{ scale: 0.99 }}
                   >
@@ -464,7 +464,7 @@ const Register = () => {
                 Already have an account?{" "}
                 <Link
                   to="/login"
-                  className="text-indigo-600 dark:text-indigo-400 font-semibold focus:outline-none focus:underline hover:underline transition duration-200"
+                  className="text-teal-600 dark:text-teal-400 font-semibold focus:outline-none focus:underline hover:underline transition duration-200"
                 >
                   Log in
                 </Link>.

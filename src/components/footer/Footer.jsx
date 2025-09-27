@@ -22,16 +22,16 @@ const Footer = () => {
         </div>
         <div className="flex items-center justify-center">
           {/* Apply dark mode text colors to icons */}
-          <a className="mr-4 text-gray-800 dark:text-gray-300 hover:text-indigo-500" href="#">
+          <a className="mr-4 text-gray-800 dark:text-gray-300 hover:text-teal-500" href="#">
             <FaFacebookF className="text-base" />
           </a>
-          <a className="mr-4 text-gray-800 dark:text-gray-300 hover:text-indigo-500" href="#">
+          <a className="mr-4 text-gray-800 dark:text-gray-300 hover:text-teal-500" href="#">
             <FaLinkedinIn className="text-base" />
           </a>
-          <a className="mr-4 text-gray-800 dark:text-gray-300 hover:text-indigo-500" href="#">
+          <a className="mr-4 text-gray-800 dark:text-gray-300 hover:text-teal-500" href="#">
             <FaXTwitter className="text-base" />
           </a>
-          <a className="mr-4 text-gray-800 dark:text-gray-300 hover:text-indigo-500" href="#">
+          <a className="mr-4 text-gray-800 dark:text-gray-300 hover:text-teal-500" href="#">
             <FaInstagram className="text-base" />
           </a>
         </div>
@@ -63,10 +63,10 @@ const Footer = () => {
             <h6 className="mb-4 font-bold uppercase text-sm">Site links</h6>
             <ul className="text-xs space-y-2">
               {/* Apply dark mode text colors to links */}
-              <li><Link to='/' className="text-gray-800 dark:text-gray-300 hover:text-indigo-500">Home</Link></li>
-              <li><Link to='/about' className="text-gray-800 dark:text-gray-300 hover:text-indigo-500">About</Link></li>
-              <li><Link to='/services' className="text-gray-800 dark:text-gray-300 hover:text-indigo-500">Services</Link></li>
-              <li><Link to='/contact' className="text-gray-800 dark:text-gray-300 hover:text-indigo-500">Contact</Link></li>
+              <li><Link to='/' className="text-gray-800 dark:text-gray-300 hover:text-teal-500">Home</Link></li>
+              <li><Link to='/about' className="text-gray-800 dark:text-gray-300 hover:text-teal-500">About</Link></li>
+              <li><Link to='/services' className="text-gray-800 dark:text-gray-300 hover:text-teal-500">Services</Link></li>
+              <li><Link to='/contact' className="text-gray-800 dark:text-gray-300 hover:text-teal-500">Contact</Link></li>
             </ul>
           </div>
 
@@ -97,7 +97,7 @@ const Footer = () => {
           © {year} Copyright{" "}
         </p>
         <Link className="text-gray-800 dark:text-gray-300 text-xs font-semibold" to="/">
-          ProMed Health <span className="text-indigo-500">Plus</span>
+          ProMed Health <span className="text-teal-500">Plus</span>
         </Link>
       </div>
     </footer>

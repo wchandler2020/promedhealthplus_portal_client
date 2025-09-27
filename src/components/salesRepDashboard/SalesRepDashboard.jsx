@@ -123,7 +123,7 @@ const SalesRepDashboard = () => {
   const getOrderStatusColor = (status) => {
     switch (status) {
       case "Delivered": return "bg-green-500 text-white";
-      case "Shipped": return "bg-indigod-500 text-white";
+      case "Shipped": return "bg-teald-500 text-white";
       case "Pending": return "bg-yellow-500 text-white";
       default: return "bg-gray-500 text-white";
     }
@@ -203,7 +203,7 @@ const SalesRepDashboard = () => {
             current={dashboardData.stats.summary.deliveredOrders}
             total={dashboardData.stats.summary.totalOrders}
             icon={<MdOutlineShoppingBag size={32} />}
-            color="indigod"
+            color="teal"
           />
           <StatBox
             title="Total IVRs"
