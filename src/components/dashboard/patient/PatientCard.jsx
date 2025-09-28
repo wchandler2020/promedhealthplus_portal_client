@@ -6,6 +6,7 @@ import { format } from "date-fns";
 import { formatPhoneNumber } from "react-phone-number-input";
 import Notes from "../documemts/Notes";
 import NewOrderForm from "../../orders/NewOrderForm";
+import { IoDocumentsOutline } from "react-icons/io5";
 
 const IVRStatusBadge = ({ status }) => {
   const colors = {
@@ -55,7 +56,7 @@ const PatientCard = ({ patient, onViewPdf, onEdit, onDelete }) => {
         </h3>
         <div className="flex items-center space-x-3">
           <FaEdit
-            className="text-gray-500 dark:text-gray-400 hover:text-blue-500 cursor-pointer text-base"
+            className="text-gray-500 dark:text-gray-400 hover:text-teal-500 cursor-pointer text-base"
             onClick={() => onEdit(patient)}
             title="Edit Patient"
           />
@@ -188,8 +189,8 @@ const PatientCard = ({ patient, onViewPdf, onEdit, onDelete }) => {
             <strong>Promed Healthcare Plus IVR</strong>
           </p>
           <div className="flex space-x-2">
-            <FaEye
-              className="text-gray-500 dark:text-gray-400 hover:text-blue-500 cursor-pointer"
+            <IoDocumentsOutline
+              className="text-gray-500 dark:text-gray-400 hover:text-teal-500 cursor-pointer"
               onClick={() => onViewPdf(patient)}
             />
           </div>
@@ -209,7 +210,7 @@ const PatientCard = ({ patient, onViewPdf, onEdit, onDelete }) => {
             className={`text-xs px-3 py-1 rounded-full flex items-center gap-1 transition-all
             ${
               patient.ivrStatus === "Approved"
-                ? "bg-blue-500 text-white hover:bg-blue-600"
+                ? "bg-teal-500 text-white hover:bg-teal-600"
                 : "bg-gray-200 text-gray-500 cursor-not-allowed dark:bg-gray-700 dark:text-gray-400"
             }`}
             onClick={() => setOpenOrderModal(true)}

@@ -57,7 +57,7 @@ const Navbar = ({ isDarkMode, setIsDarkMode }) => {
   const profileRef = useRef(null);
 
   const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
+    setIsMobileMenuOpen((prev) => !prev);
   };
 
   const closeMobileMenu = () => {
@@ -68,16 +68,16 @@ const Navbar = ({ isDarkMode, setIsDarkMode }) => {
     const newMode = !isDarkMode;
     setIsDarkMode(newMode);
     localStorage.setItem("darkMode", newMode);
-    if (newMode) {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
+    if (newMode) document.documentElement.classList.add("dark");
+    else document.documentElement.classList.remove("dark");
   };
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth >= 1024) closeMobileMenu();
+      // Close mobile menu when reaching lg breakpoint (1024px)
+      if (window.innerWidth >= 1024) {
+        closeMobileMenu();
+      }
     };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
@@ -93,7 +93,8 @@ const Navbar = ({ isDarkMode, setIsDarkMode }) => {
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    return () =>
+      document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   useEffect(() => {
@@ -103,9 +104,7 @@ const Navbar = ({ isDarkMode, setIsDarkMode }) => {
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   useEffect(() => {
@@ -118,7 +117,6 @@ const Navbar = ({ isDarkMode, setIsDarkMode }) => {
       }
       setLoadingProfile(false);
     };
-
     if (isAuthenticated) {
       fetchProfile();
     }
@@ -204,219 +202,230 @@ const Navbar = ({ isDarkMode, setIsDarkMode }) => {
   return (
     <div className="bg-white dark:bg-gray-900 px-6 sm:px-8 mt-2 mb-10 transition-colors duration-500">
       <nav className="relative px-4 py-4 flex justify-between items-center bg-white dark:bg-gray-900">
-        <div className="flex items-center justify-center">
+        {/* Logo Section */}
+        <div className="flex items-center justify-center flex-shrink-0">
           <img src={logo} alt="" width={50} height={50} className="mr-1" />
           <Link
-            className="text-2xl sm:text-3xl font-semibold leading-none text-gray-900 dark:text-gray-100"
+            className="text-xl sm:text-2xl lg:text-3xl font-semibold leading-none text-gray-900 dark:text-gray-100 whitespace-nowrap"
             to="/"
           >
             ProMed Health Plus
           </Link>
         </div>
 
-        <div className="lg:hidden">
-          <button
-            className="navbar-burger flex items-center text-teal-600 p-3"
-            onClick={toggleMobileMenu}
-          >
-            <MobileMenuIconSVG />
-          </button>
-        </div>
-
-        <ul className="hidden absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 lg:flex lg:mx-auto lg:items-center lg:space-x-6">
-          <li>
-            <Link
-              className="text-base text-gray-800 dark:text-gray-200 hover:text-teal-400 font-semibold"
-              to="/"
-            >
-              Home
-            </Link>
-          </li>
-          {isAuthenticated && (
+        {/* Desktop Navigation Links - Only show on lg+ screens */}
+        <div className="hidden lg:flex items-center justify-center flex-1">
+          <ul className="flex items-center space-x-6 xl:space-x-8">
             <li>
               <Link
-                className="text-base text-gray-800 dark:text-gray-200 hover:text-teal-400 font-semibold"
-                to="/dashboard/"
+                className="text-base text-gray-800 dark:text-gray-200 hover:text-teal-400 font-semibold whitespace-nowrap"
+                to="/"
               >
-                Dashboard
+                Home
               </Link>
             </li>
-          )}
-          <li>
-            <Link
-              className="text-base text-gray-800 dark:text-gray-200 hover:text-teal-400 font-semibold"
-              to="/about/"
-            >
-              About Us
-            </Link>
-          </li>
-          <li>
-            <Link
-              className="text-base text-gray-800 dark:text-gray-200 hover:text-teal-400 font-semibold"
-              to="/services/"
-            >
-              Services
-            </Link>
-          </li>
-          <li>
-            <Link
-              className="text-base text-gray-800 dark:text-gray-200 hover:text-teal-400 font-semibold"
-              to="/contact/"
-            >
-              Contact
-            </Link>
-          </li>
-        </ul>
+            {isAuthenticated && (
+              <li>
+                <Link
+                  className="text-base text-gray-800 dark:text-gray-200 hover:text-teal-400 font-semibold whitespace-nowrap"
+                  to="/dashboard/"
+                >
+                  Dashboard
+                </Link>
+              </li>
+            )}
+            <li>
+              <Link
+                className="text-base text-gray-800 dark:text-gray-200 hover:text-teal-400 font-semibold whitespace-nowrap"
+                to="/about/"
+              >
+                About Us
+              </Link>
+            </li>
+            <li>
+              <Link
+                className="text-base text-gray-800 dark:text-gray-200 hover:text-teal-400 font-semibold whitespace-nowrap"
+                to="/services/"
+              >
+                Services
+              </Link>
+            </li>
+            <li>
+              <Link
+                className="text-base text-gray-800 dark:text-gray-200 hover:text-teal-400 font-semibold whitespace-nowrap"
+                to="/contact/"
+              >
+                Contact
+              </Link>
+            </li>
+          </ul>
+        </div>
 
-        {isAuthenticated ? (
-          <div className="hidden lg:flex items-center space-x-4">
-            {/* Updated Dark Mode Toggle for Desktop */}
+        {/* Right Side Content */}
+        <div className="flex items-center space-x-2 sm:space-x-4">
+          {/* Mobile menu button - show on lg and below */}
+          <div className="lg:hidden">
             <button
-              onClick={toggleDarkMode}
-              aria-label="Toggle Dark Mode"
-              className="p-1 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition"
+              className="navbar-burger flex items-center text-teal-600 p-2"
+              onClick={toggleMobileMenu}
             >
-              {isDarkMode ? (
-                <MdLightMode size={20} className="text-yellow-500" />
-              ) : (
-                <MdDarkMode size={20} className="text-teal-500" />
-              )}
+              <MobileMenuIconSVG />
             </button>
-            <div
-              className="relative notification-container"
-              ref={notificationRef}
-            >
-              <IoIosNotificationsOutline
-                className="text-3xl text-gray-500 dark:text-gray-400 cursor-pointer font-semibold"
-                onClick={() => setShowDropdown((prev) => !prev)}
-              />
-              {notificationCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-semibold rounded-full h-5 w-5 flex items-center justify-center">
-                  {notificationCount}
-                </span>
-              )}
-              {showDropdown && (
-                <div className="absolute right-0 mt-2 w-64 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50 transition-all duration-300 ease-in-out">
-                  <div className="p-3 border-b border-gray-200 dark:border-gray-700 text-sm font-semibold text-gray-700 dark:text-gray-300 text-center">
-                    Notifications
-                  </div>
-                  <ul className="max-h-60 overflow-y-auto">
-                    {notifications.length > 0 ? (
-                      notifications.map((notif) => (
-                        <li
-                          key={notif.id}
-                          onClick={() => handleNotificationClick(notif)}
-                          className={`px-4 py-2 text-xs flex flex-col ${
-                            notif.is_read ? "text-gray-400" : "text-gray-700 dark:text-gray-300"
-                          } hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer`}
-                        >
-                          <div className="flex justify-between items-center">
-                            <span>{notif.message}</span>
-                            {notif.data && (
-                              <IoEyeOutline className="text-gray-400 dark:text-gray-500 text-lg ml-2" />
-                            )}
-                          </div>
-                          <span className="text-[10px] text-gray-400 dark:text-gray-500 mt-1 italic">
-                            {getTimeLabel(notif.date_created)}
-                          </span>
-                        </li>
-                      ))
-                    ) : (
-                      <li className="px-4 py-2 text-[10px] text-gray-500 dark:text-gray-400 text-center">
-                        No notifications
-                      </li>
-                    )}
-                  </ul>
-                </div>
-              )}
-            </div>
-            <div
-              className="relative"
-              onClick={() => setShowProfileDropdown(true)}
-              ref={profileRef}
-            >
-              <div className="flex items-center space-x-2 cursor-pointer">
-                <h6 className="text-xs font-semibold text-gray-800 dark:text-gray-200">
-                  {profile?.full_name ||
-                    profile?.user?.full_name ||
-                    "Dr. Kara Johnson"}
-                </h6>
-                <img
-                  src={
-                    profile?.image?.startsWith("http")
-                      ? removeDuplicateMedia(profile.image)
-                      : profile?.image
-                      ? `${process.env.REACT_APP_MEDIA_URL}${profile.image}`
-                      : default_user_img
-                  }
-                  alt="User Profile"
-                  className="w-10 h-10 rounded-full object-cover object-top border border-gray-300 shadow-sm"
+          </div>
+
+          {/* Desktop Right Side - Only show on lg+ */}
+          {isAuthenticated ? (
+            <div className="hidden lg:flex items-center space-x-4">
+              <button
+                onClick={toggleDarkMode}
+                aria-label="Toggle Dark Mode"
+                className="p-1 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition flex-shrink-0"
+              >
+                {isDarkMode ? (
+                  <MdLightMode size={20} className="text-yellow-500" />
+                ) : (
+                  <MdDarkMode size={20} className="text-teal-500" />
+                )}
+              </button>
+
+              <div
+                className="relative notification-container flex-shrink-0"
+                ref={notificationRef}
+              >
+                <IoIosNotificationsOutline
+                  className="text-3xl text-gray-500 dark:text-gray-400 cursor-pointer font-semibold"
+                  onClick={() => setShowDropdown((prev) => !prev)}
                 />
+                {notificationCount > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-semibold rounded-full h-5 w-5 flex items-center justify-center">
+                    {notificationCount}
+                  </span>
+                )}
+                {showDropdown && (
+                  <div className="absolute right-0 mt-2 w-64 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50 transition-all duration-300 ease-in-out">
+                    <div className="p-3 border-b border-gray-200 dark:border-gray-700 text-sm font-semibold text-gray-700 dark:text-gray-300 text-center">
+                      Notifications
+                    </div>
+                    <ul className="max-h-60 overflow-y-auto">
+                      {notifications.length > 0 ? (
+                        notifications.map((notif) => (
+                          <li
+                            key={notif.id}
+                            onClick={() => handleNotificationClick(notif)}
+                            className={`px-4 py-2 text-xs flex flex-col ${
+                              notif.is_read
+                                ? "text-gray-400"
+                                : "text-gray-700 dark:text-gray-300"
+                            } hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer`}
+                          >
+                            <div className="flex justify-between items-center">
+                              <span>{notif.message}</span>
+                              {notif.data && (
+                                <IoEyeOutline className="text-gray-400 dark:text-gray-500 text-lg ml-2" />
+                              )}
+                            </div>
+                            <span className="text-[10px] text-gray-400 dark:text-gray-500 mt-1 italic">
+                              {getTimeLabel(notif.date_created)}
+                            </span>
+                          </li>
+                        ))
+                      ) : (
+                        <li className="px-4 py-2 text-[10px] text-gray-500 dark:text-gray-400 text-center">
+                          No notifications
+                        </li>
+                      )}
+                    </ul>
+                  </div>
+                )}
               </div>
 
-              {showProfileDropdown && (
-                <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50">
-                  <Link
-                    to="/profile"
-                    className="flex items-center px-4 py-2 text-[10px] text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer uppercase font-semibold"
-                  >
-                    <IoEyeOutline className="mr-1" />
-                    View Profile
-                  </Link>
-                  <Link
-                    onClick={logout}
-                    className="flex items-center px-4 py-2 text-[10px] text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer uppercase font-semibold"
-                  >
-                    <IoMdLogOut className="mr-1" />
-                    Logout
-                  </Link>
+              <div
+                className="relative flex-shrink-0"
+                onClick={() => setShowProfileDropdown(true)}
+                ref={profileRef}
+              >
+                <div className="flex items-center space-x-2 cursor-pointer">
+                  <h6 className="text-xs font-semibold text-gray-800 dark:text-gray-200 whitespace-nowrap">
+                    {profile?.full_name ||
+                      profile?.user?.full_name ||
+                      "Dr. Kara Johnson"}
+                  </h6>
+                  <img
+                    src={
+                      profile?.image?.startsWith("http")
+                        ? removeDuplicateMedia(profile.image)
+                        : profile?.image
+                        ? `${process.env.REACT_APP_MEDIA_URL}${profile.image}`
+                        : default_user_img
+                    }
+                    alt="User Profile"
+                    className="w-10 h-10 rounded-full object-cover object-top border border-gray-300 shadow-sm"
+                  />
                 </div>
-              )}
+
+                {showProfileDropdown && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50">
+                    <Link
+                      to="/profile"
+                      className="flex items-center px-4 py-2 text-[10px] text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer uppercase font-semibold"
+                    >
+                      <IoEyeOutline className="mr-1" />
+                      View Profile
+                    </Link>
+                    <Link
+                      onClick={logout}
+                      className="flex items-center px-4 py-2 text-[10px] text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer uppercase font-semibold"
+                    >
+                      <IoMdLogOut className="mr-1" />
+                      Logout
+                    </Link>
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
-        ) : (
-          <div className="hidden lg:flex items-center space-x-4">
-             {/* Updated Dark Mode Toggle for Desktop */}
-             <button
-              onClick={toggleDarkMode}
-              aria-label="Toggle Dark Mode"
-              className="p-1 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition"
-            >
-              {isDarkMode ? (
-                <MdLightMode size={20} className="text-yellow-500" />
-              ) : (
-                <MdDarkMode size={20} className="text-teal-500" />
-              )}
-            </button>
-            <Link to="/login">
-              <button className="px-4 py-2 text-sm tracking-wide text-white transition-colors duration-200 transform bg-teal-500 rounded-md hover:bg-teal-400 focus:outline-none focus:bg-teal-500 focus:ring focus:ring-teal-500 focus:ring-opacity-50 uppercase">
-                Dashboard Login
+          ) : (
+            <div className="hidden lg:flex items-center space-x-4">
+              <button
+                onClick={toggleDarkMode}
+                aria-label="Toggle Dark Mode"
+                className="p-1 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition flex-shrink-0"
+              >
+                {isDarkMode ? (
+                  <MdLightMode size={20} className="text-yellow-500" />
+                ) : (
+                  <MdDarkMode size={20} className="text-teal-500" />
+                )}
               </button>
-            </Link>
-            <Link to="/register">
-              <button className="px-4 py-2 text-sm tracking-wide text-teal-500 border border-teal-500 rounded-md transition-colors duration-200 hover:bg-teal-100 focus:outline-none focus:ring focus:ring-teal-500 focus:ring-opacity-50 uppercase">
-                Provider Registration
-              </button>
-            </Link>
-          </div>
-        )}
+              <Link to="/login">
+                <button className="px-4 py-2 text-sm tracking-wide text-white transition-colors duration-200 transform bg-teal-500 rounded-md hover:bg-teal-400 focus:outline-none focus:bg-teal-500 focus:ring focus:ring-teal-500 focus:ring-opacity-50 uppercase whitespace-nowrap">
+                  Dashboard Login
+                </button>
+              </Link>
+              <Link to="/register">
+                <button className="px-4 py-2 text-sm tracking-wide text-teal-500 border border-teal-500 rounded-md transition-colors duration-200 hover:bg-teal-100 focus:outline-none focus:ring focus:ring-teal-500 focus:ring-opacity-50 uppercase whitespace-nowrap">
+                  Provider Registration
+                </button>
+              </Link>
+            </div>
+          )}
+        </div>
       </nav>
 
       {/* Mobile Menu */}
       <div
         className={`navbar-menu relative z-50 ${
-          isMobileMenuOpen ? "" : "pointer-events-none" // Use pointer-events-none instead of hidden to allow transitions
+          isMobileMenuOpen ? "" : "pointer-events-none"
         }`}
       >
-        {/* Backdrop (Opacity Transition) */}
+        {/* Backdrop */}
         <div
           className={`navbar-backdrop fixed inset-0 bg-gray-800 transition-opacity duration-300 ${
             isMobileMenuOpen ? "opacity-25" : "opacity-0"
           }`}
           onClick={closeMobileMenu}
         ></div>
-        
-        {/* Menu Panel (Slide Transition) */}
+
+        {/* Sliding menu panel */}
         <nav
           className={`fixed top-0 left-0 bottom-0 flex flex-col w-5/6 max-w-sm py-6 px-6 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 overflow-y-auto transform transition-transform duration-300 ease-out z-50 ${
             isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
@@ -526,7 +535,9 @@ const Navbar = ({ isDarkMode, setIsDarkMode }) => {
                                 setShowDropdown(false);
                               }}
                               className={`px-4 py-2 text-xs flex flex-col ${
-                                notif.is_read ? "text-gray-400" : "text-gray-700 dark:text-gray-300"
+                                notif.is_read
+                                  ? "text-gray-400"
+                                  : "text-gray-700 dark:text-gray-300"
                               } hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer`}
                             >
                               <div className="flex justify-between items-center">
@@ -568,8 +579,8 @@ const Navbar = ({ isDarkMode, setIsDarkMode }) => {
                       "Dr. Kara Johnson"}
                   </h6>
                 </div>
-                 {/* Updated Dark Mode Toggle for Mobile */}
-                 <button
+
+                <button
                   onClick={toggleDarkMode}
                   aria-label="Toggle Dark Mode"
                   className="w-full px-4 py-2 text-sm tracking-wide text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-700 rounded-md transition-colors duration-200 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-50 flex items-center justify-center"
@@ -593,8 +604,7 @@ const Navbar = ({ isDarkMode, setIsDarkMode }) => {
               </div>
             ) : (
               <div className="flex flex-col space-y-4">
-                 {/* Updated Dark Mode Toggle for Mobile */}
-                 <button
+                <button
                   onClick={toggleDarkMode}
                   aria-label="Toggle Dark Mode"
                   className="w-full px-4 py-2 text-sm tracking-wide text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-700 rounded-md transition-colors duration-200 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-50 flex items-center justify-center"
@@ -618,13 +628,14 @@ const Navbar = ({ isDarkMode, setIsDarkMode }) => {
                 </Link>
               </div>
             )}
-
-            <p className="my-4 text-xs text-center text-gray-400">
-              ProMed Health Plus &copy; {new Date().getFullYear()}
-            </p>
           </div>
+          
+          <p className="my-4 text-xs text-center text-gray-400 dark:text-gray-500">
+            ProMed Health Plus &copy; {new Date().getFullYear()}
+          </p>
         </nav>
       </div>
+
       <NotificationModal
         open={showModal}
         handleClose={() => setShowModal(false)}
