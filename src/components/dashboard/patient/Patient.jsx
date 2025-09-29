@@ -515,11 +515,10 @@ const Patients = ({ activationFilter, setActivationFilter }) => {
             setEditingPatient(null);
             setOpen(true);
           }}
-
-          className="w-full sm:w-auto border border-teal-500 text-teal-500 hover:bg-teal-500 hover:text-white dark:hover:text-white dark:text-teal-400 dark:border-teal-400 dark:hover:bg-teal-500 px-4 py-2 rounded-md transition-all text-sm flex items-center justify-center gap-1"
+          className="w-full sm:w-auto border border-teal-500 text-teal-500 hover:bg-teal-500 hover:text-white dark:hover:text-white dark:text-teal-400 dark:border-teal-400 dark:hover:bg-teal-500 px-4 py-2 rounded-full transition-all text-sm flex items-center justify-center gap-1"
           whileTap={buttonTap}
         >
-          <FaPlus className="w-3 h-3" /> + New Patient
+          <FaPlus className="w-3 h-3" /> New Patient
         </motion.button>
       </div>
 
@@ -584,8 +583,6 @@ const Patients = ({ activationFilter, setActivationFilter }) => {
           )}
         </AnimatePresence>
       </motion.div>
-
-      {/* Pagination Controls 💥 ADD MOTION */}
       <div className="flex justify-center items-center mt-6 space-x-2 sm:space-x-4">
         <motion.button
           onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
@@ -661,18 +658,47 @@ const Patients = ({ activationFilter, setActivationFilter }) => {
           />
         </Box>
       </Modal>
-
       {/* MODAL 1: Patient Details (Unchanged) */}
       <Modal open={open} onClose={resetForm}>
-        <Box sx={{ ...modalStyle, maxHeight: "90vh", overflowY: "auto" }}>
-          <NewPatientForm
-            formData={formData}
-            handleInputChange={handleInputChange}
-            handleSavePatient={handleSavePatient}
-            resetForm={resetForm}
-            errors={errors}
-            editingPatient={editingPatient}
-          />
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: "100%",
+            maxWidth: 600,
+            maxHeight: "90vh",
+            bgcolor: "transparent",
+            boxShadow: "none",
+            outline: "none",
+            borderRadius: "16px",
+            overflow: "hidden", 
+          }}
+        >
+          <Box
+            sx={{
+              maxHeight: "90vh",
+              overflowY: "auto",
+              bgcolor: "white",
+              borderRadius: "16px",
+              msOverflowStyle: 'none',   
+              scrollbarWidth: 'none',   
+              "&::-webkit-scrollbar": {
+                display: "none",         
+              },
+            }}
+            className="dark:bg-gray-900"
+          >
+            <NewPatientForm
+              formData={formData}
+              handleInputChange={handleInputChange}
+              handleSavePatient={handleSavePatient}
+              resetForm={resetForm}
+              errors={errors}
+              editingPatient={editingPatient}
+            />
+          </Box>
         </Box>
       </Modal>
     </div>

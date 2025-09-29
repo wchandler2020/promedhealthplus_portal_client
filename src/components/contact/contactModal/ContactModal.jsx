@@ -4,7 +4,9 @@ import authRequest from "../../../utils/axios";
 import { AuthContext } from "../../../utils/auth";
 import toast from "react-hot-toast";
 import { motion } from "framer-motion"; // 💥 Import motion
-import { IoCloseOutline, IoCallOutline } from "react-icons/io5"; // 💥 Added IoCloseOutline for style
+import { IoCloseOutline, IoCallOutline } from "react-icons/io5";
+import { AiOutlineMail } from "react-icons/ai";
+
 
 // Framer Motion Variants (Copied from NewPatientForm style)
 const formItemVariants = {
@@ -103,7 +105,7 @@ const ContactRepModal = ({ open, onClose }) => {
           {/* Header Section (Styled like NewPatientForm header) */}
           <div className="flex justify-between items-center border-b border-gray-200 dark:border-gray-700 pb-3 mb-6">
             <div className="flex items-center space-x-2">
-              <IoCallOutline className="h-7 w-7 text-teal-600 dark:text-teal-400" />
+              <AiOutlineMail className="h-7 w-7 text-teal-600 dark:text-teal-400" />
               <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
                 Contact Your Rep
               </h3>

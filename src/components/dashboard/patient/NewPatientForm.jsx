@@ -46,10 +46,10 @@ const NewPatientForm = ({
   };
 
   return (
-    // We use AnimatePresence and motion.div here for animation since this is the component rendered inside the MUI Modal Box
+    // 💥 FIX 1 & 2: Changed h-full to max-h-[90vh] and added overflow-hidden for border-radius consistency
     <motion.div
       id="patient-form-wrapper"
-      className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-6 md:p-8 mx-4 border border-gray-100 dark:border-gray-700 relative w-full h-full"
+      className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-6 md:p-8 mx-4 border border-gray-100 dark:border-gray-700 relative w-full max-w-lg md:max-w-4xl max-h-[90vh] overflow-hidden" // max-h-[90vh] ensures it fits, overflow-hidden ensures rounded corners work.
       initial={{ opacity: 0, y: 50 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 50 }}
@@ -74,11 +74,13 @@ const NewPatientForm = ({
           e.preventDefault();
           handleSavePatient();
         }}
-        className="space-y-6 overflow-y-auto pr-2" // Added pr-2 for scrollbar spacing
+        // The inner form content is now scrollable up to the max height of the container minus header/footer space.
+        className="space-y-6 overflow-y-auto pr-2" 
         initial="hidden"
         animate="visible"
         variants={formContainerVariants}
-        style={{ maxHeight: "calc(90vh - 120px)" }} // Adjust based on header/footer height
+        // Simplified max height calculation since the parent now controls it with max-h-[90vh]
+        style={{ maxHeight: "calc(90vh - 120px)" }} 
       >
         
         {/* === PATIENT IDENTIFICATION === */}

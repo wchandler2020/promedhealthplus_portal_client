@@ -20,7 +20,7 @@ const IVRStatusBadge = ({ status }) => {
   };
   return (
     <span
-      className={`px-2 py-1 text-xs font-semibold rounded ${colors[status]}`}
+      className={`px-2 py-1 text-[10px] font-semibold rounded-full ml-1 ${colors[status]}`}
     >
       {status}
     </span>
@@ -95,112 +95,66 @@ const PatientCard = ({ patient, onViewPdf, onEdit, onDelete }) => {
         </div>
       </div>
 
-      <div
-        // Retained flex and justify-between for side-by-side layout
-        className="flex items-center justify-between w-full"
-        style={{ marginTop: -4 }}
-      >
+      {/* --- Patient Identification & Contact --- */}
+
+      <div className="flex items-center justify-between w-full">
         <p className="text-xs mr-2">
           <strong>Medical Record #:</strong> {patient.medical_record_number}
         </p>
-
-        {/* IVR Status text remains text-sm (or defaults to the base size) */}
-        <strong className="text-sm">
+        <strong className="text-xs">
           IVR Status: <IVRStatusBadge status={patient.ivrStatus} />
         </strong>
       </div>
-      <div
-        className="text-sm text-gray-700 dark:text-gray-300 space-y-1"
-        style={{ marginTop: 8 }}
-      >
-        <p className="text-xs flex">
+      
+      {/* Container for address/phone/DOB/Age with tight spacing */}
+      <div className="text-xs text-gray-700 dark:text-gray-300 space-y-1 pt-1">
+        <p className="flex">
           <strong className="mr-1">Address:</strong> {patient.address}{" "}
           {patient.city}, {patient.state} {patient.zip_code}
         </p>
-      </div>
-      <div
-        className="text-sm text-gray-700 dark:text-gray-300 space-y-1"
-        style={{ marginTop: -0.5 }}
-      >
-        <p className="text-xs flex">
+        <p className="flex">
           <strong className="mr-1">Phone Number:</strong> {formattedPhoneNumber}
         </p>
-      </div>
-      <div
-        className="text-sm text-gray-700 dark:text-gray-300 space-y-1"
-        style={{ marginTop: -0.5 }}
-      >
-        <p className="text-xs flex">
+        <p className="flex">
           <strong className="mr-1">Date of Birth:</strong> {formattedDate}
         </p>
-      </div>
-      <div
-        className="text-sm text-gray-700 dark:text-gray-300 space-y-1"
-        style={{ marginTop: -0.5 }}
-      >
-        <p className="text-xs flex">
+        <p className="flex">
           <strong className="mr-1">Age :</strong>{" "}
           {calculateAge(patient.date_of_birth)}
         </p>
       </div>
 
-      <div
-        className="h-[2px] w-[90%] bg-gray-200 dark:bg-gray-700 flex m-auto opacity-550"
-        style={{ marginTop: 25 }}
-      ></div>
-      <p className="text-sm font-semibold text-center">Insurance Information</p>
-      <div
-        className="text-sm text-gray-700 dark:text-gray-300 space-y-1"
-        style={{ marginTop: 5 }}
-      >
-        <p className="text-xs flex">
+      {/* --- Insurance Information --- */}
+
+      <div className="w-full h-[1px] bg-gray-200 dark:bg-gray-700 my-3"></div>
+      
+      <p className="text-sm font-semibold text-center mb-1">Insurance Information</p>
+      
+      {/* Container for insurance details with tight spacing */}
+      <div className="text-xs text-gray-700 dark:text-gray-300 space-y-1">
+        <p className="flex">
           <strong className="mr-1">Primary Insurance Provider :</strong>{" "}
           {patient.primary_insurance}
         </p>
-      </div>
-      <div
-        className="text-sm text-gray-700 dark:text-gray-300 space-y-1"
-        style={{ marginTop: -0.5 }}
-      >
-        <p className="text-xs flex">
+        <p className="flex">
           <strong className="mr-1">Primary Insurance Number :</strong>{" "}
           {patient.primary_insurance_number}
         </p>
-      </div>
-      <div
-        className="text-sm text-gray-700 dark:text-gray-300 space-y-1"
-        style={{ marginTop: 3 }}
-      >
-        <p className="text-xs flex">
+        <p className="flex">
           <strong className="mr-1">Secondary Insurance Provider:</strong>{" "}
           {patient.secondary_insurance ? patient.secondary_insurance : "N/A"}
         </p>
-      </div>
-      <div
-        className="text-sm text-gray-700 dark:text-gray-300 space-y-1"
-        style={{ marginTop: -0.5 }}
-      >
-        <p className="text-xs flex">
+        <p className="flex">
           <strong className="mr-1">Secondary Insurance Number:</strong>{" "}
           {patient.secondary_insurance_number
             ? patient.secondary_insurance_number
             : "N/A"}
         </p>
-      </div>
-      <div
-        className="text-sm text-gray-700 dark:text-gray-300 space-y-1"
-        style={{ marginTop: 3 }}
-      >
-        <p className="text-xs flex">
+        <p className="flex">
           <strong className="mr-1">Tertiary Insurance Provider:</strong>{" "}
           {patient.tertiary_insurance ? patient.tertiary_insurance : "N/A"}
         </p>
-      </div>
-      <div
-        className="text-sm text-gray-700 dark:text-gray-300 space-y-1"
-        style={{ marginTop: -0.5 }}
-      >
-        <p className="text-xs flex">
+        <p className="flex">
           <strong className="mr-1">Tertiary Insurance Number:</strong>{" "}
           {patient.tertiary_insurance_number
             ? patient.tertiary_insurance_number
@@ -208,17 +162,15 @@ const PatientCard = ({ patient, onViewPdf, onEdit, onDelete }) => {
         </p>
       </div>
 
-      <div
-        className="h-[2px] w-[90%] bg-gray-200 dark:bg-gray-700 flex m-auto opacity-550"
-        style={{ marginTop: 25 }}
-      ></div>
-      <p className="text-sm font-semibold text-center">Patient Documentation</p>
-      <div
-        className="text-sm text-gray-700 dark:text-gray-300 space-y-1"
-        style={{ marginTop: 5 }}
-      >
+      {/* --- Patient Documentation --- */}
+      
+      <div className="w-full h-[1px] bg-gray-200 dark:bg-gray-700 my-3"></div>
+      
+      <p className="text-sm font-semibold text-center mb-1">Patient Documentation</p>
+      
+      <div className="text-xs text-gray-700 dark:text-gray-300">
         <div className="flex items-center justify-between">
-          <p className="text-xs flex">
+          <p className="flex">
             <strong>Promed Healthcare Plus IVR</strong>
           </p>
           <div className="flex space-x-2">
@@ -234,15 +186,15 @@ const PatientCard = ({ patient, onViewPdf, onEdit, onDelete }) => {
         </div>
       </div>
 
-      <div
-        className="h-[2px] w-[90%] bg-gray-200 dark:bg-gray-700 flex m-auto opacity-550"
-        style={{ marginTop: 25 }}
-      ></div>
-      <p className="text-sm font-semibold text-center mt-6">Patient Order</p>
+      {/* --- Patient Order --- */}
+      
+      <div className="w-full h-[1px] bg-gray-200 dark:bg-gray-700 my-3"></div>
+      
+      <p className="text-sm font-semibold text-center mt-2 mb-2">Patient Order</p>
 
       {/* FIX: Use flex-wrap to allow elements to stack on small screens */}
-      <div className="flex justify-between items-center mt-2 flex-wrap gap-2">
-        <p className="text-xs text-gray-700 dark:text-gray-300 **min-w-[50%]** font-bold">
+      <div className="flex justify-between items-center flex-wrap gap-2">
+        <p className="text-xs text-gray-700 dark:text-gray-300 font-bold">
           Place an order for this patient.
         </p>
         <div className="relative flex items-center gap-1">
@@ -260,7 +212,6 @@ const PatientCard = ({ patient, onViewPdf, onEdit, onDelete }) => {
             </div>
           )}
           <motion.button
-            // FIX: Reduced text size from text-xs to text-[10px] for better fit
             className={`text-[10px] px-3 py-1 rounded-full flex items-center gap-1 transition-all
             ${
               patient.ivrStatus === "Approved"
@@ -280,10 +231,9 @@ const PatientCard = ({ patient, onViewPdf, onEdit, onDelete }) => {
           </motion.button>
         </div>
       </div>
-      <div
-        className="h-[2px] w-[90%] bg-gray-200 dark:bg-gray-700 flex m-auto opacity-550"
-        style={{ marginTop: 25 }}
-      ></div>
+      
+      <div className="w-full h-[1px] bg-gray-200 dark:bg-gray-700 my-3"></div>
+      
       <Notes key={patient.id} patientId={patient.id} />
       <NewOrderForm
         open={openOrderModal}

@@ -30,7 +30,6 @@ const ConfirmationModal = ({ open, onClose, onConfirm }) => (
         boxShadow: 24,
         p: 4,
       }}
-      // Use Tailwind for modal background and borders
       className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 transition-colors duration-300"
     >
       <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4">
@@ -47,12 +46,11 @@ const ConfirmationModal = ({ open, onClose, onConfirm }) => (
           sx={{
             color: "gray",
             borderColor: "gray",
-            fontSize: "12px", 
+            fontSize: "12px",
             fontWeight: 500,
             "&:hover": {
               borderColor: "gray.dark",
             },
-            // Dark mode overrides
             ".dark &": {
               color: "#9ca3af",
               borderColor: "#4b5563",
@@ -98,7 +96,6 @@ const NewOrderForm = ({ open, onClose, patient }) => {
     patientName: `${patient?.first_name || ""} ${patient?.last_name || ""}`,
     patientDob: patient?.date_of_birth || "",
     patientPhoneNumber: patient?.phone_number || "",
-    // Assuming patient address fields are combined here
     patientAddress: `${patient?.address || ""}, ${patient?.city || ""}, ${
       patient?.state || ""
     } ${patient?.zip_code || ""}`,
@@ -115,7 +112,6 @@ const NewOrderForm = ({ open, onClose, patient }) => {
   };
 
   const fetchProducts = async () => {
-    // ... (Your fetchProducts logic remains the same)
     try {
       setLoading(true);
       setError(null);
@@ -140,7 +136,6 @@ const NewOrderForm = ({ open, onClose, patient }) => {
       }
       const data = await response.json();
 
-      // Get wound size from patient prop
       const woundLength = parseFloat(patient?.wound_size_length) || 0;
       const woundWidth = parseFloat(patient?.wound_size_width) || 0;
       const woundSize = woundLength * woundWidth;
@@ -204,7 +199,7 @@ const NewOrderForm = ({ open, onClose, patient }) => {
   };
 
   const handleFinalOrderSubmission = async () => {
-    setOpenConfirmModal(false); // Close modal on submission attempt
+    setOpenConfirmModal(false);
     setLoading(true);
 
     const orderItems = [];
@@ -389,7 +384,7 @@ const NewOrderForm = ({ open, onClose, patient }) => {
             />
             <TextField
               fullWidth
-              label="Delivery dAddress"
+              label="Delivery Address"
               name="providerAddress"
               value={formData.providerAddress}
               onChange={handleFormChange}
@@ -524,73 +519,80 @@ const NewOrderForm = ({ open, onClose, patient }) => {
             width: "90%",
             maxWidth: 600,
             maxHeight: "90vh",
-            overflowY: "auto",
             borderRadius: "16px",
             boxShadow: 24,
-            p: 4,
+            overflow: "hidden",
           }}
           className="bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 transition-colors duration-300"
         >
-          <div className="relative">
-            <button
-              onClick={onClose}
-              className="absolute top-0 right-0 text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-100 transition"
-            >
-              ✕
-            </button>
-            <h2 className="text-3xl font-semibold text-gray-800 dark:text-gray-100 text-center mb-2">
-              New Order
-            </h2>
-            <p className="text-center text-gray-500 dark:text-gray-400 mb-6">
-              Complete the steps to place a new order.
-            </p>
-            {renderStepContent()}
-            <div className="flex justify-center items-center mt-6 space-x-4">
+          <Box
+            sx={{
+              maxHeight: "90vh",
+              overflowY: "auto",
+              p: 4,
+            }}
+          >
+            <div className="relative">
               <button
-                onClick={() => setStep((prev) => prev - 1)}
-                disabled={step === 1 || loading}
-                className="px-3 py-2 rounded bg-gray-100 disabled:opacity-50 dark:bg-gray-700 text-gray-700 dark:text-gray-200"
+                onClick={onClose}
+                className="absolute top-0 right-0 text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-100 transition"
               >
-                Back
+                ✕
               </button>
-              {step < totalSteps ? (
+              <h2 className="text-3xl font-semibold text-gray-800 dark:text-gray-100 text-center mb-2">
+                New Order
+              </h2>
+              <p className="text-center text-gray-500 dark:text-gray-400 mb-6">
+                Complete the steps to place a new order.
+              </p>
+              {renderStepContent()}
+              <div className="flex justify-center items-center mt-6 space-x-4">
                 <button
-                  onClick={() => setStep((prev) => prev + 1)}
-                  className="px-3 py-2 rounded bg-teal-600 text-white"
-                  disabled={loading}
+                  onClick={() => setStep((prev) => prev - 1)}
+                  disabled={step === 1 || loading}
+                  className="px-3 py-2 rounded bg-gray-100 disabled:opacity-50 dark:bg-gray-700 text-gray-700 dark:text-gray-200"
                 >
-                  Next
+                  Back
                 </button>
-              ) : (
-                <Button
-                  onClick={handlePlaceOrderClick}
-                  variant="contained"
-                  className="bg-teal-600 text-white font-bold"
-                  disabled={!hasSelectedItems || loading}
-                  sx={{
-                    "&.Mui-disabled": {
-                      bgcolor: "grey.500",
-                      color: "grey.300",
-                      cursor: "not-allowed",
-                    },
-                    "&:not(.Mui-disabled)": {
-                      bgcolor: "#008080",
-                      color: "white",
-                      "&:hover": {
-                        bgcolor: "#66CDAA",
+                {step < totalSteps ? (
+                  <button
+                    onClick={() => setStep((prev) => prev + 1)}
+                    className="px-3 py-2 rounded bg-teal-600 text-white"
+                    disabled={loading}
+                  >
+                    Next
+                  </button>
+                ) : (
+                  <Button
+                    onClick={handlePlaceOrderClick}
+                    variant="contained"
+                    className="bg-teal-600 text-white font-bold"
+                    disabled={!hasSelectedItems || loading}
+                    sx={{
+                      "&.Mui-disabled": {
+                        bgcolor: "grey.500",
+                        color: "grey.300",
+                        cursor: "not-allowed",
                       },
-                    },
-                  }}
-                >
-                  {loading ? (
-                    <CircularProgress size={24} color="inherit" />
-                  ) : (
-                    "Place Order"
-                  )}
-                </Button>
-              )}
+                      "&:not(.Mui-disabled)": {
+                        bgcolor: "#008080",
+                        color: "white",
+                        "&:hover": {
+                          bgcolor: "#66CDAA",
+                        },
+                      },
+                    }}
+                  >
+                    {loading ? (
+                      <CircularProgress size={24} color="inherit" />
+                    ) : (
+                      "Place Order"
+                    )}
+                  </Button>
+                )}
+              </div>
             </div>
-          </div>
+          </Box>
         </Box>
       </Modal>
 
