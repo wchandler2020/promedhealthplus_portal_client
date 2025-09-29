@@ -41,8 +41,6 @@ const HeroSection = () => {
   return (
     <div className="bg-gray-100 dark:bg-gray-900 transition-colors duration-500">
       <section className="relative px-4 sm:px-8 lg:px-16 xl:px-40 2xl:px-64 overflow-hidden flex items-center min-h-screen"> 
-        
-        {/* The background image container with Motion for subtle scale-in */}
         <motion.div 
           className="absolute inset-0 z-0"
           initial={{ scale: 1.05 }}
@@ -52,7 +50,7 @@ const HeroSection = () => {
           <img
             src={wound_care_home_img}
             alt="Medical professionals working on wound care"
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover object-right" 
           />
         </motion.div>
 
@@ -86,7 +84,7 @@ const HeroSection = () => {
             {/* CTA Button */}
             <motion.button
               onClick={handleOpen}
-              className="px-10 py-4 bg-teal-600 text-white rounded-lg inline-block mt-8 font-semibold text-lg uppercase tracking-wider hover:bg-teal-700 transition-colors duration-300 shadow-xl"
+              className="px-10 py-4 bg-teal-600 text-white rounded-full inline-block mt-8 font-bold text-sm uppercase tracking-wider hover:bg-teal-700 transition-colors duration-300 shadow-xl"
               variants={itemVariants}
               whileHover={{ scale: 1.05, boxShadow: "0 15px 25px rgba(0, 0, 0, 0.4)" }}
               whileTap={{ scale: 0.95 }}

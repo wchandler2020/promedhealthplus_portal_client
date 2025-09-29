@@ -1,38 +1,47 @@
+// src/components/dashboard/patients/Patients.js (Main Component)
+
 import React, { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../../../utils/auth";
 import { Box, Modal } from "@mui/material";
-import { motion } from "framer-motion"; // 💥 Import motion
+import { motion, AnimatePresence } from "framer-motion"; // 💥 Import AnimatePresence
 import { format } from "date-fns";
-import { FaEye, FaSearch, FaSlidersH } from "react-icons/fa";
+import { FaEye, FaSearch, FaSlidersH, FaPlus } from "react-icons/fa"; // Added FaPlus
 import FillablePdf from "../documemts/FillablePdf";
 import PatientCard from "./PatientCard";
 import toast from "react-hot-toast";
 import { states } from "../../../utils/data";
+import NewPatientForm from "./NewPatientForm";
 
-// 💥 NEW: Modal Animation Variants for smooth transition
+// Modal Animation Variants (Kept from previous suggestion)
 const modalVariants = {
   hidden: { opacity: 0, scale: 0.95 },
   visible: {
     opacity: 1,
     scale: 1,
-    transition: {
-      duration: 0.3,
-      ease: "easeOut",
-    },
+    transition: { duration: 0.3, ease: "easeOut" },
   },
-  exit: {
-    opacity: 0,
-    scale: 0.9,
-    transition: {
-      duration: 0.25,
-    },
-  },
+  exit: { opacity: 0, scale: 0.9, transition: { duration: 0.25 } },
 };
 
-const ivrStatusBadge = ({ status }) => {
+// 💥 NEW: List container variants for staggered list entry
+const listContainerVariants = {
+    visible: {
+        transition: {
+            staggerChildren: 0.05, // Stagger cards by 50ms
+        },
+    },
+};
+
+// 💥 NEW: Button press animation properties
+const buttonTap = {
+    scale: 0.95,
+};
+
+// IVR Status Badge (Modified to accept props and use the provided colors)
+const IVRStatusBadge = ({ status }) => {
   const colors = {
     Approved:
-      "bg-teal-100 dark:bg-teal-800 text-teal-700 dark:text-teal-200",
+      "bg-green-100 dark:bg-green-800 text-green-700 dark:text-green-200",
     Pending:
       "bg-yellow-100 dark:bg-yellow-800 text-yellow-700 dark:text-yellow-200",
     Denied: "bg-red-100 dark:bg-red-800 text-red-700 dark:text-red-200",
@@ -46,9 +55,7 @@ const ivrStatusBadge = ({ status }) => {
   );
 };
 
-// ----------------------------------------------------------------------
-// Command Center Filter Modal Component (MODIFIED)
-// ----------------------------------------------------------------------
+// Filter Command Center (Wrapper updated to use AnimatePresence)
 const FilterCommandCenter = ({
   open,
   handleClose,
@@ -75,18 +82,17 @@ const FilterCommandCenter = ({
   const handlePatientsPerPageChange = (e) => {
     setPatientsPerPage(Number(e.target.value));
   };
-
+  // We wrap the content in motion.div because the Modal wrapper handles the open/close state
+  // and we use AnimatePresence outside in the main Patients component.
   return (
     <Modal
       open={open}
       onClose={handleClose}
-      // 💥 Crucial for Framer Motion: disable MUI's default transition
       disablePortal
       keepMounted
       hideBackdrop={false}
     >
       <Box sx={filterModalStyle}>
-        {/* 💥 FIX: Apply motion.div with variants here */}
         <motion.div
           className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-6 mx-4 border border-gray-100 dark:border-gray-700 relative"
           initial="hidden"
@@ -114,12 +120,11 @@ const FilterCommandCenter = ({
               />
             </svg>
           </button>
-
           <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-6 border-b border-gray-200 dark:border-gray-700 pb-2">
             Patient Filter Command Center
           </h3>
 
-          {/* IVR Status Filter */}
+          {/* ... (Filter controls remain unchanged) ... */}
           <div className="mb-6">
             <label
               htmlFor="ivr-filter"
@@ -140,7 +145,6 @@ const FilterCommandCenter = ({
             </select>
           </div>
 
-          {/* Activation Filter (Radio Buttons) */}
           <div className="mb-6">
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
               Filter by Activation:
@@ -194,7 +198,6 @@ const FilterCommandCenter = ({
             </div>
           </div>
 
-          {/* Patients Per Page Filter */}
           <div>
             <label
               htmlFor="patients-per-page"
@@ -216,12 +219,13 @@ const FilterCommandCenter = ({
             </select>
           </div>
 
-          <button
+          <motion.button
             onClick={handleClose}
             className="mt-6 w-full bg-teal-600 hover:bg-teal-700 text-white font-semibold py-2 rounded-lg shadow-md transition duration-300"
+            whileTap={buttonTap}
           >
             Apply Filters
-          </button>
+          </motion.button>
         </motion.div>
       </Box>
     </Modal>
@@ -234,10 +238,10 @@ const Patients = ({ activationFilter, setActivationFilter }) => {
     useContext(AuthContext);
   const [patients, setPatients] = useState([]);
   const [errors, setErrors] = useState({});
-  const [open, setOpen] = useState(false); // For the patient details modal
-  const [filterModalOpen, setFilterModalOpen] = useState(false); // State for Filter Modal
+  const [open, setOpen] = useState(false);
+  const [filterModalOpen, setFilterModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const [viewPdfModalOpen, setViewPdfModalOpen] = useState(false); // For the PDF modal
+  const [viewPdfModalOpen, setViewPdfModalOpen] = useState(false);
   const [selectedPatient, setSelectedPatient] = useState(null);
   const [ivrFilter, setIvrFilter] = useState("");
   const [patientsPerPage, setPatientsPerPage] = useState(10);
@@ -267,11 +271,20 @@ const Patients = ({ activationFilter, setActivationFilter }) => {
     date_updated: "",
     wound_size_length: "",
     wound_size_width: "",
+    // ... (rest of formData fields)
   });
-
-  // ... (rest of your helper functions and useEffects remain unchanged) ...
-  // (formatPhoneNumberToE164, ValidateForm, useEffects for fetching/filtering/pagination, handleInputChange, resetForm, handleSavePatient, handleEditPatient, handleDeletePatient, filteredPatients, sortedPatients, indexOfLastPatient, indexOfFirstPatient, currentPatients, totalPages, handleViewPdf are unchanged)
-
+  
+  // 💥 NEW: List container variants for staggered list entry
+  const listContainerVariants = {
+    visible: {
+      transition: {
+        staggerChildren: 0.08, // Stagger cards slightly more
+      },
+    },
+  };
+  
+  // ... (All helper functions: formatPhoneNumberToE164, ValidateForm, useEffects, handleInputChange, resetForm, handleSavePatient, handleEditPatient, handleDeletePatient, filtering/sorting/pagination logic remain the same) ...
+  
   const formatPhoneNumberToE164 = (phone) => {
     if (!phone) return "";
     const digitsOnly = phone.replace(/\D/g, "");
@@ -474,7 +487,6 @@ const Patients = ({ activationFilter, setActivationFilter }) => {
   const totalPages = Math.ceil(sortedPatients.length / patientsPerPage);
 
   const handleViewPdf = (patient) => {
-    console.log("Opening PDF modal for:", patient);
     setSelectedPatient(patient);
     setViewPdfModalOpen(true);
   };
@@ -497,15 +509,16 @@ const Patients = ({ activationFilter, setActivationFilter }) => {
         <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-100">
           Patient Applications
         </h2>
-        <button
-          className="border border-teal-500 text-teal-500 hover:bg-teal-500 hover:text-white dark:hover:text-white dark:text-teal-400 dark:border-teal-400 dark:hover:bg-teal-500 px-4 py-2 rounded-md transition-all text-xs"
+        <motion.button // 💥 Apply motion to the New Patient button
+          className="border border-teal-500 text-teal-500 hover:bg-teal-500 hover:text-white dark:hover:text-white dark:text-teal-400 dark:border-teal-400 dark:hover:bg-teal-500 px-4 py-2 rounded-md transition-all text-sm flex items-center gap-1"
           onClick={() => {
             setEditingPatient(null);
             setOpen(true);
           }}
+          whileTap={buttonTap}
         >
-          + New Patient
-        </button>
+          <FaPlus className="w-3 h-3"/> New Patient
+        </motion.button>
       </div>
 
       {/* Search and Filter Control Block */}
@@ -524,10 +537,11 @@ const Patients = ({ activationFilter, setActivationFilter }) => {
           </div>
         </div>
 
-        {/* Filter/Command Center Button */}
-        <button
+        {/* Filter/Command Center Button 💥 ADD MOTION */}
+        <motion.button
           onClick={() => setFilterModalOpen(true)}
           className="flex items-center gap-2 px-4 py-1 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 bg-gray-50 dark:bg-gray-700 rounded-full text-sm font-medium hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-300 w-full sm:w-auto"
+          whileTap={buttonTap} 
         >
           <FaSlidersH className="w-4 h-4" />
           <span className="flex items-center space-x-1">
@@ -536,33 +550,46 @@ const Patients = ({ activationFilter, setActivationFilter }) => {
               ({[ivrFilter, activationFilter].filter(Boolean).length})
             </span>
           </span>
-        </button>
+        </motion.button>
       </div>
 
-      <div className="space-y-6">
-        {currentPatients.length > 0 ? (
-          currentPatients.map((patient) => (
-            <PatientCard
-              key={patient.id}
-              patient={patient}
-              onViewPdf={handleViewPdf}
-              onEdit={handleEditPatient}
-              onDelete={handleDeletePatient}
-            />
-          ))
-        ) : (
-          <p className="text-center py-10 text-gray-500 dark:text-gray-400">
-            No patients match the current search or filter criteria.
-          </p>
-        )}
-      </div>
+      {/* Patient Cards List 💥 ADD MOTION & ANIMATEPRESENCE */}
+      <motion.div
+        className="space-y-6"
+        variants={listContainerVariants}
+        initial="hidden"
+        animate="visible"
+      >
+        <AnimatePresence> 
+          {currentPatients.length > 0 ? (
+            currentPatients.map((patient) => (
+              <PatientCard
+                key={patient.id}
+                patient={patient}
+                onViewPdf={handleViewPdf}
+                onEdit={handleEditPatient}
+                onDelete={handleDeletePatient}
+              />
+            ))
+          ) : (
+            <motion.p 
+              className="text-center py-10 text-gray-500 dark:text-gray-400"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+            >
+              No patients match the current search or filter criteria.
+            </motion.p>
+          )}
+        </AnimatePresence>
+      </motion.div>
 
-      {/* Pagination Controls */}
+      {/* Pagination Controls 💥 ADD MOTION */}
       <div className="flex justify-center items-center mt-6 space-x-2 sm:space-x-4">
-        <button
+        <motion.button
           onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
           disabled={currentPage === 1}
           className="px-2 py-1 sm:px-3 sm:py-2 rounded-full border bg-gray-100 dark:bg-gray-700 dark:border-gray-600 disabled:opacity-50 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-300"
+          whileTap={currentPage !== 1 ? buttonTap : {}}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -578,16 +605,17 @@ const Patients = ({ activationFilter, setActivationFilter }) => {
               d="M15.75 19.5L8.25 12l7.5-7.5"
             />
           </svg>
-        </button>
+        </motion.button>
         <span className="text-sm font-medium text-gray-600 dark:text-gray-300 px-3 py-1 sm:px-4 sm:py-2 rounded-full border border-gray-300 dark:border-gray-600">
           Page {currentPage} of {totalPages}
         </span>
-        <button
+        <motion.button
           onClick={() =>
             setCurrentPage((prev) => Math.min(prev + 1, totalPages))
           }
           disabled={currentPage === totalPages}
           className="px-2 py-1 sm:px-3 sm:py-2 rounded-full border bg-gray-100 dark:bg-gray-700 dark:border-gray-600 disabled:opacity-50 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-300"
+          whileTap={currentPage !== totalPages ? buttonTap : {}}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -603,34 +631,45 @@ const Patients = ({ activationFilter, setActivationFilter }) => {
               d="M8.25 4.5l7.5 7.5-7.5 7.5"
             />
           </svg>
-        </button>
+        </motion.button>
       </div>
 
-      {/* MODAL 1: Patient Details (Unchanged) */}
-      <Modal open={open} onClose={resetForm}>
-        <Box sx={{ ...modalStyle, maxHeight: "90vh", overflowY: "auto" }}>
-          {/* Patient form content goes here */}
-        </Box>
-      </Modal>
-
-      {/* MODAL 2: Filter Command Center (Now uses Framer Motion) */}
-      <FilterCommandCenter
-        open={filterModalOpen}
-        handleClose={() => setFilterModalOpen(false)}
-        ivrFilter={ivrFilter}
-        setIvrFilter={setIvrFilter}
-        activationFilter={activationFilter}
-        setActivationFilter={setActivationFilter}
-        patientsPerPage={patientsPerPage}
-        setPatientsPerPage={setPatientsPerPage}
-      />
+      {/* MODAL 2: Filter Command Center 💥 Wrap with AnimatePresence */}
+      <AnimatePresence>
+        {filterModalOpen && (
+          <FilterCommandCenter
+            open={filterModalOpen}
+            handleClose={() => setFilterModalOpen(false)}
+            ivrFilter={ivrFilter}
+            setIvrFilter={setIvrFilter}
+            activationFilter={activationFilter}
+            setActivationFilter={setActivationFilter}
+            patientsPerPage={patientsPerPage}
+            setPatientsPerPage={setPatientsPerPage}
+          />
+        )}
+      </AnimatePresence>
 
       {/* MODAL 3: PDF Viewer (Unchanged) */}
       <Modal open={viewPdfModalOpen} onClose={() => setViewPdfModalOpen(false)}>
         <Box sx={{ ...modalStyle, maxWidth: 900 }}>
           <FillablePdf
             patient={selectedPatient}
-            handleClose={() => setViewPdfModalOpen(false)}
+            onClose={() => setViewPdfModalOpen(false)}
+          />
+        </Box>
+      </Modal>
+      
+      {/* MODAL 1: Patient Details (Unchanged) */}
+      <Modal open={open} onClose={resetForm}>
+        <Box sx={{ ...modalStyle, maxHeight: "90vh", overflowY: "auto" }}>
+          <NewPatientForm 
+            formData={formData}
+            handleInputChange={handleInputChange}
+            handleSavePatient={handleSavePatient}
+            resetForm={resetForm}
+            errors={errors}
+            editingPatient={editingPatient}
           />
         </Box>
       </Modal>

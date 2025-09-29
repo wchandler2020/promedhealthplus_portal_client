@@ -17,7 +17,7 @@ import ProviderProfileCard from "./components/profile/ProviderProfileCard";
 import VerifyEmail from "./components/verifyEmail/VerifyEmail";
 import ForgotPassword from "./components/login/ForgotPassword";
 import ResetPassword from "./components/login/ResetPassword";
-import IvrForm from "./components/dashboard/patient/IvrForm";
+// import IvrForm from "./components/dashboard/patient/IvrForm";
 import DashboardWrapper from "./components/salesRepDashboard/DashboardWrapper";
 import PrivateRoute from "./utils/privateRoutes";
 import { AuthContext } from "./utils/auth";
@@ -120,7 +120,6 @@ function AppWrapper() {
         <main className="flex-grow">
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/ivr-form" element={<IvrForm />} />
             <Route path="/register" element={<Register />} />
             <Route path="/verify-email/:token" element={<VerifyEmail />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />

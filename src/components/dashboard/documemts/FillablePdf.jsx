@@ -1,238 +1,172 @@
 import React, { useState, useEffect } from "react";
+import { FaTimes, FaFilePdf } from "react-icons/fa";
+import CircularProgress from '@mui/material/CircularProgress';
 import authRequest from "../../../utils/axios";
 import toast from "react-hot-toast";
-import EditPdfFormModal from "./EditPdfFormModal";
+import { API_BASE_URL } from "../../../utils/constants"; 
 
-const FillablePdf = ({ selectedPatientId, onClose }) => {
-  const [pdfUrl, setPdfUrl] = useState(null);
-  const [formData, setFormData] = useState(null);
-  const [showEditor, setShowEditor] = useState(false);
+// Use a placeholder URL or configure a constant
+const PATIENT_JOTFORM_URL_BASE = "https://form.jotform.com/252594933893069"; 
+const FORM_TYPE = "IVR_FORM"; // Must match the form_type expected by your backend
+
+// ASSUMPTION: You can access the current User's email (provider email) here, 
+// likely passed as a prop or fetched via context. For this example, we'll use a placeholder.
+const PROVIDER_EMAIL = "provider@example.com"; 
+
+const FillablePdf = ({ patient, onClose }) => {
   const [loading, setLoading] = useState(true);
+  const [jotformUrl, setJotformUrl] = useState(PATIENT_JOTFORM_URL_BASE);
+  const [completedPdfUrl, setCompletedPdfUrl] = useState(null); 
+  const [existingFormFound, setExistingFormFound] = useState(false);
+  const constructJotFormUrl = () => {
+      // 1. Define the data mapping JotForm field names to patient data.
+      // NOTE: These keys (e.g., patientID, q1_name) MUST match the variable names 
+      // used in your JotForm pre-fill settings and webhook payload.
+      const prefillMap = {
+          // CRITICAL FIELDS for the backend webhook (must be in your JotForm)
+          providerEmail: PROVIDER_EMAIL, 
+          patientID: patient.id, 
+          
+          // Patient/Form Pre-fill Fields
+          q1_patientName: `${patient.first_name} ${patient.last_name}`, 
+          q2_patientDOB: patient.date_of_birth, 
+          // Add other fields: 'q3_address': patient.address, etc.
+      };
+      
+      const queryParams = new URLSearchParams();
 
-  // Helper function to get SAS URL for a blob.
-  const fetchSasUrl = async (containerName, blobName) => {
-    try {
-      const axiosInstance = authRequest();
-      const encodedBlobName = encodeURIComponent(blobName);
-      const res = await axiosInstance.get(
-        `/onboarding/forms/sas-url/${containerName}/${encodedBlobName}/`
-      );
-      return res.data.sas_url;
-    } catch (error) {
-      console.error("Failed to fetch SAS URL:", error);
-      toast.error("Could not get secure link to PDF.");
-      return null;
-    }
+      // 2. Iterate over the map and append parameters using the robust method.
+      Object.entries(prefillMap).forEach(([key, value]) => {
+          if (value) { 
+              queryParams.append(key, value);
+          }
+      });
+
+      // 3. Construct the final URL.
+      const finalUrl = `${PATIENT_JOTFORM_URL_BASE}?${queryParams.toString()}`;
+      setJotformUrl(finalUrl);
   };
-
-  const loadBlankPdf = () => {
-    const blankPdfUrl = `${process.env.REACT_APP_PYTHONANYWHERE_API}/onboarding/forms/blank/IVR_FORM/`;
-    // const blankPdfUrl = `${process.env.REACT_APP_API_URL}/onboarding/forms/blank/IVR_FORM/`;
-    setPdfUrl(blankPdfUrl);
-    setFormData(null);
-    setLoading(false);
-  };
-
-  const handleGeneratePdf = async () => {
-    // This is where you would put the content of handleGeneratePdf if needed.
-  };
-
-  // The main function to load an existing PDF or generate a new one.
-  const loadOrCreatePdf = async () => {
-    if (!selectedPatientId) {
+  const fetchCompletedPdfUrl = async () => {
+    if (!patient || !patient.id) {
       setLoading(false);
       return;
     }
 
     setLoading(true);
+    setCompletedPdfUrl(null);
+
     try {
       const axiosInstance = authRequest();
-      // Attempt to fetch existing data and blob path.
-      const dataResponse = await axiosInstance.get(
-        `/onboarding/forms/prepopulate-data/`,
+      const response = await axiosInstance.get(
+        `${API_BASE_URL}/onboarding/forms/sas-url/`,
         {
           params: {
-            patient_id: selectedPatientId,
-            form_type: "IVR_FORM",
+            patient_id: patient.id,
+            form_type: FORM_TYPE,
           },
         }
       );
-      setFormData(dataResponse.data);
 
-      const blobPath = dataResponse.data.completed_form_blob_path;
-      if (blobPath) {
-        // If a blob path exists, get the SAS URL for the existing PDF.
-        const sasUrl = await fetchSasUrl("media", blobPath);
-        if (sasUrl) {
-          setPdfUrl(sasUrl);
-          toast.success("Existing PDF loaded successfully!");
-          return;
-        }
-      }
-      // If no existing form, generate a new one.
-      const pdfResponse = await axiosInstance.get(
-        `/onboarding/forms/prepopulate/`,
-        {
-          params: {
-            patient_id: selectedPatientId,
-            form_type: "IVR_FORM",
-          },
-          responseType: "blob",
-        }
-      );
-      const blob = new Blob([pdfResponse.data], { type: "application/pdf" });
-      const blobUrl = URL.createObjectURL(blob);
-      setPdfUrl(blobUrl);
-      toast.success("New PDF generated successfully!");
+      // Success: A completed form exists and we have the SAS URL
+      setCompletedPdfUrl(response.data.sas_url);
+      setExistingFormFound(true);
+      toast.success("Existing IVR form found and ready to view.");
+
     } catch (error) {
-      console.error("Failed to load or generate PDF:", error);
-      toast.error("Failed to load or generate PDF.");
+      // 404/Error: No completed form exists, proceed to construct the JotForm URL
+      setExistingFormFound(false);
+      constructJotFormUrl(); 
+
+      if (error.response?.status !== 404) {
+        toast.error("Failed to check for existing form due to an error.");
+        console.error("SAS URL fetch error:", error);
+      }
     } finally {
       setLoading(false);
     }
   };
 
-  // Function to save the form and wait for the blob to be created.
-  const handleSavePatientIVR = async () => {
-    if (!selectedPatientId) {
-      toast.error("No patient selected.");
-      return;
-    }
-
-    setLoading(true);
-    try {
-      const axiosInstance = authRequest();
-      const response = await axiosInstance.post("/onboarding/forms/fill/", {
-        patient_id: selectedPatientId,
-        form_type: "IVR_FORM",
-        form_data: formData || {},
-      });
-      const newBlobPath = response.data.completed_form_blob_path;
-
-      // Start a polling loop to wait for the blob to be created.
-      const pollInterval = setInterval(async () => {
-        try {
-          const axiosInstance = authRequest();
-          const containerName = "media";
-          const encodedBlobName = encodeURIComponent(newBlobPath);
-
-          // Check the status of the blob.
-          const statusRes = await axiosInstance.get(
-            `/onboarding/forms/check-blob/${containerName}/${encodedBlobName}/`
-          );
-
-          if (statusRes.data.exists) {
-            clearInterval(pollInterval);
-            const sasUrl = await fetchSasUrl(containerName, newBlobPath);
-            setPdfUrl(sasUrl);
-            setLoading(false);
-            toast.success("Patient IVR form saved to cloud!");
-          }
-        } catch (error) {
-          console.error("Polling for blob failed:", error);
-          // Stop polling on a catastrophic error.
-          clearInterval(pollInterval);
-          setLoading(false);
-          toast.error("Error saving and checking form.");
-        }
-      }, 3000); // Poll every 3 seconds.
-    } catch (error) {
-      console.error("Failed to save form:", error);
-      setLoading(false);
-      toast.error("Error saving form.");
-    }
-  };
-
-  const handleEditorSuccess = async (newPdfUrl, updatedData) => {
-    setFormData(updatedData);
-    setPdfUrl(newPdfUrl);
-    setLoading(false);
-    setShowEditor(false);
-    toast.success("PDF preview re-generated successfully!");
-  };
-
   useEffect(() => {
-    if (selectedPatientId) {
-      loadOrCreatePdf();
-    }
-  }, [selectedPatientId]);
+    fetchCompletedPdfUrl();
+  }, [patient]); 
 
+  // --- Rendering Logic ---
+  const renderContent = () => {
+    if (loading) {
+      return (
+        <div className="flex justify-center items-center min-h-[600px] w-full">
+            <CircularProgress />
+            <p className="ml-3 text-gray-600 dark:text-gray-400">Checking for existing form...</p>
+        </div>
+      );
+    }
+
+    // MODE 1: Existing PDF Found
+    if (existingFormFound && completedPdfUrl) {
+      return (
+        <div className="text-center min-h-[600px] flex flex-col items-center justify-center">
+          <FaFilePdf className="w-16 h-16 text-red-600 mb-4" />
+          <p className="text-xl font-semibold mb-6 text-gray-800 dark:text-gray-100">
+            A **completed IVR Form** already exists for this patient.
+          </p>
+          <a
+            href={completedPdfUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-6 py-3 bg-teal-600 text-white font-medium rounded-lg shadow-md hover:bg-teal-700 transition flex items-center gap-2"
+          >
+            <FaFilePdf /> View Completed PDF
+          </a>
+        </div>
+      );
+    }
+
+    // MODE 2: No Existing PDF, Show JotForm for new submission
+    return (
+      <>
+        <p className="mb-4 text-sm text-gray-600 dark:text-gray-400">
+          Please complete the form below. Patient data has been pre-filled.
+        </p>
+        <iframe
+          src={jotformUrl}
+          width="100%"
+          height="600px"
+          title="Patient Onboarding Form"
+          style={{ border: "1px solid #ccc", borderRadius: "8px" }}
+          frameBorder="0"
+          allowFullScreen
+        ></iframe>
+        
+        <div className="mt-4 flex gap-4">
+          <button
+              className="px-4 py-2 bg-gray-300 text-gray-700 rounded cursor-not-allowed"
+              disabled
+          >
+              Submission Handled by JotForm
+          </button>
+        </div>
+      </>
+    );
+  };
+  
   return (
-    <div className="pdf-fill-container" style={{ padding: "2rem" }}>
+    <div 
+      className="bg-white dark:bg-gray-900 rounded-lg shadow-lg max-w-4xl w-full max-h-[90vh] overflow-auto relative"
+      style={{ padding: "2rem" }}
+    >
       <button
         onClick={onClose}
-        className="absolute top-4 right-4 text-gray-500 hover:text-gray-800 transition"
+        className="absolute top-4 right-4 text-gray-500 hover:text-red-500 transition"
         aria-label="Close"
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-6 w-6"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M6 18L18 6M6 6l12 12"
-          />
-        </svg>
+        <FaTimes className="w-6 h-6" />
       </button>
 
-      {loading && <p>Loading PDF...</p>}
+      <h3 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-100">
+        Patient IVR Form
+      </h3>
 
-      {!loading && pdfUrl && (
-        <>
-          <h3>Preview:</h3>
-          {/* <iframe
-            src={pdfUrl}
-            width="100%"
-            height="600px"
-            title="PDF Preview"
-            style={{ border: "1px solid #ccc" }}
-          ></iframe> */}
-          <iframe
-            src='https://form.jotform.com/252594933893069'
-            width="100%"
-            height="600px"
-            title="PDF Preview"
-            style={{ border: "1px solid #ccc" }}
-          ></iframe>
-          <div className="mt-4 flex gap-4">
-            <a
-              href={pdfUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              download
-              className="px-4 py-2 bg-blue-600 text-white rounded"
-            >
-              Download PDF
-            </a>
-            <button
-              className="px-4 py-2 bg-blue-600 text-white rounded"
-              onClick={() => setShowEditor(true)}
-            >
-              Edit PDF Fields
-            </button>
-            <button
-              className="px-4 py-2 bg-blue-600 text-white rounded"
-              onClick={handleSavePatientIVR}
-            >
-              Save Patient IVR
-            </button>
-          </div>
-        </>
-      )}
-
-      {showEditor && (
-        <EditPdfFormModal
-          formData={formData || {}}
-          patientId={selectedPatientId}
-          onClose={() => setShowEditor(false)}
-          onSuccess={handleEditorSuccess}
-        />
-      )}
+      {renderContent()}
     </div>
   );
 };

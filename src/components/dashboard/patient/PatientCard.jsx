@@ -1,12 +1,11 @@
-// src/components/dashboard/patients/PatientCard.jsx
 import React, { useState } from "react";
-import { FaEye, FaEdit, FaTrashAlt, FaShoppingCart } from "react-icons/fa";
-import { IoInformationCircleOutline } from "react-icons/io5";
+import { motion } from "framer-motion"; // 💥 Import motion
+import { FaEye, FaEdit, FaTrashAlt } from "react-icons/fa";
+import { IoInformationCircleOutline, IoDocumentsOutline } from "react-icons/io5";
 import { format } from "date-fns";
 import { formatPhoneNumber } from "react-phone-number-input";
 import Notes from "../documemts/Notes";
 import NewOrderForm from "../../orders/NewOrderForm";
-import { IoDocumentsOutline } from "react-icons/io5";
 
 const IVRStatusBadge = ({ status }) => {
   const colors = {
@@ -25,6 +24,13 @@ const IVRStatusBadge = ({ status }) => {
   );
 };
 
+// 💥 NEW: Individual list item animation variants (for staggered entry and exit)
+const listItemVariants = {
+  hidden: { y: 20, opacity: 0 },
+  visible: { y: 0, opacity: 1, transition: { duration: 0.3 } },
+  exit: { opacity: 0, x: -50, transition: { duration: 0.2 } },
+};
+
 const PatientCard = ({ patient, onViewPdf, onEdit, onDelete }) => {
   const [openOrderModal, setOpenOrderModal] = useState(false);
   const formattedDate = patient.date_of_birth
@@ -33,9 +39,9 @@ const PatientCard = ({ patient, onViewPdf, onEdit, onDelete }) => {
   const formattedPhoneNumber = patient.phone_number
     ? formatPhoneNumber(patient.phone_number) || patient.phone_number
     : "N/A";
+
   const calculateAge = (dobString) => {
     if (!dobString || !/^\d{4}-\d{2}-\d{2}$/.test(dobString)) {
-      console.error("Invalid date of birth format. Please use 'YYYY-MM-DD'.");
       return null;
     }
     const dob = new Date(dobString);
@@ -48,25 +54,46 @@ const PatientCard = ({ patient, onViewPdf, onEdit, onDelete }) => {
     }
     return age;
   };
+
   return (
-    <div className="border p-4 rounded-lg border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 shadow-sm space-y-2 text-gray-900 dark:text-gray-200">
+    // 💥 Apply motion.div and variants for entrance and hover flair
+    <motion.div
+      className="border p-4 rounded-xl border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 shadow-md space-y-2 text-gray-900 dark:text-gray-200"
+      variants={listItemVariants}
+      initial="hidden"
+      animate="visible"
+      exit="exit"
+      whileHover={{ 
+        scale: 1.005, 
+        boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)" 
+      }}
+      transition={{ type: "spring", stiffness: 300, damping: 20 }}
+    >
       <div className="flex justify-between items-center mb-4">
         <h3 className="text-lg font-semibold">
           {patient.first_name} {patient.last_name}
         </h3>
         <div className="flex items-center space-x-3">
-          <FaEdit
-            className="text-gray-500 dark:text-gray-400 hover:text-teal-500 cursor-pointer text-base"
+          <motion.button
             onClick={() => onEdit(patient)}
+            className="text-gray-500 dark:text-gray-400 hover:text-teal-500 transition"
             title="Edit Patient"
-          />
-          <FaTrashAlt
-            className="text-gray-500 dark:text-gray-400 hover:text-red-500 cursor-pointer text-base"
+            whileTap={{ scale: 0.85 }} // 💥 Press feedback
+          >
+            <FaEdit className="text-base" />
+          </motion.button>
+          <motion.button
             onClick={() => onDelete(patient.id)}
+            className="text-gray-500 dark:text-gray-400 hover:text-red-500 transition"
             title="Delete Patient"
-          />
+            whileTap={{ scale: 0.85 }} // 💥 Press feedback
+          >
+            <FaTrashAlt className="text-base" />
+          </motion.button>
         </div>
       </div>
+      {/* ... (Patient Info Section remains the same) ... */}
+      
       <div
         className="flex items-center justify-between w-full"
         style={{ marginTop: -4 }}
@@ -112,6 +139,8 @@ const PatientCard = ({ patient, onViewPdf, onEdit, onDelete }) => {
           {calculateAge(patient.date_of_birth)}
         </p>
       </div>
+      
+      {/* ... (Separators and Insurance Section remains the same) ... */}
       <div
         className="h-[2px] w-[90%] bg-gray-200 dark:bg-gray-700 flex m-auto opacity-550"
         style={{ marginTop: 25 }}
@@ -175,6 +204,8 @@ const PatientCard = ({ patient, onViewPdf, onEdit, onDelete }) => {
             : "N/A"}
         </p>
       </div>
+
+      {/* Patient Documentation Section (Updated with motion.button) */}
       <div
         className="h-[2px] w-[90%] bg-gray-200 dark:bg-gray-700 flex m-auto opacity-550"
         style={{ marginTop: 25 }}
@@ -189,13 +220,19 @@ const PatientCard = ({ patient, onViewPdf, onEdit, onDelete }) => {
             <strong>Promed Healthcare Plus IVR</strong>
           </p>
           <div className="flex space-x-2">
-            <IoDocumentsOutline
-              className="text-gray-500 dark:text-gray-400 hover:text-teal-500 cursor-pointer"
+            <motion.button
               onClick={() => onViewPdf(patient)}
-            />
+              className="p-1 rounded-full text-gray-500 dark:text-gray-400 hover:text-teal-500 transition"
+              whileTap={{ scale: 0.9 }}
+              title="View IVR Form"
+            >
+              <IoDocumentsOutline className="w-5 h-5" />
+            </motion.button>
           </div>
         </div>
       </div>
+      
+      {/* Patient Order Section (Updated with motion.button) */}
       <div
         className="h-[2px] w-[90%] bg-gray-200 dark:bg-gray-700 flex m-auto opacity-550"
         style={{ marginTop: 25 }}
@@ -206,7 +243,7 @@ const PatientCard = ({ patient, onViewPdf, onEdit, onDelete }) => {
           Place an order for this patient.
         </p>
         <div className="relative flex items-center gap-1">
-          <button
+          <motion.button
             className={`text-xs px-3 py-1 rounded-full flex items-center gap-1 transition-all
             ${
               patient.ivrStatus === "Approved"
@@ -220,9 +257,10 @@ const PatientCard = ({ patient, onViewPdf, onEdit, onDelete }) => {
                 ? "Orders can only be placed for patients with an approved IVR."
                 : ""
             }
+            whileTap={patient.ivrStatus === "Approved" ? { scale: 0.95 } : {}} // 💥 Press feedback
           >
             + New Order
-          </button>
+          </motion.button>
           {patient.ivrStatus !== "Approved" && (
             <div className="relative group">
               <IoInformationCircleOutline className="text-xl text-red-400 font-semibold cursor-pointer dark:text-red-300" />
@@ -248,7 +286,8 @@ const PatientCard = ({ patient, onViewPdf, onEdit, onDelete }) => {
         onClose={() => setOpenOrderModal(false)}
         patient={patient}
       />
-    </div>
+    </motion.div>
   );
 };
+
 export default PatientCard;

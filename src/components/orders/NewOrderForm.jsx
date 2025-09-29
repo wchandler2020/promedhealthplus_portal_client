@@ -9,8 +9,8 @@ import {
   MenuItem,
 } from "@mui/material";
 import { AuthContext } from "../../utils/auth";
-import OrderItem from "./OrderItem";
-import OrderSummary from "./OrderSummary";
+import OrderItem from "./OrderItem"; // Assuming OrderItem handles its own styling internally
+import OrderSummary from "./OrderSummary"; // Assuming OrderSummary handles its own styling internally
 import toast from "react-hot-toast";
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
@@ -56,8 +56,7 @@ const NewOrderForm = ({ open, onClose, patient }) => {
       if (!accessToken) throw new Error("Authentication token not found.");
 
       const response = await fetch(
-        // `${process.env.REACT_APP_PYTHONANYWHERE_API}/products/`,
-        `${process.env.REACT_APP_API_URL}/products/`,
+        `${process.env.REACT_APP_PYTHONANYWHERE_API}/products/`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -102,10 +101,8 @@ const NewOrderForm = ({ open, onClose, patient }) => {
   const total = Object.entries(selectedVariants).reduce(
     (sum, [productId, variants]) => {
       if (!Array.isArray(variants)) return sum;
-
       const item = itemsData.find((i) => i.id === parseInt(productId));
       if (!item) return sum;
-
       for (const { variantId, quantity } of variants) {
         const variant = item.variants.find((v) => v.id === parseInt(variantId));
         if (variant && quantity > 0) {
@@ -131,7 +128,6 @@ const NewOrderForm = ({ open, onClose, patient }) => {
               product: parseInt(productId),
               variant: parseInt(variantId),
               quantity,
-              // price_at_order: variant.price,
             });
           }
         }
@@ -164,8 +160,7 @@ const NewOrderForm = ({ open, onClose, patient }) => {
       }
 
       const response = await fetch(
-        // `${process.env.REACT_APP_PYTHONANYWHERE_API}/provider/orders/`,
-        `${process.env.REACT_APP_API_URL}/provider/orders/`,
+        `${process.env.REACT_APP_PYTHONANYWHERE_API}/provider/orders/`,
         {
           method: "POST",
           headers: {
@@ -204,6 +199,7 @@ const NewOrderForm = ({ open, onClose, patient }) => {
           patient?.state || ""
         } ${patient?.zip_code || ""}`,
         patientCountry: patient?.country || "",
+        deliveryDate: "",
       });
       fetchProducts();
     }
@@ -223,14 +219,23 @@ const NewOrderForm = ({ open, onClose, patient }) => {
       );
     }
     if (error) {
+      // Keep Tailwind dark classes here
       return <div className="p-4 text-red-500 dark:text-red-400 text-center">{error}</div>;
     }
 
-    // Define common styles for MUI components
-    const commonTextFieldSx = {
+    // --- FIX: Remove hardcoded background/color from here ---
+
+    const commonInputSx = {
+      // 1. INPUT FIELD ROOT STYLING
       '& .MuiOutlinedInput-root': {
+        // !!! REMOVE hardcoded backgroundColor and color. 
+        // This forces it to white and prevents Tailwind from working.
+        // backgroundColor: 'white', 
+        // color: 'black',
+        
+        // Common border and focus states
         '& fieldset': {
-          borderColor: 'divider',
+          borderColor: '#d1d5db', // gray-300
         },
         '&:hover fieldset': {
           borderColor: 'primary.main',
@@ -238,186 +243,108 @@ const NewOrderForm = ({ open, onClose, patient }) => {
         '&.Mui-focused fieldset': {
           borderColor: 'primary.main',
         },
-        backgroundColor: 'white',
-        color: 'black',
-        '@media (prefers-color-scheme: dark)': {
-            backgroundColor: '#1f2937',
-            color: '#e5e7eb',
-        },
       },
+      // 2. LABEL STYLING
       '& .MuiInputLabel-root': {
-        color: 'gray',
-        '@media (prefers-color-scheme: dark)': {
-            color: '#9ca3af',
-        },
+        color: '#6b7280', // gray-500 for light/gray-400 for dark, but we'll try to let global styles handle it.
+      },
+      // 3. Helper for dark mode border color
+      '.dark & .MuiOutlinedInput-root fieldset': {
+         borderColor: '#4b5563', // gray-600 border for dark mode
       },
     };
-
-    const commonSelectSx = {
-      '& .MuiOutlinedInput-notchedOutline': {
-        borderColor: 'divider',
-        '@media (prefers-color-scheme: dark)': {
-            borderColor: '#374151',
-        },
-      },
-      '&:hover .MuiOutlinedInput-notchedOutline': {
-        borderColor: 'primary.main',
-      },
-      '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-        borderColor: 'primary.main',
-      },
+    
+    // Custom Menu Item styling is needed to ensure the dropdown menu respects the dark/light theme
+    const commonMenuItemSx = {
+      // Set light mode defaults for the list items
       backgroundColor: 'white',
       color: 'black',
-      '@media (prefers-color-scheme: dark)': {
-        backgroundColor: '#1f2937',
-        color: '#e5e7eb',
+      '&:hover': {
+        backgroundColor: '#f3f4f6', // gray-100 hover
       },
-      '& .MuiSvgIcon-root': {
-        color: 'text.secondary',
-        '@media (prefers-color-scheme: dark)': {
-            color: '#9ca3af',
-        },
-      },
-    };
-
-    const commonMenuItemSx = {
-        backgroundColor: 'white',
-        color: 'black',
-        '@media (prefers-color-scheme: dark)': {
-            backgroundColor: '#1f2937',
-            color: '#e5e7eb',
-        },
+      // Now, apply dark mode styles using the '.dark &' selector which checks if a parent has the 'dark' class
+      '.dark &': {
+        backgroundColor: '#374151', // gray-700
+        color: '#e5e7eb', // gray-200
         '&:hover': {
-            backgroundColor: 'action.hover',
-            '@media (prefers-color-scheme: dark)': {
-                backgroundColor: '#374151',
-            },
-        },
-    }
-
-    const commonDatePickerSx = {
-      '& .MuiInputBase-root': {
-        backgroundColor: 'white',
-        '@media (prefers-color-scheme: dark)': {
-            backgroundColor: '#1f2937',
+          backgroundColor: '#4b5563', // gray-600 hover
         },
       },
-      '& .MuiSvgIcon-root': {
-        color: 'text.secondary',
-        '@media (prefers-color-scheme: dark)': {
-            color: '#9ca3af',
+      '&.Mui-selected': {
+        backgroundColor: '#e5e7eb', // light mode selected
+        '&:hover': {
+          backgroundColor: '#d1d5db',
         },
       },
+      '.dark &.Mui-selected': {
+        backgroundColor: '#4b5563', // dark mode selected
+        '&:hover': {
+          backgroundColor: '#374151',
+        },
+      }
     };
+    
+    // --- Render Content ---
 
     return (
       <Box sx={{
-        // Global style for a consistent look on all MUI components inside this Box
-        '& .MuiTextField-root, & .MuiSelect-root': {
-          '& .MuiInputBase-input, & .MuiSelect-select': {
-            backgroundColor: 'white',
-            color: 'black',
-            '@media (prefers-color-scheme: dark)': {
-              backgroundColor: '#1f2937',
-              color: '#e5e7eb',
-            },
+          // Global style for a consistent look on all MUI components inside this Box
+          '& .MuiTextField-root, & .MuiSelect-root, & .MuiInputBase-root': {
+              '& .MuiInputLabel-root': {
+                  color: '#6b7280', // light mode label
+              },
+              
+              // Apply specific dark mode overrides for input backgrounds, text, and labels
+              '.dark & .MuiInputBase-input, .dark & .MuiSelect-select': {
+                backgroundColor: '#1f2937', // dark:bg-gray-800 equivalent
+                color: '#e5e7eb', // dark:text-gray-200 equivalent
+              },
+              '.dark & .MuiInputLabel-root': {
+                  color: '#9ca3af', // dark:text-gray-400 equivalent
+              },
+
+              // This is necessary for the default Select background since it uses a nested InputBase
+              '&.MuiSelect-root': {
+                backgroundColor: 'white',
+                '.dark &': {
+                  backgroundColor: '#1f2937',
+                }
+              },
           },
-          '& .MuiInputLabel-root': {
-            color: 'gray',
-            '@media (prefers-color-scheme: dark)': {
-                color: '#9ca3af',
-            },
+          // Ensure DatePicker icons follow theme
+          '& .MuiSvgIcon-root': {
+              color: '#6b7280', // light mode icon color
           },
-          '& .MuiOutlinedInput-notchedOutline': {
-            borderColor: 'divider',
-            '@media (prefers-color-scheme: dark)': {
-                borderColor: '#4b5563',
-            },
+          '.dark & .MuiSvgIcon-root': {
+              color: '#9ca3af', // dark mode icon color
           },
-          '&:hover .MuiOutlinedInput-notchedOutline': {
-            borderColor: 'primary.main',
-          },
-          '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-            borderColor: 'primary.main',
-          },
-        }
       }}>
         {step === 1 && (
           <div className="p-4 space-y-4">
-            <TextField
-              fullWidth
-              label="Provider Name"
-              name="providerName"
-              value={formData.providerName}
-              onChange={handleFormChange}
-              sx={commonTextFieldSx}
-            />
-            <TextField
-              fullWidth
-              label="Facility Name"
-              name="facilityName"
-              value={formData.facilityName}
-              onChange={handleFormChange}
-              sx={commonTextFieldSx}
-            />
-            <TextField
-              fullWidth
-              label="Phone Number"
-              name="providerPhoneNumber"
-              value={formData.providerPhoneNumber}
-              onChange={handleFormChange}
-              sx={commonTextFieldSx}
-            />
-            <TextField
-              fullWidth
-              label="Address"
-              name="providerAddress"
-              value={formData.providerAddress}
-              onChange={handleFormChange}
-              sx={commonTextFieldSx}
-            />
+            <TextField fullWidth label="Provider Name" name="providerName" value={formData.providerName} onChange={handleFormChange} sx={commonInputSx} required/>
+            <TextField fullWidth label="Facility Name" name="facilityName" value={formData.facilityName} onChange={handleFormChange} sx={commonInputSx} required/>
+            <TextField fullWidth label="Phone Number" name="providerPhoneNumber" value={formData.providerPhoneNumber} onChange={handleFormChange} sx={commonInputSx} required />
+            <TextField fullWidth label="Delivery dAddress" name="providerAddress" value={formData.providerAddress} onChange={handleFormChange} sx={commonInputSx} required/>
           </div>
         )}
         {step === 2 && (
           <div className="p-4 space-y-4">
-            <TextField
-              fullWidth
-              label="Patient Name"
-              name="patientName"
-              value={formData.patientName}
-              onChange={handleFormChange}
-              sx={commonTextFieldSx}
-            />
-            <TextField
-              fullWidth
-              label="Date of Birth"
-              name="patientDob"
-              value={formData.patientDob}
-              onChange={handleFormChange}
-              sx={commonTextFieldSx}
-            />
-            <TextField
-              fullWidth
-              label="Phone Number"
-              name="patientPhoneNumber"
-              value={formData.patientPhoneNumber}
-              onChange={handleFormChange}
-              sx={commonTextFieldSx}
-            />
-            <TextField
-              fullWidth
-              label="Address"
-              name="patientAddress"
-              value={formData.patientAddress}
-              onChange={handleFormChange}
-              sx={commonTextFieldSx}
-            />
+            <TextField fullWidth label="Patient Name" name="patientName" value={formData.patientName} onChange={handleFormChange} sx={commonInputSx} />
+            <TextField fullWidth label="Date of Birth" name="patientDob" value={formData.patientDob} onChange={handleFormChange} sx={commonInputSx} />
+            <TextField fullWidth label="Phone Number" name="patientPhoneNumber" value={formData.patientPhoneNumber} onChange={handleFormChange} sx={commonInputSx} />
+            <TextField fullWidth label="Address" name="patientAddress" value={formData.patientAddress} onChange={handleFormChange} sx={commonInputSx} />
             <Select
               fullWidth
               name="patientCountry"
               value={formData.patientCountry || "United States"}
               onChange={handleFormChange}
-              sx={commonSelectSx}
+              sx={commonInputSx}
+              // This ensures the dropdown menu paper respects dark mode
+              MenuProps={{
+                PaperProps: {
+                  className: 'bg-white dark:bg-gray-700', 
+                }
+              }}
             >
               <MenuItem value="United States" sx={commonMenuItemSx}>United States</MenuItem>
             </Select>
@@ -434,10 +361,8 @@ const NewOrderForm = ({ open, onClose, patient }) => {
                   key={item.id}
                   item={item}
                   selectedVariants={selectedVariants[item.id] || []}
-                  onVariantChange={(variants) =>
-                    handleItemVariantChange(item.id, variants)
-                  }
-                  selectSx={commonSelectSx}
+                  onVariantChange={(variants) => handleItemVariantChange(item.id, variants)}
+                  selectSx={commonInputSx}
                   menuItemSx={commonMenuItemSx}
                 />
               ))
@@ -446,12 +371,11 @@ const NewOrderForm = ({ open, onClose, patient }) => {
                 No available products found.
               </p>
             )}
+            
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <DatePicker
                 label="Requested Delivery Date"
-                value={
-                  formData.deliveryDate ? new Date(formData.deliveryDate) : null
-                }
+                value={formData.deliveryDate ? new Date(formData.deliveryDate) : null}
                 onChange={(newValue) => {
                   setFormData((prev) => ({
                     ...prev,
@@ -463,10 +387,9 @@ const NewOrderForm = ({ open, onClose, patient }) => {
                   textField: {
                     fullWidth: true,
                     variant: "outlined",
-                    sx: commonTextFieldSx
+                    sx: commonInputSx
                   },
                 }}
-                sx={commonDatePickerSx}
               />
             </LocalizationProvider>
 
@@ -498,15 +421,11 @@ const NewOrderForm = ({ open, onClose, patient }) => {
           maxHeight: "90vh",
           overflowY: "auto",
           borderRadius: "16px",
-          bgcolor: "white",
+          bgcolor: "white", 
           boxShadow: 24,
           p: 4,
-          // Dark mode styles
-          '@media (prefers-color-scheme: dark)': {
-            bgcolor: '#1f2937',
-            boxShadow: '0 8px 30px rgba(0, 0, 0, 0.6)',
-          },
         }}
+        // The key to applying the dark theme: The parent container must have the dark classes.
         className="bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 transition-colors duration-300"
       >
         <div className="relative">
@@ -516,7 +435,7 @@ const NewOrderForm = ({ open, onClose, patient }) => {
           >
             ✕
           </button>
-          <h2 className="text-3xl font-semibold text-center text-gray-800 dark:text-gray-100 mb-2">
+          <h2 className="text-3xl font-semibold text-gray-800 dark:text-gray-100 text-center mb-2">
             New Order
           </h2>
           <p className="text-center text-gray-500 dark:text-gray-400 mb-6">

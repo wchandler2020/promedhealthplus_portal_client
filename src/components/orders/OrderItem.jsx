@@ -119,7 +119,7 @@ const OrderItem = ({ item, selectedVariants = [], onVariantChange }) => {
                 .filter((variant) => !usedIds.includes(String(variant.id)))
                 .map((variant) => (
                   <option className="bg-white text-black dark:bg-gray-700 dark:text-gray-200" key={variant.id} value={variant.id}>
-                    {variant.size} - ${variant.price}
+                    {variant.size} 
                   </option>
                 ))}
             </select>

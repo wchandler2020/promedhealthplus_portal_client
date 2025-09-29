@@ -116,7 +116,7 @@ const MFA = () => {
           <div className="flex items-center h-full px-20 relative z-20">
             <div>
               <h2 className="text-5xl font-extrabold text-white drop-shadow-lg">
-                ProMed Health <span className="text-indigo-400">Plus</span>
+                ProMed Health <span className="text-teal-400">Plus</span>
               </h2>
               <p className="max-w-xl mt-3 text-gray-200 text-xl font-light drop-shadow">
                 We sent a secure code to your registered device for identity verification.
@@ -160,8 +160,8 @@ const MFA = () => {
                       type="text"
                       inputMode="numeric"
                       maxLength="1"
-                      // Updated styling for indigo focus and professional look
-                      className="w-12 h-14 text-center text-3xl font-semibold border-2 border-gray-300 dark:border-gray-700 rounded-lg text-gray-800 dark:text-white bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200"
+                      // Updated styling for teal focus and professional look
+                      className="w-12 h-14 text-center text-3xl font-semibold border-2 border-gray-300 dark:border-gray-700 rounded-lg text-gray-800 dark:text-white bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition duration-200"
                       value={digit}
                       onChange={(e) => handleChange(e.target.value, index)}
                       onKeyDown={(e) => handleKeyDown(e, index)}
@@ -174,7 +174,7 @@ const MFA = () => {
                 {/* Submit */}
                 <motion.button
                   type="submit"
-                  className="w-full px-4 py-3 tracking-wide text-white font-bold transition-colors duration-200 transform bg-indigo-600 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 uppercase shadow-lg disabled:opacity-50"
+                  className="w-full px-4 py-3 tracking-wide text-white font-bold transition-colors duration-200 transform bg-teal-600 rounded-lg hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 uppercase shadow-lg disabled:opacity-50"
                   whileHover={{ scale: 1.01 }}
                   whileTap={{ scale: 0.99 }}
                   disabled={code.some(d => d === "")}
