@@ -53,11 +53,7 @@ const HeroSection = () => {
             className="w-full h-full object-cover object-right" 
           />
         </motion.div>
-
-        {/* The semi-transparent overlay */}
         <div className="absolute inset-0 z-0 bg-gray-900/60 dark:bg-gray-900/80"></div>
-
-        {/* The content container with Stagger animation */}
         <motion.div 
           className="lg:w-3/4 xl:w-2/4 relative z-10 py-16" 
           initial="hidden"
@@ -65,7 +61,6 @@ const HeroSection = () => {
           variants={containerVariants}
         >
           <div className="bg-white/10 p-6 rounded-xl backdrop-blur-sm shadow-2xl"> 
-            {/* 💥 FIX: Removed 'whitespace-nowrap' to prevent overflow on large screens */}
             <motion.h1 
               className="text-white text-2xl sm:text-3xl md:text-4xl xl:text-5xl font-semibold leading-tight drop-shadow-lg"
               variants={itemVariants}

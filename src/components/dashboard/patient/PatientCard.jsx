@@ -1,7 +1,10 @@
 import React, { useState } from "react";
-import { motion } from "framer-motion"; 
+import { motion } from "framer-motion";
 import { FaEye, FaEdit, FaTrashAlt } from "react-icons/fa";
-import { IoInformationCircleOutline, IoDocumentsOutline } from "react-icons/io5";
+import {
+  IoInformationCircleOutline,
+  IoDocumentsOutline,
+} from "react-icons/io5";
 import { format } from "date-fns";
 import { formatPhoneNumber } from "react-phone-number-input";
 import Notes from "../documemts/Notes";
@@ -61,9 +64,10 @@ const PatientCard = ({ patient, onViewPdf, onEdit, onDelete }) => {
       initial="hidden"
       animate="visible"
       exit="exit"
-      whileHover={{ 
-        scale: 1.005, 
-        boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)" 
+      whileHover={{
+        scale: 1.005,
+        boxShadow:
+          "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)",
       }}
       transition={{ type: "spring", stiffness: 300, damping: 20 }}
     >
@@ -76,7 +80,7 @@ const PatientCard = ({ patient, onViewPdf, onEdit, onDelete }) => {
             onClick={() => onEdit(patient)}
             className="text-gray-500 dark:text-gray-400 hover:text-teal-500 transition"
             title="Edit Patient"
-            whileTap={{ scale: 0.85 }} 
+            whileTap={{ scale: 0.85 }}
           >
             <FaEdit className="text-base" />
           </motion.button>
@@ -84,20 +88,23 @@ const PatientCard = ({ patient, onViewPdf, onEdit, onDelete }) => {
             onClick={() => onDelete(patient.id)}
             className="text-gray-500 dark:text-gray-400 hover:text-red-500 transition"
             title="Delete Patient"
-            whileTap={{ scale: 0.85 }} 
+            whileTap={{ scale: 0.85 }}
           >
             <FaTrashAlt className="text-base" />
           </motion.button>
         </div>
       </div>
-      
+
       <div
+        // Retained flex and justify-between for side-by-side layout
         className="flex items-center justify-between w-full"
         style={{ marginTop: -4 }}
       >
-        <p className="text-sm">
+        <p className="text-xs mr-2">
           <strong>Medical Record #:</strong> {patient.medical_record_number}
         </p>
+
+        {/* IVR Status text remains text-sm (or defaults to the base size) */}
         <strong className="text-sm">
           IVR Status: <IVRStatusBadge status={patient.ivrStatus} />
         </strong>
@@ -136,7 +143,7 @@ const PatientCard = ({ patient, onViewPdf, onEdit, onDelete }) => {
           {calculateAge(patient.date_of_birth)}
         </p>
       </div>
-      
+
       <div
         className="h-[2px] w-[90%] bg-gray-200 dark:bg-gray-700 flex m-auto opacity-550"
         style={{ marginTop: 25 }}
@@ -226,19 +233,32 @@ const PatientCard = ({ patient, onViewPdf, onEdit, onDelete }) => {
           </div>
         </div>
       </div>
-      
+
       <div
         className="h-[2px] w-[90%] bg-gray-200 dark:bg-gray-700 flex m-auto opacity-550"
         style={{ marginTop: 25 }}
       ></div>
       <p className="text-sm font-semibold text-center mt-6">Patient Order</p>
-      
+
       {/* FIX: Use flex-wrap to allow elements to stack on small screens */}
-      <div className="flex justify-between items-center mt-2 flex-wrap gap-2"> 
+      <div className="flex justify-between items-center mt-2 flex-wrap gap-2">
         <p className="text-xs text-gray-700 dark:text-gray-300 **min-w-[50%]** font-bold">
           Place an order for this patient.
         </p>
         <div className="relative flex items-center gap-1">
+          {patient.ivrStatus !== "Approved" && (
+            <div className="relative group">
+              <IoInformationCircleOutline className="text-xl text-red-400 font-semibold cursor-pointer dark:text-red-300" />
+              <div
+                className="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2
+                bg-white border border-gray-200 shadow-lg px-3 py-1 text-xs text-gray-500
+                rounded-xl w-max opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10 font-semibold
+                dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300"
+              >
+                Orders can only be placed for patients with an approved IVR.
+              </div>
+            </div>
+          )}
           <motion.button
             // FIX: Reduced text size from text-xs to text-[10px] for better fit
             className={`text-[10px] px-3 py-1 rounded-full flex items-center gap-1 transition-all
@@ -254,11 +274,11 @@ const PatientCard = ({ patient, onViewPdf, onEdit, onDelete }) => {
                 ? "Orders can only be placed for patients with an approved IVR."
                 : ""
             }
-            whileTap={patient.ivrStatus === "Approved" ? { scale: 0.95 } : {}} 
+            whileTap={patient.ivrStatus === "Approved" ? { scale: 0.95 } : {}}
           >
             + New Order
           </motion.button>
-          {patient.ivrStatus !== "Approved" && (
+          {/* {patient.ivrStatus !== "Approved" && (
             <div className="relative group">
               <IoInformationCircleOutline className="text-xl text-red-400 font-semibold cursor-pointer dark:text-red-300" />
               <div
@@ -270,7 +290,7 @@ const PatientCard = ({ patient, onViewPdf, onEdit, onDelete }) => {
                 Orders can only be placed for patients with an approved IVR.
               </div>
             </div>
-          )}
+          )} */}
         </div>
       </div>
       <div

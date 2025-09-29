@@ -1,14 +1,11 @@
 import React, { useState } from "react";
 import { Modal, Box } from "@mui/material";
-// 1. Import motion
-import { motion } from "framer-motion";
+import { motion } from "framer-motion"; // Imported Framer Motion
 import { IoMailOutline, IoCallOutline } from "react-icons/io5";
 import { states, about_approach_data, about_team } from "../../utils/data";
-import about_bg_img from '../../assets/images/about_bg_img.jpg'
-import { FaChalkboardTeacher } from "react-icons/fa";
+import about_bg_img from '../../assets/images/about_bg_img.jpg';
 
-
-// Removed local placeholder data for cleanliness, assuming data is imported correctly.
+const MotionBox = motion(Box);
 
 const About = () => {
   const [open, setOpen] = useState(false);
@@ -32,6 +29,7 @@ const About = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Form submitted:", formData);
+    // You would typically send data to an API here
     setOpen(false);
   };
 
@@ -39,18 +37,18 @@ const About = () => {
     setOpen(false);
   };
 
-  // 🎯 NEW: Modal Animation Variants
+  // 🎯 Modal Animation Variants
   const modalVariants = {
     hidden: { opacity: 0, scale: 0.95 },
     visible: {
       opacity: 1,
       scale: 1,
       transition: {
-        duration: 0.3, // Adjust for desired speed
+        duration: 0.3,
         ease: "easeOut",
       },
     },
-    exit: { // Framer Motion uses 'exit' for unmount animations
+    exit: {
       opacity: 0,
       scale: 0.95,
       transition: {
@@ -66,19 +64,18 @@ const About = () => {
     transform: "translate(-50%, -50%)",
     width: "100%",
     maxWidth: 600,
-    // FIX: Added max height and overflowY for scrolling
-    maxHeight: "90vh", // Max height to 90% of viewport height
-    overflowY: "auto", // Enable vertical scrolling
-    bgcolor: isDarkMode ? "#1f2937" : "transparent",
+    maxHeight: "90vh",
+    overflowY: "auto",
     boxShadow: "none",
     outline: "none",
+    // MUI requires bgcolor here, but the inner motion.div handles the dark/light background
+    bgcolor: 'transparent', 
   };
 
   const darkModeClass = isDarkMode ? "dark" : "";
 
-  // --- Framer Motion Animation Variants ---
+  // --- Framer Motion Animation Variants for Main Content ---
 
-  // Fade in and slide up from below (for main page content)
   const containerVariants = {
     hidden: { opacity: 0, y: 50 },
     visible: {
@@ -92,7 +89,6 @@ const About = () => {
     },
   };
 
-  // Individual item animation
   const itemVariants = {
     hidden: { opacity: 0, y: 30 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
@@ -101,7 +97,8 @@ const About = () => {
   return (
     <div className={darkModeClass}>
       <div className="bg-white dark:bg-gray-900 transition-colors duration-500 min-h-screen">
-        {/* Hero Section (Immediate Load/Stagger) */}
+        
+        {/* Hero Section */}
         <motion.header
           className="bg-white dark:bg-gray-900 text-gray-800 dark:text-white pt-32 pb-16 transition-colors duration-500"
           initial="hidden"
@@ -126,6 +123,7 @@ const About = () => {
 
         {/* Main Section */}
         <main className="container mx-auto px-4 sm:px-6 py-16">
+          
           {/* Our Story (Mission & Image) */}
           <motion.section
             className="mb-20 p-6 md:p-12 bg-gray-50 dark:bg-gray-800 rounded-2xl shadow-inner dark:shadow-none transition-colors duration-500"
@@ -134,8 +132,26 @@ const About = () => {
             viewport={{ once: true, amount: 0.3 }}
             variants={containerVariants}
           >
+            {/* 💥 FIX: Responsive layout for Image above Text on small screens */}
             <div className="flex flex-col md:flex-row items-center gap-12">
-              <motion.div className="md:w-1/2" variants={itemVariants}>
+              
+              {/* Image Container: order-1 on small, order-2 on medium+ */}
+              <motion.div
+                className="w-full md:w-1/2 mt-8 md:mt-0 order-1 md:order-2"
+                variants={itemVariants}
+              >
+                <img
+                  src={about_bg_img}
+                  alt="Wound Care Visualization"
+                  className="rounded-xl shadow-2xl w-full h-auto border-4 border-teal-500/50 dark:border-teal-400/50"
+                />
+              </motion.div>
+              
+              {/* Text Container: order-2 on small, order-1 on medium+ */}
+              <motion.div
+                className="md:w-1/2 order-2 md:order-1"
+                variants={itemVariants}
+              >
                 <h2 className="text-3xl sm:text-4xl font-bold text-gray-800 dark:text-white mb-6">
                   Our Mission
                 </h2>
@@ -150,16 +166,7 @@ const About = () => {
                   superior patient outcomes and practice success.
                 </p>
               </motion.div>
-              <motion.div
-                className="md:w-1/2 mt-8 md:mt-0"
-                variants={itemVariants}
-              >
-                <img
-                  src={about_bg_img}
-                  alt="Wound Care Visualization"
-                  className="rounded-xl shadow-2xl w-full h-auto border-4 border-teal-500/50 dark:border-teal-400/50"
-                />
-              </motion.div>
+              
             </div>
           </motion.section>
 
@@ -200,6 +207,8 @@ const About = () => {
               </div>
             </div>
           </motion.section>
+          
+          {/* Meet Our Leadership (Flippable Cards) */}
           <motion.section
             className="mb-20 p-6 md:p-12"
             initial="hidden"
@@ -214,30 +223,27 @@ const About = () => {
               Meet Our Leadership
             </motion.h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {about_team.map((member, index) => (
+              {about_team.map((member) => (
                 <motion.div
                   key={member.id}
-                  className="perspective-1000 h-full" // h-full ensures all cards align in height, but the inner container is the one that sets the fixed height.
+                  className="perspective-1000 h-full"
                   variants={itemVariants}
                 >
-                  {/* Main Flippable Container - 🎯 FIX: Changed h-96 to a custom h-[440px] and ensured image height is h-64 */}
                   <motion.div
-                    className="relative w-full h-[440px]" // Use a custom height that comfortably contains the original content
-                    // Framer Motion properties for 3D flip on hover
+                    className="relative w-full h-[440px]"
                     whileHover={{ rotateY: 180 }}
                     transition={{ duration: 0.6 }}
-                    style={{ transformStyle: "preserve-3d" }} // Required for 3D effect
+                    style={{ transformStyle: "preserve-3d" }}
                   >
-                    {/* Front of the Card (Visible by default) */}
+                    {/* Front of the Card */}
                     <div
                       className="absolute inset-0 bg-white dark:bg-gray-800 rounded-xl shadow-lg dark:shadow-2xl overflow-hidden transition-colors duration-300"
-                      style={{ backfaceVisibility: "hidden" }} // Hides the back of the front card during flip
+                      style={{ backfaceVisibility: "hidden" }}
                     >
                       <div className="overflow-hidden">
                         <img
                           src={member.image}
                           alt={member.name}
-                          // RESTORED ORIGINAL IMAGE HEIGHT
                           className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-105"
                         />
                       </div>
@@ -254,19 +260,17 @@ const About = () => {
                       </div>
                     </div>
 
-                    {/* Back of the Card (Flipped over - Contact Info) */}
+                    {/* Back of the Card */}
                     <div
                       className="absolute inset-0 bg-teal-600 rounded-xl shadow-lg dark:shadow-2xl overflow-hidden text-white flex flex-col justify-center items-center p-6"
                       style={{
-                        backfaceVisibility: "hidden", // Hides the back of the back card
-                        transform: "rotateY(180deg)", // Initially flipped to the back
+                        backfaceVisibility: "hidden",
+                        transform: "rotateY(180deg)",
                       }}
                     >
                       <h3 className="font-bold text-2xl mb-4">
                         Contact Information
                       </h3>
-
-                      {/* Email Address */}
                       <div className="flex items-center space-x-3 mb-4 text-center">
                         <IoMailOutline size={24} className="flex-shrink-0" />
                         <a
@@ -276,8 +280,6 @@ const About = () => {
                           {member.email}
                         </a>
                       </div>
-
-                      {/* Phone Number */}
                       <div className="flex items-center space-x-3 mb-4 text-center">
                         <IoCallOutline size={24} className="flex-shrink-0" />
                         <a
@@ -287,7 +289,6 @@ const About = () => {
                           {member.phone}
                         </a>
                       </div>
-
                       <p className="mt-4 text-teal-200 text-xs italic">
                         {member.name}'s direct line
                       </p>
@@ -328,26 +329,25 @@ const About = () => {
         </main>
       </div>
 
-      {/* Modal with Tailwind Form */}
-      {/* 🎯 FIX: We need to set up MUI's transition logic for Framer Motion */}
+      {/* Modal with Framer Motion Integration */}
       <Modal 
         open={open} 
         onClose={handleClose}
-        // Tell MUI to disable its default transition/animation
         disablePortal
-        keepMounted
-        hideBackdrop={false} // Keep the backdrop visible for context
+        hideBackdrop={false}
       >
-        <Box sx={modalStyle}>
-          {/* 🎯 FIX: Wrap content in motion.div and apply variants */}
-          <motion.div
-            className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl dark:shadow-none p-8 mx-4 border border-gray-100 dark:border-gray-700 relative transition-colors duration-300"
+
+        <MotionBox 
+            sx={modalStyle}
             initial="hidden"
             animate="visible"
-            exit="exit" // Use the 'exit' state for closing
+            exit="exit" 
             variants={modalVariants}
+        >
+          <motion.div
+            className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl dark:shadow-none p-8 mx-4 border border-gray-100 dark:border-gray-700 relative transition-colors duration-300"
           >
-            {/* Close button (The 'X') */}
+            {/* Close button */}
             <button
               onClick={handleClose}
               className="absolute top-4 right-4 text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-white transition"
@@ -497,7 +497,7 @@ const About = () => {
                 ></textarea>
               </div>
               
-              {/* Submission Button - Now full width since the Cancel button is removed */}
+              {/* Submission Button */}
               <button
                 type="submit"
                 className="w-full bg-teal-600 hover:bg-teal-700 dark:bg-teal-500 dark:hover:bg-teal-400 text-white font-semibold py-3 px-6 rounded-lg shadow-lg transition duration-300"
@@ -506,7 +506,7 @@ const About = () => {
               </button>
             </form>
           </motion.div>
-        </Box>
+        </MotionBox>
       </Modal>
     </div>
   );

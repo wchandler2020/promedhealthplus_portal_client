@@ -25,16 +25,16 @@ const modalVariants = {
 
 // 💥 NEW: List container variants for staggered list entry
 const listContainerVariants = {
-    visible: {
-        transition: {
-            staggerChildren: 0.05, // Stagger cards by 50ms
-        },
+  visible: {
+    transition: {
+      staggerChildren: 0.05, // Stagger cards by 50ms
     },
+  },
 };
 
 // 💥 NEW: Button press animation properties
 const buttonTap = {
-    scale: 0.95,
+  scale: 0.95,
 };
 
 // IVR Status Badge (Modified to accept props and use the provided colors)
@@ -120,8 +120,8 @@ const FilterCommandCenter = ({
               />
             </svg>
           </button>
-          <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-6 border-b border-gray-200 dark:border-gray-700 pb-2">
-            Patient Filter Command Center
+          <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-6 border-b border-gray-200 dark:border-gray-700 pb-2 text-center">
+            Patient Filters
           </h3>
 
           {/* ... (Filter controls remain unchanged) ... */}
@@ -273,7 +273,7 @@ const Patients = ({ activationFilter, setActivationFilter }) => {
     wound_size_width: "",
     // ... (rest of formData fields)
   });
-  
+
   // 💥 NEW: List container variants for staggered list entry
   const listContainerVariants = {
     visible: {
@@ -282,9 +282,9 @@ const Patients = ({ activationFilter, setActivationFilter }) => {
       },
     },
   };
-  
+
   // ... (All helper functions: formatPhoneNumberToE164, ValidateForm, useEffects, handleInputChange, resetForm, handleSavePatient, handleEditPatient, handleDeletePatient, filtering/sorting/pagination logic remain the same) ...
-  
+
   const formatPhoneNumberToE164 = (phone) => {
     if (!phone) return "";
     const digitsOnly = phone.replace(/\D/g, "");
@@ -505,19 +505,21 @@ const Patients = ({ activationFilter, setActivationFilter }) => {
 
   return (
     <div className="max-w-5xl mx-auto mt-10 p-6 bg-white dark:bg-gray-900 shadow-lg rounded-lg transition-colors duration-300">
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex flex-col sm:flex-row justify-between sm:items-center mb-6 space-y-3 sm:space-y-0">
         <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-100">
-          Patient Applications
+          Patient Management
         </h2>
-        <motion.button // 💥 Apply motion to the New Patient button
-          className="border border-teal-500 text-teal-500 hover:bg-teal-500 hover:text-white dark:hover:text-white dark:text-teal-400 dark:border-teal-400 dark:hover:bg-teal-500 px-4 py-2 rounded-md transition-all text-sm flex items-center gap-1"
+
+        <motion.button
           onClick={() => {
             setEditingPatient(null);
             setOpen(true);
           }}
+
+          className="w-full sm:w-auto border border-teal-500 text-teal-500 hover:bg-teal-500 hover:text-white dark:hover:text-white dark:text-teal-400 dark:border-teal-400 dark:hover:bg-teal-500 px-4 py-2 rounded-md transition-all text-sm flex items-center justify-center gap-1"
           whileTap={buttonTap}
         >
-          <FaPlus className="w-3 h-3"/> New Patient
+          <FaPlus className="w-3 h-3" /> + New Patient
         </motion.button>
       </div>
 
@@ -541,7 +543,7 @@ const Patients = ({ activationFilter, setActivationFilter }) => {
         <motion.button
           onClick={() => setFilterModalOpen(true)}
           className="flex items-center gap-2 px-4 py-1 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 bg-gray-50 dark:bg-gray-700 rounded-full text-sm font-medium hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-300 w-full sm:w-auto"
-          whileTap={buttonTap} 
+          whileTap={buttonTap}
         >
           <FaSlidersH className="w-4 h-4" />
           <span className="flex items-center space-x-1">
@@ -560,7 +562,7 @@ const Patients = ({ activationFilter, setActivationFilter }) => {
         initial="hidden"
         animate="visible"
       >
-        <AnimatePresence> 
+        <AnimatePresence>
           {currentPatients.length > 0 ? (
             currentPatients.map((patient) => (
               <PatientCard
@@ -572,7 +574,7 @@ const Patients = ({ activationFilter, setActivationFilter }) => {
               />
             ))
           ) : (
-            <motion.p 
+            <motion.p
               className="text-center py-10 text-gray-500 dark:text-gray-400"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -659,11 +661,11 @@ const Patients = ({ activationFilter, setActivationFilter }) => {
           />
         </Box>
       </Modal>
-      
+
       {/* MODAL 1: Patient Details (Unchanged) */}
       <Modal open={open} onClose={resetForm}>
         <Box sx={{ ...modalStyle, maxHeight: "90vh", overflowY: "auto" }}>
-          <NewPatientForm 
+          <NewPatientForm
             formData={formData}
             handleInputChange={handleInputChange}
             handleSavePatient={handleSavePatient}
