@@ -53,7 +53,7 @@ const HeroSection = () => {
             className="w-full h-full object-cover object-right" 
           />
         </motion.div>
-        <div className="absolute inset-0 z-0 bg-gray-900/60 dark:bg-gray-900/80"></div>
+        <div className="absolute inset-0 z-0 bg-gray-900/50 dark:bg-gray-900/60"></div>
         <motion.div 
           className="lg:w-3/4 xl:w-2/4 relative z-10 py-16" 
           initial="hidden"
