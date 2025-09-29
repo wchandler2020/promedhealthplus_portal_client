@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { motion } from "framer-motion"; // 💥 Import motion
+import { motion } from "framer-motion"; 
 import { FaEye, FaEdit, FaTrashAlt } from "react-icons/fa";
 import { IoInformationCircleOutline, IoDocumentsOutline } from "react-icons/io5";
 import { format } from "date-fns";
@@ -24,7 +24,6 @@ const IVRStatusBadge = ({ status }) => {
   );
 };
 
-// 💥 NEW: Individual list item animation variants (for staggered entry and exit)
 const listItemVariants = {
   hidden: { y: 20, opacity: 0 },
   visible: { y: 0, opacity: 1, transition: { duration: 0.3 } },
@@ -56,7 +55,6 @@ const PatientCard = ({ patient, onViewPdf, onEdit, onDelete }) => {
   };
 
   return (
-    // 💥 Apply motion.div and variants for entrance and hover flair
     <motion.div
       className="border p-4 rounded-xl border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 shadow-md space-y-2 text-gray-900 dark:text-gray-200"
       variants={listItemVariants}
@@ -78,7 +76,7 @@ const PatientCard = ({ patient, onViewPdf, onEdit, onDelete }) => {
             onClick={() => onEdit(patient)}
             className="text-gray-500 dark:text-gray-400 hover:text-teal-500 transition"
             title="Edit Patient"
-            whileTap={{ scale: 0.85 }} // 💥 Press feedback
+            whileTap={{ scale: 0.85 }} 
           >
             <FaEdit className="text-base" />
           </motion.button>
@@ -86,13 +84,12 @@ const PatientCard = ({ patient, onViewPdf, onEdit, onDelete }) => {
             onClick={() => onDelete(patient.id)}
             className="text-gray-500 dark:text-gray-400 hover:text-red-500 transition"
             title="Delete Patient"
-            whileTap={{ scale: 0.85 }} // 💥 Press feedback
+            whileTap={{ scale: 0.85 }} 
           >
             <FaTrashAlt className="text-base" />
           </motion.button>
         </div>
       </div>
-      {/* ... (Patient Info Section remains the same) ... */}
       
       <div
         className="flex items-center justify-between w-full"
@@ -140,7 +137,6 @@ const PatientCard = ({ patient, onViewPdf, onEdit, onDelete }) => {
         </p>
       </div>
       
-      {/* ... (Separators and Insurance Section remains the same) ... */}
       <div
         className="h-[2px] w-[90%] bg-gray-200 dark:bg-gray-700 flex m-auto opacity-550"
         style={{ marginTop: 25 }}
@@ -205,7 +201,6 @@ const PatientCard = ({ patient, onViewPdf, onEdit, onDelete }) => {
         </p>
       </div>
 
-      {/* Patient Documentation Section (Updated with motion.button) */}
       <div
         className="h-[2px] w-[90%] bg-gray-200 dark:bg-gray-700 flex m-auto opacity-550"
         style={{ marginTop: 25 }}
@@ -232,19 +227,21 @@ const PatientCard = ({ patient, onViewPdf, onEdit, onDelete }) => {
         </div>
       </div>
       
-      {/* Patient Order Section (Updated with motion.button) */}
       <div
         className="h-[2px] w-[90%] bg-gray-200 dark:bg-gray-700 flex m-auto opacity-550"
         style={{ marginTop: 25 }}
       ></div>
       <p className="text-sm font-semibold text-center mt-6">Patient Order</p>
-      <div className="flex justify-between items-center mt-2">
-        <p className="text-xs text-gray-700 dark:text-gray-300">
+      
+      {/* FIX: Use flex-wrap to allow elements to stack on small screens */}
+      <div className="flex justify-between items-center mt-2 flex-wrap gap-2"> 
+        <p className="text-xs text-gray-700 dark:text-gray-300 **min-w-[50%]** font-bold">
           Place an order for this patient.
         </p>
         <div className="relative flex items-center gap-1">
           <motion.button
-            className={`text-xs px-3 py-1 rounded-full flex items-center gap-1 transition-all
+            // FIX: Reduced text size from text-xs to text-[10px] for better fit
+            className={`text-[10px] px-3 py-1 rounded-full flex items-center gap-1 transition-all
             ${
               patient.ivrStatus === "Approved"
                 ? "bg-teal-500 text-white hover:bg-teal-600"
@@ -257,7 +254,7 @@ const PatientCard = ({ patient, onViewPdf, onEdit, onDelete }) => {
                 ? "Orders can only be placed for patients with an approved IVR."
                 : ""
             }
-            whileTap={patient.ivrStatus === "Approved" ? { scale: 0.95 } : {}} // 💥 Press feedback
+            whileTap={patient.ivrStatus === "Approved" ? { scale: 0.95 } : {}} 
           >
             + New Order
           </motion.button>

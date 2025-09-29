@@ -9,12 +9,75 @@ import {
   MenuItem,
 } from "@mui/material";
 import { AuthContext } from "../../utils/auth";
-import OrderItem from "./OrderItem"; // Assuming OrderItem handles its own styling internally
-import OrderSummary from "./OrderSummary"; // Assuming OrderSummary handles its own styling internally
+import OrderItem from "./OrderItem";
+import OrderSummary from "./OrderSummary";
 import toast from "react-hot-toast";
-import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 
+// 💥 NEW COMPONENT: Confirmation Modal
+const ConfirmationModal = ({ open, onClose, onConfirm }) => (
+  <Modal open={open} onClose={onClose}>
+    <Box
+      sx={{
+        position: "absolute",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+        width: "90%",
+        maxWidth: 400,
+        borderRadius: "16px",
+        boxShadow: 24,
+        p: 4,
+      }}
+      // Use Tailwind for modal background and borders
+      className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 transition-colors duration-300"
+    >
+      <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4">
+        Confirm Order Submission
+      </h3>
+      <p className="text-gray-700 dark:text-gray-300 mb-6 text-sm">
+        Are you certain you want to submit this order? Once submitted, the order
+        is sent to the fulfillment team for immediate processing.
+      </p>
+      <div className="flex justify-end space-x-3">
+        <Button
+          onClick={onClose}
+          variant="outlined"
+          sx={{
+            color: "gray",
+            borderColor: "gray",
+            fontSize: "12px", 
+            fontWeight: 500,
+            "&:hover": {
+              borderColor: "gray.dark",
+            },
+            // Dark mode overrides
+            ".dark &": {
+              color: "#9ca3af",
+              borderColor: "#4b5563",
+            },
+          }}
+        >
+          Cancel
+        </Button>
+        <Button
+          onClick={onConfirm}
+          variant="contained"
+          sx={{
+            bgcolor: "#008080",
+            fontSize: "12px",
+            "&:hover": {
+              bgcolor: "#66CDAA",
+            },
+          }}
+        >
+          Yes, Submit Order
+        </Button>
+      </div>
+    </Box>
+  </Modal>
+);
 
 const NewOrderForm = ({ open, onClose, patient }) => {
   const [step, setStep] = useState(1);
@@ -25,6 +88,8 @@ const NewOrderForm = ({ open, onClose, patient }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  const [openConfirmModal, setOpenConfirmModal] = useState(false);
+
   const [formData, setFormData] = useState({
     providerName: user?.full_name || "",
     facilityName: user?.profile?.facility || "",
@@ -33,6 +98,7 @@ const NewOrderForm = ({ open, onClose, patient }) => {
     patientName: `${patient?.first_name || ""} ${patient?.last_name || ""}`,
     patientDob: patient?.date_of_birth || "",
     patientPhoneNumber: patient?.phone_number || "",
+    // Assuming patient address fields are combined here
     patientAddress: `${patient?.address || ""}, ${patient?.city || ""}, ${
       patient?.state || ""
     } ${patient?.zip_code || ""}`,
@@ -49,6 +115,7 @@ const NewOrderForm = ({ open, onClose, patient }) => {
   };
 
   const fetchProducts = async () => {
+    // ... (Your fetchProducts logic remains the same)
     try {
       setLoading(true);
       setError(null);
@@ -73,7 +140,7 @@ const NewOrderForm = ({ open, onClose, patient }) => {
       }
       const data = await response.json();
 
-      // Get wound size from patient prop 
+      // Get wound size from patient prop
       const woundLength = parseFloat(patient?.wound_size_length) || 0;
       const woundWidth = parseFloat(patient?.wound_size_width) || 0;
       const woundSize = woundLength * woundWidth;
@@ -114,7 +181,32 @@ const NewOrderForm = ({ open, onClose, patient }) => {
     0
   );
 
-  const handleOrderNow = async () => {
+  const handlePlaceOrderClick = () => {
+    const orderItems = [];
+    Object.entries(selectedVariants).forEach(([productId, variants]) => {
+      variants.forEach(({ variantId, quantity }) => {
+        if (quantity > 0) {
+          orderItems.push({
+            product: parseInt(productId),
+            variant: parseInt(variantId),
+            quantity,
+          });
+        }
+      });
+    });
+
+    if (orderItems.length === 0 || total <= 0) {
+      toast.error("Please select at least one item and variant with quantity.");
+      return;
+    }
+
+    setOpenConfirmModal(true);
+  };
+
+  const handleFinalOrderSubmission = async () => {
+    setOpenConfirmModal(false); // Close modal on submission attempt
+    setLoading(true);
+
     const orderItems = [];
     Object.entries(selectedVariants).forEach(([productId, variants]) => {
       variants.forEach(({ variantId, quantity }) => {
@@ -134,11 +226,6 @@ const NewOrderForm = ({ open, onClose, patient }) => {
       });
     });
 
-    if (orderItems.length === 0 || total <= 0) {
-      toast.error("Please select at least one item and variant with quantity.");
-      return;
-    }
-
     const orderPayload = {
       provider: user.id,
       patient: patient.id,
@@ -151,6 +238,7 @@ const NewOrderForm = ({ open, onClose, patient }) => {
       country: formData.patientCountry,
       items: orderItems,
       delivery_date: formData.deliveryDate || null,
+      order_verified: true,
     };
 
     try {
@@ -176,12 +264,14 @@ const NewOrderForm = ({ open, onClose, patient }) => {
         throw new Error(errorData.detail || "Failed to place order.");
       }
 
-      toast.success("Order placed successfully!");
+      toast.success("Order confirmed and submitted successfully!");
       onClose();
       setStep(1);
       setSelectedVariants({});
     } catch (err) {
       toast.error(`Error: ${err.message}`);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -205,8 +295,31 @@ const NewOrderForm = ({ open, onClose, patient }) => {
     }
   }, [open, user, patient]);
 
+  const commonInputSx = {
+    "& .MuiOutlinedInput-root": {
+      "& fieldset": { borderColor: "#d1d5db" },
+      "&:hover fieldset": { borderColor: "primary.main" },
+      "&.Mui-focused fieldset": { borderColor: "primary.main" },
+    },
+    "& .MuiInputLabel-root": { color: "#6b7280" },
+    ".dark & .MuiOutlinedInput-root fieldset": { borderColor: "#4b5563" },
+  };
+
+  const commonMenuItemSx = {
+    backgroundColor: "white",
+    color: "black",
+    "&:hover": { backgroundColor: "#f3f4f6" },
+    ".dark &": {
+      backgroundColor: "#374151",
+      color: "#e5e7eb",
+      "&:hover": { backgroundColor: "#4b5563" },
+    },
+    "&.Mui-selected": { backgroundColor: "#e5e7eb" },
+    ".dark &.Mui-selected": { backgroundColor: "#4b5563" },
+  };
+
   const renderStepContent = () => {
-    if (loading) {
+    if (loading && step === 3) {
       return (
         <Box
           display="flex"
@@ -214,139 +327,126 @@ const NewOrderForm = ({ open, onClose, patient }) => {
           alignItems="center"
           height="200px"
         >
-          <CircularProgress sx={{ color: 'primary.main' }} />
+          <CircularProgress sx={{ color: "primary.main" }} />
         </Box>
       );
     }
-    if (error) {
-      // Keep Tailwind dark classes here
-      return <div className="p-4 text-red-500 dark:text-red-400 text-center">{error}</div>;
+    if (error && step === 3) {
+      return (
+        <div className="p-4 text-red-500 dark:text-red-400 text-center">
+          {error}
+        </div>
+      );
     }
 
-    // --- FIX: Remove hardcoded background/color from here ---
-
-    const commonInputSx = {
-      // 1. INPUT FIELD ROOT STYLING
-      '& .MuiOutlinedInput-root': {
-        // !!! REMOVE hardcoded backgroundColor and color. 
-        // This forces it to white and prevents Tailwind from working.
-        // backgroundColor: 'white', 
-        // color: 'black',
-        
-        // Common border and focus states
-        '& fieldset': {
-          borderColor: '#d1d5db', // gray-300
-        },
-        '&:hover fieldset': {
-          borderColor: 'primary.main',
-        },
-        '&.Mui-focused fieldset': {
-          borderColor: 'primary.main',
-        },
-      },
-      // 2. LABEL STYLING
-      '& .MuiInputLabel-root': {
-        color: '#6b7280', // gray-500 for light/gray-400 for dark, but we'll try to let global styles handle it.
-      },
-      // 3. Helper for dark mode border color
-      '.dark & .MuiOutlinedInput-root fieldset': {
-         borderColor: '#4b5563', // gray-600 border for dark mode
-      },
-    };
-    
-    // Custom Menu Item styling is needed to ensure the dropdown menu respects the dark/light theme
-    const commonMenuItemSx = {
-      // Set light mode defaults for the list items
-      backgroundColor: 'white',
-      color: 'black',
-      '&:hover': {
-        backgroundColor: '#f3f4f6', // gray-100 hover
-      },
-      // Now, apply dark mode styles using the '.dark &' selector which checks if a parent has the 'dark' class
-      '.dark &': {
-        backgroundColor: '#374151', // gray-700
-        color: '#e5e7eb', // gray-200
-        '&:hover': {
-          backgroundColor: '#4b5563', // gray-600 hover
-        },
-      },
-      '&.Mui-selected': {
-        backgroundColor: '#e5e7eb', // light mode selected
-        '&:hover': {
-          backgroundColor: '#d1d5db',
-        },
-      },
-      '.dark &.Mui-selected': {
-        backgroundColor: '#4b5563', // dark mode selected
-        '&:hover': {
-          backgroundColor: '#374151',
-        },
-      }
-    };
-    
-    // --- Render Content ---
-
     return (
-      <Box sx={{
-          // Global style for a consistent look on all MUI components inside this Box
-          '& .MuiTextField-root, & .MuiSelect-root, & .MuiInputBase-root': {
-              '& .MuiInputLabel-root': {
-                  color: '#6b7280', // light mode label
-              },
-              
-              // Apply specific dark mode overrides for input backgrounds, text, and labels
-              '.dark & .MuiInputBase-input, .dark & .MuiSelect-select': {
-                backgroundColor: '#1f2937', // dark:bg-gray-800 equivalent
-                color: '#e5e7eb', // dark:text-gray-200 equivalent
-              },
-              '.dark & .MuiInputLabel-root': {
-                  color: '#9ca3af', // dark:text-gray-400 equivalent
-              },
-
-              // This is necessary for the default Select background since it uses a nested InputBase
-              '&.MuiSelect-root': {
-                backgroundColor: 'white',
-                '.dark &': {
-                  backgroundColor: '#1f2937',
-                }
-              },
+      <Box
+        sx={{
+          "& .MuiTextField-root, & .MuiSelect-root, & .MuiInputBase-root": {
+            "& .MuiInputLabel-root": { color: "#6b7280" },
+            ".dark & .MuiInputBase-input, .dark & .MuiSelect-select": {
+              backgroundColor: "#1f2937",
+              color: "#e5e7eb",
+            },
+            ".dark & .MuiInputLabel-root": { color: "#9ca3af" },
+            "&.MuiSelect-root": {
+              backgroundColor: "white",
+              ".dark &": { backgroundColor: "#1f2937" },
+            },
           },
-          // Ensure DatePicker icons follow theme
-          '& .MuiSvgIcon-root': {
-              color: '#6b7280', // light mode icon color
-          },
-          '.dark & .MuiSvgIcon-root': {
-              color: '#9ca3af', // dark mode icon color
-          },
-      }}>
+          "& .MuiSvgIcon-root": { color: "#6b7280" },
+          ".dark & .MuiSvgIcon-root": { color: "#9ca3af" },
+        }}
+      >
         {step === 1 && (
           <div className="p-4 space-y-4">
-            <TextField fullWidth label="Provider Name" name="providerName" value={formData.providerName} onChange={handleFormChange} sx={commonInputSx} required/>
-            <TextField fullWidth label="Facility Name" name="facilityName" value={formData.facilityName} onChange={handleFormChange} sx={commonInputSx} required/>
-            <TextField fullWidth label="Phone Number" name="providerPhoneNumber" value={formData.providerPhoneNumber} onChange={handleFormChange} sx={commonInputSx} required />
-            <TextField fullWidth label="Delivery dAddress" name="providerAddress" value={formData.providerAddress} onChange={handleFormChange} sx={commonInputSx} required/>
+            <TextField
+              fullWidth
+              label="Provider Name"
+              name="providerName"
+              value={formData.providerName}
+              onChange={handleFormChange}
+              sx={commonInputSx}
+              required
+            />
+            <TextField
+              fullWidth
+              label="Facility Name"
+              name="facilityName"
+              value={formData.facilityName}
+              onChange={handleFormChange}
+              sx={commonInputSx}
+              required
+            />
+            <TextField
+              fullWidth
+              label="Phone Number"
+              name="providerPhoneNumber"
+              value={formData.providerPhoneNumber}
+              onChange={handleFormChange}
+              sx={commonInputSx}
+              required
+            />
+            <TextField
+              fullWidth
+              label="Delivery dAddress"
+              name="providerAddress"
+              value={formData.providerAddress}
+              onChange={handleFormChange}
+              sx={commonInputSx}
+              required
+            />
           </div>
         )}
         {step === 2 && (
           <div className="p-4 space-y-4">
-            <TextField fullWidth label="Patient Name" name="patientName" value={formData.patientName} onChange={handleFormChange} sx={commonInputSx} />
-            <TextField fullWidth label="Date of Birth" name="patientDob" value={formData.patientDob} onChange={handleFormChange} sx={commonInputSx} />
-            <TextField fullWidth label="Phone Number" name="patientPhoneNumber" value={formData.patientPhoneNumber} onChange={handleFormChange} sx={commonInputSx} />
-            <TextField fullWidth label="Address" name="patientAddress" value={formData.patientAddress} onChange={handleFormChange} sx={commonInputSx} />
+            <TextField
+              fullWidth
+              label="Patient Name"
+              name="patientName"
+              value={formData.patientName}
+              onChange={handleFormChange}
+              sx={commonInputSx}
+            />
+            <TextField
+              fullWidth
+              label="Date of Birth"
+              name="patientDob"
+              value={formData.patientDob}
+              onChange={handleFormChange}
+              sx={commonInputSx}
+            />
+            <TextField
+              fullWidth
+              label="Phone Number"
+              name="patientPhoneNumber"
+              value={formData.patientPhoneNumber}
+              onChange={handleFormChange}
+              sx={commonInputSx}
+            />
+            <TextField
+              fullWidth
+              label="Address"
+              name="patientAddress"
+              value={formData.patientAddress}
+              onChange={handleFormChange}
+              sx={commonInputSx}
+            />
             <Select
               fullWidth
               name="patientCountry"
               value={formData.patientCountry || "United States"}
               onChange={handleFormChange}
               sx={commonInputSx}
-              // This ensures the dropdown menu paper respects dark mode
               MenuProps={{
                 PaperProps: {
-                  className: 'bg-white dark:bg-gray-700', 
-                }
+                  className: "bg-white dark:bg-gray-700",
+                },
               }}
             >
-              <MenuItem value="United States" sx={commonMenuItemSx}>United States</MenuItem>
+              <MenuItem value="United States" sx={commonMenuItemSx}>
+                United States
+              </MenuItem>
             </Select>
           </div>
         )}
@@ -361,7 +461,9 @@ const NewOrderForm = ({ open, onClose, patient }) => {
                   key={item.id}
                   item={item}
                   selectedVariants={selectedVariants[item.id] || []}
-                  onVariantChange={(variants) => handleItemVariantChange(item.id, variants)}
+                  onVariantChange={(variants) =>
+                    handleItemVariantChange(item.id, variants)
+                  }
                   selectSx={commonInputSx}
                   menuItemSx={commonMenuItemSx}
                 />
@@ -371,11 +473,13 @@ const NewOrderForm = ({ open, onClose, patient }) => {
                 No available products found.
               </p>
             )}
-            
+
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <DatePicker
                 label="Requested Delivery Date"
-                value={formData.deliveryDate ? new Date(formData.deliveryDate) : null}
+                value={
+                  formData.deliveryDate ? new Date(formData.deliveryDate) : null
+                }
                 onChange={(newValue) => {
                   setFormData((prev) => ({
                     ...prev,
@@ -387,7 +491,7 @@ const NewOrderForm = ({ open, onClose, patient }) => {
                   textField: {
                     fullWidth: true,
                     variant: "outlined",
-                    sx: commonInputSx
+                    sx: commonInputSx,
                   },
                 }}
               />
@@ -409,82 +513,93 @@ const NewOrderForm = ({ open, onClose, patient }) => {
   );
 
   return (
-    <Modal open={open} onClose={onClose}>
-      <Box
-        sx={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-          width: "90%",
-          maxWidth: 600,
-          maxHeight: "90vh",
-          overflowY: "auto",
-          borderRadius: "16px",
-          bgcolor: "white", 
-          boxShadow: 24,
-          p: 4,
-        }}
-        // The key to applying the dark theme: The parent container must have the dark classes.
-        className="bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 transition-colors duration-300"
-      >
-        <div className="relative">
-          <button
-            onClick={onClose}
-            className="absolute top-0 right-0 text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-100 transition"
-          >
-            ✕
-          </button>
-          <h2 className="text-3xl font-semibold text-gray-800 dark:text-gray-100 text-center mb-2">
-            New Order
-          </h2>
-          <p className="text-center text-gray-500 dark:text-gray-400 mb-6">
-            Complete the steps to place a new order.
-          </p>
-          {renderStepContent()}
-          <div className="flex justify-center items-center mt-6 space-x-4">
+    <>
+      <Modal open={open} onClose={onClose}>
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: "90%",
+            maxWidth: 600,
+            maxHeight: "90vh",
+            overflowY: "auto",
+            borderRadius: "16px",
+            boxShadow: 24,
+            p: 4,
+          }}
+          className="bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 transition-colors duration-300"
+        >
+          <div className="relative">
             <button
-              onClick={() => setStep((prev) => prev - 1)}
-              disabled={step === 1}
-              className="px-3 py-2 rounded bg-gray-100 disabled:opacity-50 dark:bg-gray-700 text-gray-700 dark:text-gray-200"
+              onClick={onClose}
+              className="absolute top-0 right-0 text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-100 transition"
             >
-              Back
+              ✕
             </button>
-            {step < totalSteps ? (
+            <h2 className="text-3xl font-semibold text-gray-800 dark:text-gray-100 text-center mb-2">
+              New Order
+            </h2>
+            <p className="text-center text-gray-500 dark:text-gray-400 mb-6">
+              Complete the steps to place a new order.
+            </p>
+            {renderStepContent()}
+            <div className="flex justify-center items-center mt-6 space-x-4">
               <button
-                onClick={() => setStep((prev) => prev + 1)}
-                className="px-3 py-2 rounded bg-teal-600 text-white"
+                onClick={() => setStep((prev) => prev - 1)}
+                disabled={step === 1 || loading}
+                className="px-3 py-2 rounded bg-gray-100 disabled:opacity-50 dark:bg-gray-700 text-gray-700 dark:text-gray-200"
               >
-                Next
+                Back
               </button>
-            ) : (
-              <Button
-                onClick={handleOrderNow}
-                variant="contained"
-                className="bg-teal-600 text-white font-bold"
-                disabled={!hasSelectedItems}
-                sx={{
-                  '&.Mui-disabled': {
-                    bgcolor: 'grey.500',
-                    color: 'grey.300',
-                    cursor: 'not-allowed',
-                  },
-                  '&:not(.Mui-disabled)': {
-                    bgcolor: 'primary.main',
-                    color: 'white',
-                    '&:hover': {
-                      bgcolor: 'primary.dark'
-                    }
-                  }
-                }}
-              >
-                Place Order
-              </Button>
-            )}
+              {step < totalSteps ? (
+                <button
+                  onClick={() => setStep((prev) => prev + 1)}
+                  className="px-3 py-2 rounded bg-teal-600 text-white"
+                  disabled={loading}
+                >
+                  Next
+                </button>
+              ) : (
+                <Button
+                  onClick={handlePlaceOrderClick}
+                  variant="contained"
+                  className="bg-teal-600 text-white font-bold"
+                  disabled={!hasSelectedItems || loading}
+                  sx={{
+                    "&.Mui-disabled": {
+                      bgcolor: "grey.500",
+                      color: "grey.300",
+                      cursor: "not-allowed",
+                    },
+                    "&:not(.Mui-disabled)": {
+                      bgcolor: "#008080",
+                      color: "white",
+                      "&:hover": {
+                        bgcolor: "#66CDAA",
+                      },
+                    },
+                  }}
+                >
+                  {loading ? (
+                    <CircularProgress size={24} color="inherit" />
+                  ) : (
+                    "Place Order"
+                  )}
+                </Button>
+              )}
+            </div>
           </div>
-        </div>
-      </Box>
-    </Modal>
+        </Box>
+      </Modal>
+
+      <ConfirmationModal
+        open={openConfirmModal}
+        onClose={() => setOpenConfirmModal(false)}
+        onConfirm={handleFinalOrderSubmission}
+      />
+    </>
   );
 };
 

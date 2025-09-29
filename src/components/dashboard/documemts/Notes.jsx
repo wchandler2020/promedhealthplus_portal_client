@@ -195,7 +195,7 @@ const Notes = ({ patientId }) => {
             <strong>Notes</strong>
             </p>
             <button
-            className="flex items-center gap-1 text-teal-600 text-xs"
+            className="text-[10px] px-2 py-1 rounded-full flex items-center gap-1 transition-all border border-teal-500 text-teal-500 font-bold"
             onClick={() => start(null)}
             >
             + Add Note
