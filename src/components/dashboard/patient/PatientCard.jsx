@@ -278,19 +278,6 @@ const PatientCard = ({ patient, onViewPdf, onEdit, onDelete }) => {
           >
             + New Order
           </motion.button>
-          {/* {patient.ivrStatus !== "Approved" && (
-            <div className="relative group">
-              <IoInformationCircleOutline className="text-xl text-red-400 font-semibold cursor-pointer dark:text-red-300" />
-              <div
-                className="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2
-                bg-white border border-gray-200 shadow-lg px-3 py-1 text-xs text-gray-500
-                rounded-xl w-max opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10 font-semibold
-                dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300"
-              >
-                Orders can only be placed for patients with an approved IVR.
-              </div>
-            </div>
-          )} */}
         </div>
       </div>
       <div
