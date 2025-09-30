@@ -115,7 +115,7 @@ const MFA = () => {
           {/* Text content */}
           <div className="flex items-center h-full px-20 relative z-20">
             <div>
-              <h2 className="text-5xl font-extrabold text-white drop-shadow-lg">
+              <h2 className="text-5xl font-semibold text-white drop-shadow-lg">
                 ProMed Health <span className="text-teal-400">Plus</span>
               </h2>
               <p className="max-w-xl mt-3 text-gray-200 text-xl font-light drop-shadow">
