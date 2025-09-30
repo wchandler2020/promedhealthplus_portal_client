@@ -1,117 +1,63 @@
 // src/components/ContactModal.jsx
 
-import React, { useState } from "react";
+import React from "react";
 import { Modal, Box } from "@mui/material";
-// 💥 Import motion from framer-motion
 import { motion } from "framer-motion"; 
-import toast from 'react-hot-toast';
-import axios from "axios";
+// REMOVED: useState, toast, axios
 import { states } from "../../../utils/data";
 
-// 💥 NEW: Modal Animation Variants
-const modalVariants = {
-    hidden: { opacity: 0, scale: 0.95 },
-    visible: {
-        opacity: 1,
-        scale: 1,
-        transition: {
-            duration: 0.3, // Open speed
-            ease: "easeOut",
-        },
-    },
-    exit: { // Close speed
-        opacity: 0,
-        scale: 0.9,
-        transition: {
-            duration: 0.25,
-        },
-    },
-};
-
-const modalStyle = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: "100%",
-  maxWidth: 600,
-  maxHeight: "90vh",
-  overflowY: "auto",
-  bgcolor: "transparent",
-  boxShadow: "none",
-  outline: "none",
-};
-
-const ContactModal = ({ open, handleClose }) => {
-  const [formData, setFormData] = useState({
-    name: "",
-    facility: "",
-    city: "",
-    state: "",
-    zip: "",
-    phone: "",
-    email: "",
-    question: "",
-  });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+// 💥 The props are now required for the form functionality
+const ContactModal = ({ open, handleClose, formData, handleChange, handleSubmit }) => {
+    
+  const modalVariants = {
+      hidden: { opacity: 0, scale: 0.95 },
+      visible: {
+          opacity: 1,
+          scale: 1,
+          transition: {
+              duration: 0.3, 
+              ease: "easeOut",
+          },
+      },
+      exit: { 
+          opacity: 0,
+          scale: 0.9,
+          transition: {
+              duration: 0.25,
+          },
+      },
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    const { name, email, phone, question } = formData;
-    if (!name || !email || !phone || !question) {
-      toast.error("Please fill in all required fields.");
-      return;
-    }
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      toast.error("Please enter a valid email address.");
-      return;
-    }
-
-    try {
-      await axios.post(
-        `${process.env.REACT_APP_PYTHONANYWHERE_API}/contact-us/`,
-        formData
-      );
-      toast.success("Your message has been sent. We'll get back to you soon!");
-      handleClose();
-      setFormData({
-        name: "",
-        facility: "",
-        city: "",
-        state: "",
-        zip: "",
-        phone: "",
-        email: "",
-        question: "",
-      });
-    } catch (error) {
-      toast.error("Failed to send message. Please try again.");
-    }
+  const modalStyle = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: "100%",
+    maxWidth: 600,
+    maxHeight: "90vh",
+    overflowY: "auto",
+    bgcolor: "transparent",
+    boxShadow: "none",
+    outline: "none",
   };
+  
+  // Removed local state and handleSubmit
 
   return (
     <Modal 
         open={open} 
         onClose={handleClose}
-        // 💥 Tell MUI to disable its default transition to use Framer Motion
         disablePortal
         keepMounted
         hideBackdrop={false}
     >
       <Box sx={modalStyle}>
-        {/* 💥 FIX: Wrap the modal content in motion.div and apply variants */}
         <motion.div 
             className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-8 mx-4 border border-gray-100 dark:border-gray-700 relative h-full transition-colors duration-300"
             initial="hidden"
             animate="visible"
-            exit="exit" // Uses the exit variant when 'open' becomes false
+            exit="exit" 
             variants={modalVariants}
         >
           <button
@@ -143,6 +89,7 @@ const ContactModal = ({ open, handleClose }) => {
             soon.
           </p>
 
+          {/* 💥 USES PROPS for onSubmit, value, and onChange */}
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">

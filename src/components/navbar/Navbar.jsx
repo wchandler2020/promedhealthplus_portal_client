@@ -93,8 +93,7 @@ const Navbar = ({ isDarkMode, setIsDarkMode }) => {
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
-    return () =>
-      document.removeEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   useEffect(() => {
@@ -158,6 +157,8 @@ const Navbar = ({ isDarkMode, setIsDarkMode }) => {
     setShowModal(true);
     markAsRead(notification.id);
     setShowDropdown(false);
+    // This is the fix: ensures the mobile menu panel is hidden before the modal appears
+    closeMobileMenu();
   };
 
   const markAsRead = async (id) => {
@@ -431,22 +432,23 @@ const Navbar = ({ isDarkMode, setIsDarkMode }) => {
             isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
           }`}
         >
-          <div className="flex items-center mb-8 justify-between">
+          <div className="flex items-center mb-2 justify-between">
+            <img src={logo} alt="" height={50} width={50}/>
             <Link
-              className="mr-auto text-2xl font-semibold leading-none pl-3 text-gray-900 dark:text-gray-100"
+              className="mr-auto text-[20px] font-bold leading-none pl-[2px] text-gray-900 dark:text-gray-100"
               to="/"
             >
-              ProMed Health Plus
+               ProMed Health Plus
             </Link>
             <button className="navbar-close" onClick={closeMobileMenu}>
-              <CloseMenuIconSVG />
+              <CloseMenuIconSVG/>
             </button>
           </div>
 
           <ul>
             <li className="mb-1">
               <Link
-                className="block p-4 text-sm text-gray-800 dark:text-gray-200 hover:bg-teal-50 dark:hover:bg-teal-800 hover:text-teal-500 rounded"
+                className="block px-2 py-1 text-sm font-bold text-gray-800 dark:text-gray-200 hover:bg-teal-50 dark:hover:bg-teal-800 hover:text-teal-500 rounded"
                 to="/"
                 onClick={closeMobileMenu}
               >
@@ -457,7 +459,7 @@ const Navbar = ({ isDarkMode, setIsDarkMode }) => {
               <>
                 <li className="mb-1">
                   <Link
-                    className="block p-4 text-sm text-gray-800 dark:text-gray-200 hover:bg-teal-50 dark:hover:bg-teal-800 hover:text-teal-500 rounded"
+                    className="block px-2 py-3 text-sm font-bold text-gray-800 dark:text-gray-200 hover:bg-teal-50 dark:hover:bg-teal-800 hover:text-teal-500 rounded"
                     to="/dashboard/"
                     onClick={closeMobileMenu}
                   >
@@ -466,7 +468,7 @@ const Navbar = ({ isDarkMode, setIsDarkMode }) => {
                 </li>
                 <li className="mb-1">
                   <Link
-                    className="block p-4 text-sm text-gray-800 dark:text-gray-200 hover:bg-teal-50 dark:hover:bg-teal-800 hover:text-teal-500 rounded"
+                    className="block px-2 py-3 font-bold text-sm text-gray-800 dark:text-gray-200 hover:bg-teal-50 dark:hover:bg-teal-800 hover:text-teal-500 rounded"
                     to="/profile"
                     onClick={closeMobileMenu}
                   >
@@ -477,7 +479,7 @@ const Navbar = ({ isDarkMode, setIsDarkMode }) => {
             )}
             <li className="mb-1">
               <Link
-                className="block p-4 text-sm text-gray-800 dark:text-gray-200 hover:bg-teal-50 dark:hover:bg-teal-800 hover:text-teal-500 rounded"
+                className="block px-2 py-3 font-bold text-sm text-gray-800 dark:text-gray-200 hover:bg-teal-50 dark:hover:bg-teal-800 hover:text-teal-500 rounded"
                 to="/about/"
                 onClick={closeMobileMenu}
               >
@@ -486,7 +488,7 @@ const Navbar = ({ isDarkMode, setIsDarkMode }) => {
             </li>
             <li className="mb-1">
               <Link
-                className="block p-4 text-sm text-gray-800 dark:text-gray-200 hover:bg-teal-50 dark:hover:bg-teal-800 hover:text-teal-500 rounded"
+                className="block px-2 py-3 font-bold text-sm text-gray-800 dark:text-gray-200 hover:bg-teal-50 dark:hover:bg-teal-800 hover:text-teal-500 rounded"
                 to="/services/"
                 onClick={closeMobileMenu}
               >
@@ -495,7 +497,7 @@ const Navbar = ({ isDarkMode, setIsDarkMode }) => {
             </li>
             <li className="mb-1">
               <Link
-                className="block p-4 text-sm text-gray-800 dark:text-gray-200 hover:bg-teal-50 dark:hover:bg-teal-800 hover:text-teal-500 rounded"
+                className="block px-2 py-3 font-bold text-sm text-gray-800 dark:text-gray-200 hover:bg-teal-50 dark:hover:bg-teal-800 hover:text-teal-500 rounded"
                 to="/contact/"
                 onClick={closeMobileMenu}
               >
@@ -503,7 +505,24 @@ const Navbar = ({ isDarkMode, setIsDarkMode }) => {
               </Link>
             </li>
           </ul>
-
+          <div className="flex items-center space-x-4 mt-4">
+            <img
+              src={
+                profile?.image?.startsWith("http")
+                  ? removeDuplicateMedia(profile.image)
+                  : profile?.image
+                  ? `${process.env.REACT_APP_MEDIA_URL}${profile.image}`
+                  : default_user_img
+              }
+              alt="User Profile"
+              className="w-10 h-10 rounded-full object-cover object-top border border-gray-300 shadow-sm"
+            />
+            <h6 className="text-[12px] font-semibold text-gray-800 dark:text-gray-200">
+              {profile?.full_name ||
+                profile?.user?.full_name ||
+                "Dr. Kara Johnson"}
+            </h6>
+          </div>
           <div className="mt-auto pt-6 flex flex-col">
             {isAuthenticated ? (
               <div className="flex flex-col space-y-4">
@@ -530,10 +549,8 @@ const Navbar = ({ isDarkMode, setIsDarkMode }) => {
                           notifications.map((notif) => (
                             <li
                               key={notif.id}
-                              onClick={() => {
-                                handleNotificationClick(notif);
-                                setShowDropdown(false);
-                              }}
+                              // The list item call remains the same, but the function it calls is now updated.
+                              onClick={() => handleNotificationClick(notif)}
                               className={`px-4 py-2 text-xs flex flex-col ${
                                 notif.is_read
                                   ? "text-gray-400"
@@ -559,25 +576,6 @@ const Navbar = ({ isDarkMode, setIsDarkMode }) => {
                       </ul>
                     </div>
                   )}
-                </div>
-
-                <div className="flex items-center space-x-4">
-                  <img
-                    src={
-                      profile?.image?.startsWith("http")
-                        ? removeDuplicateMedia(profile.image)
-                        : profile?.image
-                        ? `${process.env.REACT_APP_MEDIA_URL}${profile.image}`
-                        : default_user_img
-                    }
-                    alt="User Profile"
-                    className="w-10 h-10 rounded-full object-cover object-top border border-gray-300 shadow-sm"
-                  />
-                  <h6 className="text-[12px] font-semibold text-gray-800 dark:text-gray-200">
-                    {profile?.full_name ||
-                      profile?.user?.full_name ||
-                      "Dr. Kara Johnson"}
-                  </h6>
                 </div>
 
                 <button
@@ -629,7 +627,7 @@ const Navbar = ({ isDarkMode, setIsDarkMode }) => {
               </div>
             )}
           </div>
-          
+
           <p className="my-4 text-xs text-center text-gray-400 dark:text-gray-500">
             ProMed Health Plus &copy; {new Date().getFullYear()}
           </p>

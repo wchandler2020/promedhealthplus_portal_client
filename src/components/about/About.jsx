@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Modal, Box } from "@mui/material";
-import { motion } from "framer-motion"; // Imported Framer Motion
+import { motion } from "framer-motion"; 
 import { IoMailOutline, IoCallOutline } from "react-icons/io5";
 import { states, about_approach_data, about_team } from "../../utils/data";
 import about_bg_img from '../../assets/images/about_bg_img.jpg';
@@ -37,12 +37,17 @@ const About = () => {
     setOpen(false);
   };
 
-  // 🎯 Modal Animation Variants
+  // 🎯 Modal Animation Variants - FIX APPLIED HERE
   const modalVariants = {
-    hidden: { opacity: 0, scale: 0.95 },
+    // We add x: "-50%" and y: "-50%" to all states. 
+    // This tells Framer Motion to apply the centering translation 
+    // along with the opacity and scale animations.
+    hidden: { opacity: 0, scale: 0.95, x: "-50%", y: "-50%" },
     visible: {
       opacity: 1,
       scale: 1,
+      x: "-50%", // <-- Centering translation for the X-axis
+      y: "-50%", // <-- Centering translation for the Y-axis
       transition: {
         duration: 0.3,
         ease: "easeOut",
@@ -51,24 +56,27 @@ const About = () => {
     exit: {
       opacity: 0,
       scale: 0.95,
+      x: "-50%", 
+      y: "-50%",
       transition: {
         duration: 0.2,
       },
     },
   };
 
+  // 🎯 Modal Style - FIX APPLIED HERE
   const modalStyle = {
     position: "absolute",
     top: "50%",
     left: "50%",
-    transform: "translate(-50%, -50%)",
+    // REMOVED: transform: "translate(-50%, -50%)", 
+    // This is now handled by the Framer Motion variants to avoid conflicts.
     width: "100%",
     maxWidth: 600,
     maxHeight: "90vh",
     overflowY: "auto",
     boxShadow: "none",
     outline: "none",
-    // MUI requires bgcolor here, but the inner motion.div handles the dark/light background
     bgcolor: 'transparent', 
   };
 

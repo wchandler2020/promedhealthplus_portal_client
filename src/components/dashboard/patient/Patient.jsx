@@ -515,7 +515,7 @@ const Patients = ({ activationFilter, setActivationFilter }) => {
             setEditingPatient(null);
             setOpen(true);
           }}
-          className="w-full sm:w-auto border border-teal-500 text-teal-500 hover:bg-teal-500 hover:text-white dark:hover:text-white dark:text-teal-400 dark:border-teal-400 dark:hover:bg-teal-500 px-4 py-2 rounded-full transition-all text-sm flex items-center justify-center gap-1"
+          className="w-full sm:w-auto border border-teal-500 text-teal-500 hover:bg-teal-500 hover:text-white dark:hover:text-white dark:text-teal-400 dark:border-teal-400 dark:hover:bg-teal-500 px-2 py-1 rounded-full transition-all text-xs flex items-center justify-center gap-1"
           whileTap={buttonTap}
         >
           <FaPlus className="w-3 h-3" /> New Patient

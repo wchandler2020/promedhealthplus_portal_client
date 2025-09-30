@@ -12,7 +12,7 @@ const Dashboard = () => {
 
   return (
     <div className="flex-1 bg-white dark:bg-gray-900">
-      <div className="px-4 sm:px-6 ml-6 font-bold">
+      <div className="px-4 sm:px-6 ml-11 font-bold">
         <button
           onClick={() => setOpenModal(true)}
           className="
@@ -24,7 +24,7 @@ const Dashboard = () => {
             hover:bg-red-400 
             transition duration-300 
             flex items-center text-xs
-            font-semibold
+            font-semibold'
           "
         >
           <IoChatbubblesOutline className="text-lg mr-2" />

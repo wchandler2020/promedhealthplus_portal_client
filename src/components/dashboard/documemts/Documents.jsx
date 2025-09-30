@@ -113,11 +113,10 @@ const Documents = () => {
 
   return (
     <div className="max-w-3xl mx-auto mt-10 p-6 bg-white dark:bg-gray-900 rounded-lg shadow-md">
-      <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-100 mb-6">
+      <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-100 mb-7">
         Provider Onboarding
       </h2>
       
-      {/* 📥 JotForm Section */}
       <div className="border border-gray-300 dark:border-gray-700 rounded-lg p-6 mb-10 bg-gray-50 dark:bg-gray-800">
         <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-200 mb-4">
           Complete the New Account Form
