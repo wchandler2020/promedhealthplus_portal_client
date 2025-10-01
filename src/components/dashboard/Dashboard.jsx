@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { PulseLoader } from 'react-spinners'; // Imported for a clean animation
+import { PropagateLoader } from 'react-spinners'; // Imported for a clean animation
 import OrderManagement from "./orders/OrderManagement";
 import Documents from "./documemts/Documents";
 import Patients from "./patient/Patient";
@@ -51,7 +51,7 @@ const Dashboard = () => {
       <div 
         className={`
           fixed inset-0 
-          bg-teal-500             /* Light Teal Background */
+          bg-teal-200 dark:bg-teal-300
           z-50 
           flex flex-col items-center justify-center 
           transition-opacity duration-500 ease-in-out /* Fade-out CSS */
@@ -61,11 +61,11 @@ const Dashboard = () => {
         <div className="text-white text-3xl font-extrabold flex flex-col items-center">
           
           {/* ProMed Health Plus Branding */}
-          <h1 className="text-5xl font-extrabold mb-8 drop-shadow-lg">ProMed Health Plus</h1>
+          <h1 className="text-5xl font-bold mb-8 drop-shadow-lg">ProMed Health <span className="text-teal-500">Plus</span></h1>
           
           {/* react-spinners Loader */}
-          <div className="mb-4">
-            <PulseLoader 
+          <div className="mb-10">
+            <PropagateLoader 
               color={"#FFFFFF"} 
               loading={true}
               size={15}
