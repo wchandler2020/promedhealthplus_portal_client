@@ -70,13 +70,13 @@ const Contact = () => {
         >
           <motion.h1
             variants={itemVariants}
-            className="text-4xl sm:text-5xl md:text-6xl font-semibold text-gray-900 dark:text-white mb-4 leading-tight"
+            className="text-4xl sm:text-5xl md:text-6xl font-bold text-gray-900 dark:text-white mb-4 leading-tight"
           >
             Promed Health <span className="text-teal-500">Plus</span>
           </motion.h1>
           <motion.p
             variants={itemVariants}
-            className="text-lg sm:text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto"
+            className="text-lg sm:text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto font-semibold"
           >
             We’re here to answer your questions and help you advance your practice with our wound care solutions.
           </motion.p>

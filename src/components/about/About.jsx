@@ -115,13 +115,13 @@ const About = () => {
         >
           <div className="container mx-auto px-4 sm:px-6 text-center">
             <motion.h1
-              className="text-4xl sm:text-5xl md:text-6xl font-semibold"
+              className="text-4xl sm:text-5xl md:text-6xl font-bold"
               variants={itemVariants}
             >
               About Promed Health <span className="text-teal-500">Plus</span>
             </motion.h1>
             <motion.p
-              className="text-lg sm:text-xl mt-4 max-w-4xl mx-auto opacity-90 text-gray-600 dark:text-gray-300"
+              className="text-lg sm:text-xl mt-4 max-w-4xl mx-auto opacity-90 text-gray-600 dark:text-gray-300 font-semibold"
               variants={itemVariants}
             >
               Empowering Providers with Comprehensive Wound Care Solutions
