@@ -173,7 +173,7 @@ const Register = () => {
           <div className="absolute inset-0 z-0 bg-gray-900/60"></div>
           <div className="flex items-center h-full px-20 relative z-20">
             <div>
-              <h2 className="text-5xl font-semibold text-white drop-shadow-lg">
+              <h2 className="text-5xl font-bold text-white drop-shadow-lg">
                 ProMed Health <span className="text-teal-400">Plus</span>
               </h2>
               <p className="max-w-xl mt-3 text-gray-200 text-xl font-light drop-shadow">

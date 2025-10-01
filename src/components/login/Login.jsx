@@ -92,7 +92,7 @@ const Login = () => {
           
           <div className="flex items-center h-full px-20 relative z-20">
             <div>
-              <h1 className="text-5xl font-semibold text-white drop-shadow-lg">
+              <h1 className="text-5xl font-bold text-white drop-shadow-lg">
                 ProMed Health <span className="text-teal-400">Plus</span>
               </h1>
               <p className="max-w-xl mt-3 text-gray-200 text-xl font-light drop-shadow">
