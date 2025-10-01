@@ -120,7 +120,7 @@ const HeroSection = () => {
         >
           <div className="bg-white/10 p-6 rounded-xl backdrop-blur-sm shadow-2xl"> 
             <motion.h1 
-              className="text-white text-2xl sm:text-3xl md:text-4xl xl:text-5xl font-semibold leading-tight drop-shadow-lg"
+              className="text-white text-2xl sm:text-3xl md:text-4xl xl:text-5xl font-bold leading-tight drop-shadow-lg"
               variants={itemVariants}
             >
               Promed Health <span className="text-teal-400">Plus</span>

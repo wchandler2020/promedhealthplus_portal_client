@@ -207,10 +207,10 @@ const Navbar = ({ isDarkMode, setIsDarkMode }) => {
         <div className="flex items-center justify-center flex-shrink-0">
           <img src={logo} alt="" width={50} height={50} className="mr-1" />
           <Link
-            className="text-xl sm:text-2xl lg:text-3xl font-semibold leading-none text-gray-900 dark:text-gray-100 whitespace-nowrap"
+            className="text-xl sm:text-2xl lg:text-3xl font-bold leading-none text-gray-900 dark:text-gray-100 whitespace-nowrap"
             to="/"
           >
-            ProMed Health Plus
+            ProMed Health <span className="text-teal-500">Plus</span>
           </Link>
         </div>
 
@@ -438,7 +438,7 @@ const Navbar = ({ isDarkMode, setIsDarkMode }) => {
               className="mr-auto text-[20px] font-bold leading-none pl-[2px] text-gray-900 dark:text-gray-100"
               to="/"
             >
-               ProMed Health Plus
+               ProMed Health <span className="text-teal-500">Plus</span>
             </Link>
             <button className="navbar-close" onClick={closeMobileMenu}>
               <CloseMenuIconSVG/>
