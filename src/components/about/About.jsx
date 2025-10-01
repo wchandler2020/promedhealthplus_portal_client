@@ -276,23 +276,23 @@ const About = () => {
                         transform: "rotateY(180deg)",
                       }}
                     >
-                      <h3 className="font-bold text-2xl mb-4">
+                      <h3 className="font-bold text-lg mb-4">
                         Contact Information
                       </h3>
                       <div className="flex items-center space-x-3 mb-4 text-center">
-                        <IoMailOutline size={24} className="flex-shrink-0" />
+                        <IoMailOutline size={20} className="flex-shrink-0" />
                         <a
                           href={`mailto:${member.email}`}
-                          className="text-lg hover:underline font-semibold"
+                          className="text-sm hover:underline font-normal"
                         >
                           {member.email}
                         </a>
                       </div>
                       <div className="flex items-center space-x-3 mb-4 text-center">
-                        <IoCallOutline size={24} className="flex-shrink-0" />
+                        <IoCallOutline size={20} className="flex-shrink-0" />
                         <a
                           href={`tel:${member.phone.replace(/[^0-9+]/g, "")}`}
-                          className="text-lg hover:underline font-semibold"
+                          className="text-sm hover:underline font-normal"
                         >
                           {member.phone}
                         </a>
@@ -315,16 +315,16 @@ const About = () => {
             viewport={{ once: true, amount: 0.5 }}
             transition={{ duration: 0.6 }}
           >
-            <h2 className="text-3xl md:text-3xl font-semibold mb-6">
+            <h2 className="text-3xl md:text-3xl font-semibold mb-2">
               Ready to Advance Your Practice?
             </h2>
-            <p className="text-lg md:text-xl mb-10 max-w-3xl mx-auto opacity-90">
+            <p className="text-lg md:text-lg mb-12 max-w-3xl mx-auto opacity-90">
               Partner with ProMed Health Plus for unparalleled wound care
               support and reimbursement success.
             </p>
             <motion.button
               onClick={() => setOpen(true)}
-              className="bg-white text-teal-700 font-bold px-10 py-4 rounded-full hover:bg-gray-100 transition duration-300 shadow-xl text-lg uppercase tracking-wide"
+              className="bg-white text-teal-700 font-extrabold px-10 py-4 rounded-full hover:bg-gray-100 transition duration-300 shadow-xl text-sm uppercase tracking-wide"
               whileHover={{
                 scale: 1.05,
                 boxShadow: "0 10px 20px rgba(0, 0, 0, 0.2)",
