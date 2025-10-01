@@ -321,8 +321,8 @@ const Contact = () => {
               },
             ].map((faq, idx) => (
               <motion.div key={idx} variants={itemVariants} className="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 hover:shadow-xl transition duration-300">
-                <h4 className="font-semibold text-gray-900 dark:text-white flex items-center mb-2">
-                  <IoHelpCircleOutline className="text-teal-600 dark:text-teal-400 text-xl mr-2" />
+                <h4 className="font-bold text-gray-900 dark:text-white flex items-center mb-2 text-basex">
+                  <IoHelpCircleOutline className="text-teal-600 dark:text-teal-400 text-xl mr-2" size={24}/>
                   {faq.question}
                 </h4>
                 <p className="text-gray-600 dark:text-gray-400 text-sm">{faq.answer}</p>

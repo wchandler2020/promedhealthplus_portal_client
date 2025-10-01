@@ -50,7 +50,7 @@ const Footer = () => {
                 height={30}
                 className="mr-1"
               />
-              <h6 className="font-semibold text-lg">ProMed Health Plus</h6>
+              <h6 className="font-bold text-lg">ProMed Health <span className="text-teal-500">Plus</span></h6>
             </div>
             <p className="text-xs">
               We aim to provide advanced support by understanding the process

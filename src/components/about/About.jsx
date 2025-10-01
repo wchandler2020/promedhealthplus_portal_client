@@ -315,10 +315,10 @@ const About = () => {
             viewport={{ once: true, amount: 0.5 }}
             transition={{ duration: 0.6 }}
           >
-            <h2 className="text-3xl md:text-3xl font-semibold mb-2">
+            <h2 className="text-3xl md:text-3xl font-bold mb-2">
               Ready to Advance Your Practice?
             </h2>
-            <p className="text-lg md:text-lg mb-12 max-w-3xl mx-auto opacity-90">
+            <p className="text-lg md:text-lg mb-12 max-w-3xl mx-auto opacity-90 font-semibold">
               Partner with ProMed Health Plus for unparalleled wound care
               support and reimbursement success.
             </p>
