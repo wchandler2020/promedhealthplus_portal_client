@@ -1,10 +1,17 @@
 import React from 'react'
+import {products} from '../../utils/data/index'
 
 const Services = () => {
   return (
-    <div>
-        Services
-    </div>
+    <section>
+        <div>
+            {
+              products.map((product) => (
+                <h1>{product.name}</h1>
+              ))
+            }
+        </div>
+    </section>
   )
 }
 

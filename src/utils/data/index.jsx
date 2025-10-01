@@ -117,3 +117,33 @@ export const about_team = [
     phone: "+1 (555) 123-4567" 
   },
 ]
+
+export const products = [
+  {
+    id: 1,
+    name: 'a;ljfal;kj',
+    image: ';laskjdff;',
+    disciption: ';ladj',
+    link: 'a;dmf'
+  },
+  {id: 2,
+    name: 'alkdjal;fkj',
+    image: 'a[ldjfjak',
+    disciption: 'a;ldja',
+    link: ''
+  },
+  {
+    id: 3,
+    name: 'laksdlkf',
+    image: 'a;lskjfd',
+    disciption: 'a;ljdkjfas',
+    link: 'a;sdkjlfj'
+  },
+  {
+    id: 4,
+    name: 'a;lkdfjkl',
+    image: 'a;ldjfaj',
+    disciption: 'aldf',
+    link: 'a,;dksfl'
+  },
+]

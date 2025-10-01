@@ -246,9 +246,9 @@ const Navbar = ({ isDarkMode, setIsDarkMode }) => {
             <li>
               <Link
                 className="text-base text-gray-800 dark:text-gray-200 hover:text-teal-400 font-semibold whitespace-nowrap"
-                to="/services/"
+                to="/products/"
               >
-                Services
+                Products
               </Link>
             </li>
             <li>
@@ -489,7 +489,7 @@ const Navbar = ({ isDarkMode, setIsDarkMode }) => {
             <li className="mb-1">
               <Link
                 className="block px-2 py-3 font-bold text-sm text-gray-800 dark:text-gray-200 hover:bg-teal-50 dark:hover:bg-teal-800 hover:text-teal-500 rounded"
-                to="/services/"
+                to="/products/"
                 onClick={closeMobileMenu}
               >
                 Services
